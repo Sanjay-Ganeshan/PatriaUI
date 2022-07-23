@@ -5,26 +5,29 @@ from ..character import Constants
 from ..dice import RollParams, Dice
 from ..roll_status import RollStatus
 
-class ProjectLadaDMR(Weapon):
+class ProjectSplazer(Weapon):
     def __init__(self, **kwargs):
 
         super().__init__(
             **use_passed_or_default(
                 kwargs,
-                name = "Project Lada Designated Marksman's Rifle",
-                short_name = "Lada DMR",
+                name = "Splazer",
+                short_name = "Splazer",
                 description = (
-                    "A precision made rifle for Siren operators that can fire a "
-                    "full power cartridge and take down a target from a great distance."
+                    "Affectionately called the Splazer, this top-secret, cutting edge laser "
+                    "weapon deals massive damage. A select number of Sirens have "
+                    "been equipped with it to test its efficacy. "
+                    "Please remember to properly file a "
+                    "usage report with HQ if you use ammunition from this weapon."
                 ),
-                caliber = 7.8,
-                range_meters = 1200,
-                loaded_ammo = "FMJ",
+                caliber = 117,
+                range_meters = 100,
+                loaded_ammo = "Laser",
                 ammo_count = {
-                    "FMJ": (8*12, 8*12),
+                    "Laser": (1, 1),
                 },
-                clip_current = 12,
-                clip_capacity = 12,
+                clip_current = 1,
+                clip_capacity = 1,
                 allowed_modes = ["Standard"],
                 allowed_burst_sizes=[1],
             )
@@ -39,6 +42,6 @@ class ProjectLadaDMR(Weapon):
 
     def _damage_impl(self, equipped_by: Constants) -> RollParams:
         return RollParams(
-            Dice.D12,
+            Dice.D4,
             n_dice=2,
         )

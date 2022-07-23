@@ -8,7 +8,8 @@ class PlasmaChamber(WeaponAttachment):
     """
     def attach_to(self, weapon: "Weapon") -> None:
         if "Plasma" not in weapon.ammo_count:
-            weapon.ammo_count["Plasma"] = weapon.clip_capacity
+            weapon.ammo_count["Plasma"] = (0, 0)
+            weapon.replace_magazine("FMJ", "Plasma")
     
     
     def modify_damage(
@@ -32,7 +33,8 @@ class EMChamber(WeaponAttachment):
     """
     def attach_to(self, weapon: "Weapon") -> None:
         if "EM" not in weapon.ammo_count:
-            weapon.ammo_count["EM"] = weapon.clip_capacity
+            weapon.ammo_count["EM"] = (0,0)
+            weapon.replace_magazine("FMJ", "EM")
 
 
 class APChamber(WeaponAttachment):
@@ -41,7 +43,8 @@ class APChamber(WeaponAttachment):
     """
     def attach_to(self, weapon: "Weapon") -> None:
         if "AP" not in weapon.ammo_count:
-            weapon.ammo_count["AP"] = weapon.clip_capacity
+            weapon.ammo_count["AP"] = (0, 0)
+            weapon.replace_magazine("FMJ", "AP")
     
     def modify_attack(self, equipped_by: Constants, weapon: "Weapon", attack: RollParams) -> RollParams:
         if weapon.loaded_ammo == "AP":

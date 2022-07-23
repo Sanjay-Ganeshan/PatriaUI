@@ -34,7 +34,7 @@ class Weapon:
     caliber: float = 7.8
     range_meters: int = 1200
     loaded_ammo: str = "Standard"
-    ammo_count: T.Dict[str, int] = field(default_factory=lambda:{"Standard":0})
+    ammo_count: T.Dict[str, T.Tuple[int, int]] = field(default_factory=lambda:{"Standard":0})
     clip_current: int = 0
     clip_capacity: int = 12
     mode: int = 0
@@ -78,6 +78,18 @@ class Weapon:
     def get_ammo_types(self) -> T.List[str]:
         return sorted(self.ammo_count.keys())
 
+    def replace_magazine(self, old: str, new: str) -> "Weapon":
+        """
+        Replaces one held magazine of OLD with NEW
+        """
+        cur_old, mx_old = self.ammo_count[old]
+        self.ammo_count[old] = (cur_old - self.clip_capacity, mx_old - self.clip_capacity)
+
+        cur_new, mx_new = self.ammo_count[new]
+        self.ammo_count[new] = (cur_new + self.clip_capacity, mx_new + self.clip_capacity)
+        
+        return self
+
     def attack(self, equipped_by: Constants) -> RollParams:
         params = self._attack_impl(equipped_by)
         for each_attachment in self.attachments:
@@ -120,14 +132,23 @@ class Weapon:
     def _damage_impl(self, equipped_by: Constants) -> RollParams:
         raise NotImplementedError(f"{self.name} in {self.mode} has no damage formula!")
 
+    def _increment_ammo(self, diff):
+        cur, mx = self.ammo_count[self.loaded_ammo]
+        self.ammo_count[self.loaded_ammo] = (cur + diff, mx)
+
+    def _get_current_ammo(self) -> int:
+        cur, mx = self.ammo_count[self.loaded_ammo]
+        return cur
+
     def fire(self) -> bool:
         """
         Consumes ammo depending on burst size.
         Returns True iff we have enough ammo for the burst
         """
         if self.clip_current >= self.allowed_burst_sizes[self.burst_size_ix]:
-            self.clip_current -= self.allowed_burst_sizes[self.burst_size_ix]
-            self.ammo_count[self.loaded_ammo] -= self.allowed_burst_sizes[self.burst_size_ix]
+            n_rounds = self.allowed_burst_sizes[self.burst_size_ix]
+            self.clip_current -= n_rounds
+            self._increment_ammo(-1 * n_rounds)
             self.notify_listeners()
             return True
         else:
@@ -140,13 +161,13 @@ class Weapon:
         """
 
         missing_in_clip: int = self.clip_capacity - self.clip_current
-        remaining_of_type: int = self.ammo_count[self.loaded_ammo]
+        remaining_of_type: int = self._get_current_ammo()
 
         amount_loaded = min(remaining_of_type, missing_in_clip)
         if amount_loaded <= 0:
             return False
         else:
-            self.ammo_count[self.loaded_ammo] -= amount_loaded
+            self._increment_ammo(amount_loaded)
             self.clip_current += amount_loaded
             self.notify_listeners()
             return True

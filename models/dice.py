@@ -47,7 +47,7 @@ def roll(
     msg = (
         f"{description}. {roll_total_with_modifier}!\n"
         f"Rolled {n_dice}d{faces.value}{modifier:+d} -- "
-        f"Raw rolls: {orig_rolls}"
+        f"Raw rolls: {orig_rolls[:10]}"
     )
 
     if roll_type != RollStatus.STANDARD:
@@ -106,3 +106,9 @@ class RollParams:
             changes["post_roll_desc"] = post_roll_desc
 
         return replace(self, **changes)
+    
+    def __str__(self) -> str:
+        prefix = (
+            None if self.roll_type is None or self.roll_type == RollStatus.STANDARD else (self.roll_type.value[:3] + "-")
+        )
+        return f"{prefix}{self.n_dice}d{self.faces.value}{self.modifier:+d}"
