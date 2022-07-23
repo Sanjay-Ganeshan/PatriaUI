@@ -1,4 +1,3 @@
-
 class Resources:
     ARMOR_ICON = "shield.png"
 
@@ -35,5 +34,15 @@ class Resources:
         "WIS_PERCEPTION": "perception.png",
         "WIS_SURVIVAL": "survival.png",
         "WIS_SOCIAL": "social.png",
+    }
+
+    DICE_ICONS = {
+        2: "d8.png",
+        4: "d4.png",
+        6: "d6.png",
+        8: "d8.png",
+        10: "d8.png",
+        12: "d12.png",
+        20: "d20.png",
     }
 

@@ -1,10 +1,12 @@
 from kivymd.uix.boxlayout import MDBoxLayout
+
 from .shared.box_sized_mixin import BoxSized
 from .shared.needs_character_mixin import NeedsConstants
 from ..models.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
 from .character_header import CharacterGeneralInfo
 from .stats_and_skills import CharacterStats
 from .general_controls import GameLogView
+from .general_controls.dice_bar import DiceBar
 from .shared.spacer import Spacer
 
 from kivy.core.window import Window
@@ -31,6 +33,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
         self.stats = CharacterStats()
 
         self.game_log_window = GameLogView()
+        self.dice_bar = DiceBar()
 
         self.rest = Spacer(
             box_width=BOX_WIDTH,
@@ -41,6 +44,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
                         self.stats.box_height,
                         self.character.box_height,
                         self.game_log_window.box_height,
+                        self.dice_bar.box_height,
                     ]
                 )
             ),
@@ -48,6 +52,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
 
         self.add_widget(self.character)
         self.add_widget(self.stats)
+        self.add_widget(self.dice_bar)
         self.add_widget(self.rest)
         self.add_widget(self.game_log_window)
 

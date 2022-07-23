@@ -29,9 +29,9 @@ from .kvcomponents.character_sheet import CharacterSheet
 class PatriaApp(MDApp):
     def build(self):
         print(theme_font_styles)
-        # for each_style in theme_font_styles:
+        #for each_style in theme_font_styles:
         # self.theme_cls.font_styles[each_style][0] = "ALIENLEAGUEBOLD"
-        # print(each_style, self.theme_cls.font_styles[each_style])
+        #    print(each_style, self.theme_cls.font_styles[each_style])
 
         THE_GAME.set_app_instance(self)
         self.character_sheet = CharacterSheet()
