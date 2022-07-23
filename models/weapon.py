@@ -1,11 +1,13 @@
 from dataclasses import dataclass, field
+from dataclasses_json import DataClassJsonMixin
 import typing as T
 import math
 
 from .character import Constants
 from .dice import RollParams
 
-class WeaponAttachment:
+@dataclass
+class WeaponAttachment(DataClassJsonMixin):
     def attach_to(self, weapon: "Weapon") -> None:
         return
     
@@ -26,7 +28,7 @@ class WeaponAttachment:
         return damage
 
 @dataclass
-class Weapon:
+class Weapon(DataClassJsonMixin):
     name: str = "Project Lada Designated Marksman's Rifle"
     short_name: str = "Lada DMR"
     description: str = ""
@@ -69,7 +71,7 @@ class Weapon:
         for each_callback in self.callbacks:
             each_callback(self)
 
-    def bind(self, callback: T.Callable[["Weapon", None]]):
+    def bind(self, callback: T.Callable[["Weapon"], None]):
         self.callbacks.append(callback)
 
     def get_current_mode(self) -> str:

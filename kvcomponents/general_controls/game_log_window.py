@@ -7,7 +7,7 @@ class GameLogView(CenteredLabel):
         super().__init__(
             text="",
             font_style="Body1",
-            box_width=BOX_WIDTH,
+            box_width=BOX_WIDTH-2,
             box_height=2,
             **kwargs
         )

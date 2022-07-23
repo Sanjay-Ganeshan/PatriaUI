@@ -49,3 +49,5 @@ class Resources:
     ADVANTAGE = "advantage.png"
     DISADVANTAGE = "disadvantage.png"
 
+    CYCLE = "cycle.png"
+

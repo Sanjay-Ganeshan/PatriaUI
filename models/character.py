@@ -1,11 +1,12 @@
 import typing as T
 import dataclasses
 from dataclasses import dataclass, field
+from dataclasses_json import DataClassJsonMixin, config as json_config
 
 from .roll_status import RollStatus
 
 @dataclass(frozen=True)
-class Constants:
+class Constants(DataClassJsonMixin):
     # General
     ICON_SRC: str = "sinon3.png"
     CHARACTER_NAME: str = "Lumina Gale"
@@ -68,7 +69,15 @@ class Constants:
     P_WIS_SURVIVAL: int = 0
     P_WIS_SOCIAL: int = 0
 
-    NEXT_ROLL_STATUS: RollStatus = field(default=RollStatus.STANDARD)
+    NEXT_ROLL_STATUS: RollStatus = field(
+        default=RollStatus.STANDARD,
+        metadata=json_config(
+            encoder=lambda o: o.value,
+            decoder=lambda val: RollStatus(val),
+        )
+    )
+
+    WEAPONS: T.List[str] = field(default_factory=list)
 
     @classmethod
     def expand_stat_abbreviation(
@@ -91,3 +100,8 @@ class Constants:
             for field in dataclasses.fields(cls)
             if field.name.startswith(prefix)
         ]
+
+    def get_weapons() -> T.List[T.Any]:
+        from .game import THE_GAME
+
+

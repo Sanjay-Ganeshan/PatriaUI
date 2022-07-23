@@ -5,7 +5,7 @@ from .shared.needs_character_mixin import NeedsConstants
 from ..models.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
 from .character_header import CharacterGeneralInfo
 from .stats_and_skills import CharacterStats
-from .general_controls import GameLogView
+from .general_controls import GameLogAndControls
 from .general_controls.dice_bar import DiceBar
 from .shared.spacer import Spacer
 
@@ -32,7 +32,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
 
         self.stats = CharacterStats()
 
-        self.game_log_window = GameLogView()
+        self.game_log_window = GameLogAndControls()
         self.dice_bar = DiceBar()
 
         self.rest = Spacer(

@@ -2,7 +2,6 @@ from enum import IntEnum, unique
 import random
 import typing as T
 
-from .game import THE_GAME
 from .roll_status import RollStatus
 from dataclasses import dataclass, replace
 
@@ -24,6 +23,7 @@ def roll(
     roll_type: T.Optional[RollStatus] = None,
     post_roll_desc: T.Optional[T.Callable[[T.Tuple[int, T.List[int]]], str]] = None,
 ) -> T.Tuple[int, T.List[int]]:
+    from .game import THE_GAME
 
     if roll_type is None:
         roll_type = THE_GAME.get_current_character().NEXT_ROLL_STATUS
