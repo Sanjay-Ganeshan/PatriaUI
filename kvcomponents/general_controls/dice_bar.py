@@ -6,6 +6,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from ..resource_list import Resources
 from ...models.dice import Dice, RollStatus, roll
+from ...models.game import THE_GAME
 from ...models.app_settings import BOX_WIDTH
 
 
@@ -20,6 +21,8 @@ class AnyDiceRoller(ProgressiveText, TouchableMixin):
             box_width=1,
             box_height=1,
             bold=True,
+            text_color="white",
+            theme_text_color="Custom",
             **kwargs,
         )
         self.touch_init()
@@ -31,6 +34,10 @@ class AnyDiceRoller(ProgressiveText, TouchableMixin):
     def adjust_sides(self, *args):
         self.source = Resources.DICE_ICONS[self.maximum_value]
         self.current_value = self.maximum_value
+    
+    def on_left_click(self, *args):
+        roll(Dice(self.maximum_value))
+
 
 class DiceBar(MDBoxLayout, BoxSized):
     def __init__(self, **kwargs):

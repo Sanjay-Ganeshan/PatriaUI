@@ -63,7 +63,7 @@ class StatDesignation(CenteredLabel, ProgressiveIconImpl, NeedsConstants, Toucha
         roll(
             Dice.D20,
             description=(
-                f"{self.constants.CHARACTER_NAME} rolls {self.stat_name}"
+                f"{self.constants.CHARACTER_NAME} tests {self.stat_name}"
             ),
             modifier=self.stat_modifier,
         )

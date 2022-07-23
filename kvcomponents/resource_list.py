@@ -37,11 +37,11 @@ class Resources:
     }
 
     DICE_ICONS = {
-        2: "d8.png",
+        2: "d2.png",
         4: "d4.png",
         6: "d6.png",
         8: "d8.png",
-        10: "d8.png",
+        10: "d10.png",
         12: "d12.png",
         20: "d20.png",
     }
