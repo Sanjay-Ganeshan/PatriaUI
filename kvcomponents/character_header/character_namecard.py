@@ -3,7 +3,7 @@ from ..shared.box_sized_mixin import BoxSized
 from ..shared.needs_character_mixin import NeedsConstants
 
 
-class CHNamecard(CenteredLabel, BoxSized, NeedsConstants):
+class CHNamecard(CenteredLabel, NeedsConstants):
     def __init__(self, **kwargs):
         super().__init__(
             text="",

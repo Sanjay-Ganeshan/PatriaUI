@@ -1,0 +1,1 @@
+from .game_log_window import GameLogView

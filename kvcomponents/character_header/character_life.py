@@ -97,6 +97,7 @@ class CHDeathKnockedOut(ProgressiveIcon, NeedsConstants, TouchableMixin):
             orientation="horizontal",
         )
         self.constants_init()
+        self.touch_init()
 
     def adapt_to_constants(self, *args):
         super().adapt_to_constants(*args)

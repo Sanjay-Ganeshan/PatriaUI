@@ -34,7 +34,7 @@ def roll(
         rolled_vals.append(random.randrange(1, faces.value + 1))
 
     msg = (
-        f"{description}. Rolled {n_dice}d{faces.value}+{modifier}\n"
+        f"{description}. Rolled {n_dice}d{faces.value}{modifier:+d}\n"
         f"Raw rolls: {rolled_vals}"
     )
 

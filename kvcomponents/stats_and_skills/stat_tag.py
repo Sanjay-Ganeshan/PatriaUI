@@ -1,15 +1,18 @@
 from ..shared.centered_label import CenteredLabel
 from ..shared.progressive_icon import ProgressiveIconImpl
 from ..shared.needs_character_mixin import NeedsConstants
+from ..shared.touchable_mixin import TouchableMixin
 
 from ..resource_list import Resources
+from ...models.dice import Dice, roll
+
 
 from kivy.properties import (
     StringProperty,
     NumericProperty,
 )
 
-class StatDesignation(CenteredLabel, ProgressiveIconImpl, NeedsConstants):
+class StatDesignation(CenteredLabel, ProgressiveIconImpl, NeedsConstants, TouchableMixin):
     """
     A box displaying a single stat
     """
@@ -36,6 +39,7 @@ class StatDesignation(CenteredLabel, ProgressiveIconImpl, NeedsConstants):
         self.progressive_init()
         self.box_init()
         self.constants_init()
+        self.touch_init()
 
         self.text = self._get_label_string()
         self.tooltip_text = self.help_text.STAT_DESCRIPTIONS[self.stat_name]
@@ -53,3 +57,13 @@ class StatDesignation(CenteredLabel, ProgressiveIconImpl, NeedsConstants):
         super().adapt_to_constants(*args)
 
         self.stat_modifier = getattr(self.constants, f"S_{self.stat_name}")
+
+    def on_left_click(self, *args):
+        super().on_left_click(*args)
+        roll(
+            Dice.D20,
+            description=(
+                f"{self.constants.CHARACTER_NAME} rolls {self.stat_name}"
+            ),
+            modifier=self.stat_modifier,
+        )

@@ -3,6 +3,7 @@ from ..shared.box_sized_mixin import BoxSized
 from ..shared.needs_character_mixin import NeedsConstants
 from ..shared.progressive_icon import ProgressiveIconImpl, AnyIcon
 from ..shared.centered_label import CenteredLabel
+from ..shared.touchable_mixin import TouchableMixin
 from kivy.properties import (
     StringProperty,
     NumericProperty,
@@ -10,15 +11,16 @@ from kivy.properties import (
 )
 from ..shared.spacer import Spacer
 from ...models.character import Constants
+from ...models.game import THE_GAME
+from ...models.dice import Dice, RollStatus, roll
 
 from ..resource_list import Resources
 import typing as T
 
 
-class SkillTag(MDBoxLayout, BoxSized, NeedsConstants, ProgressiveIconImpl):
+class SkillTag(MDBoxLayout, BoxSized, NeedsConstants, ProgressiveIconImpl, TouchableMixin):
     skill_name = StringProperty("FILLME")
     proficiency_multiplier = NumericProperty(0)
-    corresponding_stat = StringProperty("STRENGTH")
 
     def __init__(self, **kwargs):
         super().__init__(
@@ -36,6 +38,7 @@ class SkillTag(MDBoxLayout, BoxSized, NeedsConstants, ProgressiveIconImpl):
         self.progressive_init()
         self.box_init()
         self.constants_init()
+        self.touch_init()
 
         self.space = Spacer(box_width=0.3, box_height=1)
         self.add_widget(self.space)
@@ -153,3 +156,17 @@ class SkillTag(MDBoxLayout, BoxSized, NeedsConstants, ProgressiveIconImpl):
         super().adapt_to_constants(*args)
 
         self.proficiency_multiplier = getattr(self.constants, f"P_{self.skill_name}")
+
+
+    def on_left_click(self, *args):
+        super().on_left_click(*args)
+        roll(
+            Dice.D20,
+            description=(
+                f"{self.constants.CHARACTER_NAME} rolls {self.skill_name}"
+            ),
+            modifier=self._get_total_bonus()
+        )
+
+    def on_right_click(self, *args):
+        super().on_right_click(*args)

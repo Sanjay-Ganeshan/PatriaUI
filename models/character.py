@@ -14,7 +14,8 @@ class Constants:
 
     # Armor / Power
     ARMOR_RATING: int = 14
-    SUIT_POWER: int = 4
+    ARMOR_BONUS: int = 0
+    SUIT_POWER: int = 6
     SUIT_CAPACITY: int = 6
     SHIELD_POWER: int = 2
     SHIELD_CAPACITY: int = 2

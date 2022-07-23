@@ -9,10 +9,16 @@ class CharacterList(list):
 class GameLog:
     def __init__(self):
         self.logs = []
+        self.callbacks = []
 
     def log(self, msg):
         self.logs.append(msg)
         print(msg)
+        for each_callback in self.callbacks:
+            each_callback(msg)
+
+    def bind(self, callback):
+        self.callbacks.append(callback)
 
 
 class GameState:
