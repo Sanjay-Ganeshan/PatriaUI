@@ -4,6 +4,7 @@ import typing as T
 
 from .game import THE_GAME
 from .roll_status import RollStatus
+from dataclasses import dataclass, replace
 
 @unique
 class Dice(IntEnum):
@@ -14,8 +15,6 @@ class Dice(IntEnum):
     D10 = 10
     D12 = 12
     D20 = 20
-
-
 
 def roll(
     faces: Dice,
@@ -64,3 +63,46 @@ def roll(
 
     return roll_total_with_modifier, rolled_vals
 
+@dataclass(frozen=True)
+class RollParams:
+    faces: Dice
+    n_dice: int = 1
+    modifier: int = 0
+    roll_type: T.Optional[RollStatus] = None
+    description: str = ""
+    post_roll_desc: T.Optional[T.Callable[[T.Tuple[int, T.List[int]]], str]] = None
+
+    def roll(self) -> T.Tuple[int, T.List[int]]:
+        return roll(
+            faces=self.faces,
+            n_dice=self.n_dice,
+            modifier=self.modifier,
+            roll_type=self.roll_type,
+            description=self.description,
+            post_roll_desc=self.post_roll_desc,
+        )
+    
+    def replace(
+        self, 
+        faces: T.Optional[Dice] = None,
+        n_dice: T.Optional[int]=None,
+        modifier: T.Optional[int] = None,
+        roll_type: T.Optional[RollStatus] = None,
+        description: T.Optional[str] = None,
+        post_roll_desc: T.Optional[str] = None,
+    ) -> "RollParams":
+        changes = {}
+        if faces is not None:
+            changes["faces"] = faces
+        if n_dice is not None:
+            changes["n_dice"] = n_dice
+        if modifier is not None:
+            changes["modifier"] = modifier
+        if roll_type is not None:
+            changes["roll_type"] = roll_type
+        if description is not None:
+            changes["description"] = description
+        if post_roll_desc is not None:
+            changes["post_roll_desc"] = post_roll_desc
+
+        return replace(self, **changes)
