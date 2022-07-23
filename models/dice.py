@@ -41,11 +41,18 @@ def roll(
         )
         rolled_vals.remove(which_to_drop)
     
+    crit_string = ""
+    if len(rolled_vals) == 1 and faces == Dice.D20:
+        if 20 in rolled_vals:
+            crit_string = " Critical!!"
+        elif 1 in rolled_vals:
+            crit_string = " Critical Failure!!"
+    
     roll_total = sum(rolled_vals)
     roll_total_with_modifier = roll_total + modifier
     
     msg = (
-        f"{description}. {roll_total_with_modifier}!\n"
+        f"{description}. {roll_total_with_modifier}!{crit_string}\n"
         f"Rolled {n_dice}d{faces.value}{modifier:+d} -- "
         f"Raw rolls: {orig_rolls[:10]}"
     )
