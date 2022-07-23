@@ -1,6 +1,8 @@
 import typing as T
 import dataclasses
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from .roll_status import RollStatus
 
 @dataclass(frozen=True)
 class Constants:
@@ -65,6 +67,8 @@ class Constants:
     P_WIS_PERCEPTION: int = 1
     P_WIS_SURVIVAL: int = 0
     P_WIS_SOCIAL: int = 0
+
+    NEXT_ROLL_STATUS: RollStatus = field(default=RollStatus.STANDARD)
 
     @classmethod
     def expand_stat_abbreviation(

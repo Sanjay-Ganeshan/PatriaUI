@@ -163,7 +163,7 @@ class SkillTag(MDBoxLayout, BoxSized, NeedsConstants, ProgressiveIconImpl, Touch
         roll(
             Dice.D20,
             description=(
-                f"{self.constants.CHARACTER_NAME} tests {self.skill_name}"
+                f"{self.constants.CHARACTER_NAME} tests {self._get_real_skill_name()}"
             ),
             modifier=self._get_total_bonus()
         )

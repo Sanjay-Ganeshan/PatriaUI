@@ -1,3 +1,4 @@
+from ...models.roll_status import RollStatus
 from ..shared.box_sized_mixin import BoxSizedBoxLayout, BoxSized
 from ..shared.progressive_icon import ProgressiveIcon
 from ..shared.needs_character_mixin import NeedsConstants
@@ -89,6 +90,7 @@ class ShieldPowerIcon(ProgressiveIcon, NeedsConstants, TouchableMixin):
         super().on_right_click(*args)
         replenishment, _ = roll(
             Dice.D2,
+            roll_type=RollStatus.STANDARD,
             description=(
                 f"{self.constants.CHARACTER_NAME} replenishes "
                 f"{self.constants.PRONOUN_HER} shields"

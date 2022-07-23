@@ -1,3 +1,4 @@
+from ...models.roll_status import RollStatus
 from ..shared.progressive_icon import ProgressiveIcon
 from ..shared.needs_character_mixin import NeedsConstants
 from ..shared.touchable_mixin import TouchableMixin
@@ -9,7 +10,7 @@ from ..shared.box_sized_mixin import BoxSized
 from ..shared.progressive_icon import ProgressiveText
 from kivymd.uix.boxlayout import MDBoxLayout
 from ...models.game import THE_GAME
-
+import typing as T
 
 class CHDeathFails(ProgressiveIcon, NeedsConstants, TouchableMixin):
     def __init__(self, **kwargs):
@@ -34,10 +35,11 @@ class CHDeathFails(ProgressiveIcon, NeedsConstants, TouchableMixin):
 
     def on_left_click(self, *args):
         super().on_left_click(*args)
-        new_value = min(self.maximum_value, self.current_value + 1)
-        THE_GAME.adjust_current_character(
-            CURRENT_DEATH_FAILS=new_value,
-        )
+        if self.constants.CURRENT_HP <= 0:
+            new_value = min(self.maximum_value, self.current_value + 1)
+            THE_GAME.adjust_current_character(
+                CURRENT_DEATH_FAILS=new_value,
+            )
 
     def on_right_click(self, *args):
         super().on_right_click(*args)
@@ -70,10 +72,11 @@ class CHDeathSuccesses(ProgressiveIcon, NeedsConstants, TouchableMixin):
 
     def on_left_click(self, *args):
         super().on_left_click(*args)
-        new_value = min(self.maximum_value, self.current_value + 1)
-        THE_GAME.adjust_current_character(
-            CURRENT_DEATH_SUCCESS=new_value,
-        )
+        if self.constants.CURRENT_HP <= 0:
+            new_value = min(self.maximum_value, self.current_value + 1)
+            THE_GAME.adjust_current_character(
+                CURRENT_DEATH_SUCCESS=new_value,
+            )
 
     def on_right_click(self, *args):
         super().on_right_click(*args)
@@ -104,6 +107,22 @@ class CHDeathKnockedOut(ProgressiveIcon, NeedsConstants, TouchableMixin):
         self.current_value = 1 if self.constants.CURRENT_HP <= 0 else 0
         self.tooltip_text = self.help_text.DEATH
 
+    def log_for_dice_roll(self, total: int, raw: T.List[int]) -> str:
+        if total == 20:
+            return (
+                f"Critical Success! {self.constants.CHARACTER_NAME} "
+                f"is back in action."
+            )
+        elif total == 1:
+            return (
+                f"Critical failure. {self.constants.CHARACTER_NAME} "
+                f"takes {self.constants.PRONOUN_HER} last breath."
+            )
+        elif total <= 10:
+            return (f"Failure - death looms closer.")
+        else:
+            return "Success."
+
     def on_left_click(self, position):
         super().on_left_click(position)
         if self.constants.CURRENT_HP <= 0:
@@ -113,22 +132,31 @@ class CHDeathKnockedOut(ProgressiveIcon, NeedsConstants, TouchableMixin):
                     f"{self.constants.CHARACTER_NAME} is on death's door - "
                     f"{self.constants.PRONOUN_SHE} rolls a death saving throw"
                 ),
+                roll_type=RollStatus.STANDARD,
+                post_roll_desc=self.log_for_dice_roll,
             )
-
             if result == 20:
-                THE_GAME.game_log.log(
-                    f"Critical Success! {self.constants.CHARACTER_NAME} "
-                    f"is back in action."
+                THE_GAME.adjust_current_character(
+                    CURRENT_HP=1,
+                    CURRENT_DEATH_SUCCESS=0,
+                    CURRENT_DEATH_FAILS=0,
                 )
             elif result == 1:
-                THE_GAME.game_log.log(
-                    f"Critical failure. {self.constants.CHARACTER_NAME} "
-                    f"takes {self.constants.PRONOUN_HER} last breath."
+                THE_GAME.adjust_current_character(
+                    CURRENT_DEATH_SUCCESS=0,
+                    CURRENT_DEATH_FAILS=self.constants.MAX_DEATH_FAILS,
                 )
             elif result <= 10:
-                THE_GAME.game_log.log(f"Failure - death looms closer.")
+                THE_GAME.adjust_current_character(
+                    CURRENT_DEATH_FAILS=min(self.constants.CURRENT_DEATH_FAILS+1, self.constants.MAX_DEATH_FAILS),
+                )
             else:
-                THE_GAME.game_log.log("")
+                THE_GAME.adjust_current_character(
+                    CURRENT_DEATH_SUCCESS=min(self.constants.CURRENT_DEATH_SUCCESS+1, self.constants.MAX_DEATH_SUCCESS),
+                )
+
+
+            
 
 
 class CHDeathSaves(MDBoxLayout, BoxSized, NeedsConstants):

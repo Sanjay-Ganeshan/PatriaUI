@@ -1,4 +1,6 @@
 from kivymd.uix.boxlayout import MDBoxLayout
+
+from ...models.roll_status import RollStatus
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.needs_character_mixin import NeedsConstants
 from ..shared.progressive_icon import ProgressiveIcon
@@ -114,6 +116,7 @@ class CHHitDice(ProgressiveIcon, TouchableMixin, NeedsConstants):
             new_value = max(0, self.current_value - 1)
             regen, _ = roll(
                 Dice.D6,
+                roll_type=RollStatus.STANDARD,
                 description=f"{self.constants.CHARACTER_NAME} regenerates using hit dice"
             )
             new_hp = min(self.constants.CURRENT_HP + regen, self.constants.MAX_HP)

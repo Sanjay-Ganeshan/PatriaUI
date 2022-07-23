@@ -46,3 +46,6 @@ class Resources:
         20: "d20.png",
     }
 
+    ADVANTAGE = "advantage.png"
+    DISADVANTAGE = "disadvantage.png"
+

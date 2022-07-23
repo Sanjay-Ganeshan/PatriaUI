@@ -36,6 +36,7 @@ class PatriaApp(MDApp):
         THE_GAME.set_app_instance(self)
         self.character_sheet = CharacterSheet()
         self.character_sheet.constants = THE_GAME.character_list[THE_GAME.current_character]
+        THE_GAME.game_log.log("Welcome!")
 
         return self.character_sheet
 

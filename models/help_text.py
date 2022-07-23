@@ -1,4 +1,5 @@
 from .character import Constants
+from .roll_status import RollStatus
 
 
 class HelpText:
@@ -77,4 +78,14 @@ class HelpText:
             "WIS_SURVIVAL": "FILLMEIN - SURVIVAL",
             "WIS_SOCIAL": "FILLMEIN - SOCIAL",
         }
+
+        self.ADVANTAGE = (
+            (f"Your next roll is at {constants.NEXT_ROLL_STATUS.value}" if constants.NEXT_ROLL_STATUS != RollStatus.STANDARD else "") +
+            (f"With advantage, you roll an extra die, drop the LOWEST roll.")
+        )
+
+        self.DISADVANTAGE = (
+            (f"Your next roll is at {constants.NEXT_ROLL_STATUS.value}" if constants.NEXT_ROLL_STATUS != RollStatus.STANDARD else "") +
+            (f"With disadvantage, you roll an extra die, drop the HIGHESt roll.")
+        )
 

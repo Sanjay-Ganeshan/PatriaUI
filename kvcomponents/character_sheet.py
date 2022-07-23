@@ -52,8 +52,8 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
 
         self.add_widget(self.character)
         self.add_widget(self.stats)
-        self.add_widget(self.dice_bar)
         self.add_widget(self.rest)
+        self.add_widget(self.dice_bar)
         self.add_widget(self.game_log_window)
 
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self, "text")

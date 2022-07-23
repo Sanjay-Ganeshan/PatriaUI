@@ -1,5 +1,7 @@
 import dataclasses
 import typing as T
+
+from .roll_status import RollStatus
 from .character import Constants
 
 class CharacterList(list):
@@ -29,10 +31,14 @@ class GameState:
 
         self.character_list.append(Constants())
         self.app = None
+        self.next_roll_status: RollStatus = RollStatus.STANDARD
 
     def set_app_instance(self, app):
         self.app = app
     
+    def get_current_character(self) -> Constants:
+        return self.character_list[self.current_character]
+
     def adjust_current_character(self, **replacements) -> None:
         self.character_list[self.current_character] = dataclasses.replace(
             self.character_list[self.current_character], **replacements
@@ -40,6 +46,10 @@ class GameState:
         if self.app is not None:
             self.app.character_sheet.constants = self.character_list[self.current_character]
 
+    def change_roll_status(self, new_role_status: RollStatus):
+        self.adjust_current_character(
+            NEXT_ROLL_STATUS = new_role_status,
+        )
 
 
 THE_GAME = GameState()
