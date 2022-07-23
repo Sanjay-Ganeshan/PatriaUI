@@ -77,7 +77,7 @@ class Constants(DataClassJsonMixin):
         )
     )
 
-    WEAPONS: T.List[str] = field(default_factory=list)
+    WEAPONS: T.Tuple[str, ...] = field(default_factory=tuple)
 
     @classmethod
     def expand_stat_abbreviation(
@@ -101,7 +101,10 @@ class Constants(DataClassJsonMixin):
             if field.name.startswith(prefix)
         ]
 
-    def get_weapons() -> T.List[T.Any]:
+    def get_weapons(self) -> T.List[T.Any]:
         from .game import THE_GAME
+
+        for each_weapon in self.WEAPONS:
+            return THE_GAME.get_weapon(each_weapon)
 
 

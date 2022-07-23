@@ -37,6 +37,7 @@ class PatriaApp(MDApp):
         self.character_sheet = CharacterSheet()
         self.character_sheet.constants = THE_GAME.get_current_character()
         THE_GAME.game_log.log("Welcome!")
+        print(THE_GAME.get_character(THE_GAME.get_character_id_with_name("Lumina")[0]).get_weapons())
 
         return self.character_sheet
 

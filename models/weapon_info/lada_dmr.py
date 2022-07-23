@@ -7,7 +7,6 @@ from ..roll_status import RollStatus
 
 class ProjectLadaDMR(Weapon):
     def __init__(self, **kwargs):
-
         super().__init__(
             **use_passed_or_default(
                 kwargs,
