@@ -115,7 +115,17 @@ class RollParams:
         return replace(self, **changes)
     
     def __str__(self) -> str:
-        prefix = (
-            None if self.roll_type is None or self.roll_type == RollStatus.STANDARD else (self.roll_type.value[:3] + "-")
-        )
-        return f"{prefix}{self.n_dice}d{self.faces.value}{self.modifier:+d}"
+        from .game import THE_GAME
+        if self.roll_type is None:
+            roll_type = THE_GAME.get_current_character().NEXT_ROLL_STATUS
+        else:
+            roll_type = roll_type
+        
+        if roll_type == RollStatus.STANDARD:
+            prefix = ""
+        elif roll_type == RollStatus.ADVANTAGE:
+            prefix = "+|"
+        elif roll_type == RollStatus.DISADVANTAGE:
+            prefix = "-|"
+        suffix = "" if self.modifier == 0 else f"{self.modifier:+d}"
+        return f"{prefix}{self.n_dice}d{self.faces.value}{suffix}"

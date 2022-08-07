@@ -73,6 +73,10 @@ class Weapon(DataClassJsonMixin):
 
     def bind(self, callback: T.Callable[["Weapon"], None]):
         self.callbacks.append(callback)
+    
+    def unbind(self, callback: T.Callable[["Weapon"], None]):
+        if callback in self.callbacks:
+            self.callbacks.remove(callback)
 
     def get_current_mode(self) -> str:
         return self.allowed_modes[self.mode]
@@ -106,7 +110,7 @@ class Weapon(DataClassJsonMixin):
         params = params.replace(
             description=(
                 f"{equipped_by.CHARACTER_NAME} fires "
-                f"{n_rounds} {self.loaded_ammo} {rounds_s}"
+                f"{n_rounds} {self.short_name} {self.loaded_ammo} {rounds_s}"
             )
         )
 
@@ -126,6 +130,12 @@ class Weapon(DataClassJsonMixin):
                 weapon=self,
                 damage=params,
             )
+        params = params.replace(
+            description=(
+                f"{equipped_by.CHARACTER_NAME} deals "
+                f"{self.loaded_ammo} damage"
+            )
+        )
         return params
 
     def _attack_impl(self, equipped_by: Constants) -> RollParams:
@@ -163,13 +173,12 @@ class Weapon(DataClassJsonMixin):
         """
 
         missing_in_clip: int = self.clip_capacity - self.clip_current
-        remaining_of_type: int = self._get_current_ammo()
+        remaining_of_type: int = self._get_current_ammo() - self.clip_current
 
         amount_loaded = min(remaining_of_type, missing_in_clip)
         if amount_loaded <= 0:
             return False
         else:
-            self._increment_ammo(amount_loaded)
             self.clip_current += amount_loaded
             self.notify_listeners()
             return True

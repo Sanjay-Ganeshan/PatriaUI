@@ -51,3 +51,13 @@ class Resources:
 
     CYCLE = "cycle.png"
 
+    WEAPON_ICONS = {
+        "Lada DMR": "sniper.png",
+        "Pistol": "pistol.png",
+    }
+
+    BULLET = "bullet.png"
+    BULLET_LEFT = "bullet_left.png"
+    BLOOD = "teardrop.png"
+    RETICLE = "reticle.png"
+

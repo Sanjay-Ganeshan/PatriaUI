@@ -168,7 +168,6 @@ class GameState:
 
     def equip(self, chr_id: int, wep_id: str) -> None:
         new_val = self.get_character(chr_id).WEAPONS + (wep_id,)
-        print(new_val)
         self.adjust_current_character(
             chr_id,
             WEAPONS = new_val

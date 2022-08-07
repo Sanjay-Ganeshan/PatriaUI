@@ -77,6 +77,8 @@ class Constants(DataClassJsonMixin):
         )
     )
 
+    ACTIVE_WEAPON: int = 0
+
     WEAPONS: T.Tuple[str, ...] = field(default_factory=tuple)
 
     @classmethod
@@ -107,4 +109,8 @@ class Constants(DataClassJsonMixin):
         for each_weapon in self.WEAPONS:
             return THE_GAME.get_weapon(each_weapon)
 
+    def get_active_weapon(self):
+        from .game import THE_GAME
 
+        return THE_GAME.get_weapon(self.WEAPONS[self.ACTIVE_WEAPON])
+    

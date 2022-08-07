@@ -173,7 +173,7 @@ class ProgressiveText(CenteredLabel, ProgressiveIconImpl):
         self.text = self.get_text()
     
     def get_text(self) -> str:
-        return f"{self.current_value} / {self.maximum_value}"
+        return f"{int(self.current_value):d} / {int(self.maximum_value):d}"
 
 
 class AnyIcon(ProgressiveIcon, BoxSized):
