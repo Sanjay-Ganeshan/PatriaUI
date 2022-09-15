@@ -36,6 +36,17 @@ class Resources:
         "WIS_SOCIAL": "social.png",
     }
 
+    SPELLS = {
+        "INCINERATE": "flame.png",
+        "ELECTROCUTE": "bolt.png",
+        "FREEZE": "snowflake.png",
+        "WARP": "portal.png",
+        "DEFLECT": "deflect.png",
+        "REPULSE": "repulse.png",
+        "FEEDBACK": "feedback.png",
+        "TELEKINESIS": "hand.png",
+    }
+
     DICE_ICONS = {
         2: "d2.png",
         4: "d4.png",
@@ -54,6 +65,10 @@ class Resources:
     WEAPON_ICONS = {
         "Lada DMR": "sniper.png",
         "Pistol": "pistol.png",
+        "Splazer": "splaser.png",
+        "Lada BR": "battle_rifle.png",
+        "Vesna LSW": "lsw.png",
+        "Grenade Launcher": "grenade_launcher.png",
     }
 
     BULLET = "bullet.png"

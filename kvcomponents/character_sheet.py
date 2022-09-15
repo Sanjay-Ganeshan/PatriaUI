@@ -9,6 +9,7 @@ from .general_controls import GameLogAndControls
 from .general_controls.dice_bar import DiceBar
 from .shared.spacer import Spacer
 from .weapons.weapon_bar import WeaponBar
+from .spells.spell_bar import SpellBar
 
 from kivy.core.window import Window
 
@@ -36,6 +37,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
         self.game_log_window = GameLogAndControls()
         self.dice_bar = DiceBar()
         self.weapon_bar = WeaponBar()
+        self.spell_bar = SpellBar()
 
         self.rest = Spacer(
             box_width=BOX_WIDTH,
@@ -48,6 +50,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
                         self.game_log_window.box_height,
                         self.dice_bar.box_height,
                         self.weapon_bar.box_height,
+                        self.spell_bar.box_height,
                     ]
                 )
             ),
@@ -56,6 +59,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
         self.add_widget(self.character)
         self.add_widget(self.stats)
         self.add_widget(self.weapon_bar)
+        self.add_widget(self.spell_bar)
         self.add_widget(self.rest)
         self.add_widget(self.dice_bar)
         self.add_widget(self.game_log_window)

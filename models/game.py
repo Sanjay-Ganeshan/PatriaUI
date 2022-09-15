@@ -19,7 +19,6 @@ class GameLog:
 
     def log(self, msg):
         self.logs.append(msg)
-        print(msg)
         for each_callback in self.callbacks:
             each_callback(msg)
 
@@ -46,8 +45,12 @@ class GameState:
             self.app.character_sheet.constants = self.character_list[self.current_character]
 
     def register_weapon(self, wep: Weapon) -> str:
-        while (s_id := str(wep.short_name)) in self.weapon_lookup:
-            pass
+        orig_id = str(wep.short_name)
+        s_id = orig_id
+        addin = 0
+        while s_id in self.weapon_lookup:
+            addin += 1
+            s_id = f"{orig_id}{addin}"
 
         self.weapon_lookup[s_id] = wep
 
@@ -75,11 +78,26 @@ class GameState:
         return found
 
     def _add_default_characters(self) -> None:
-        from .weapon_info.character_specific_weapons import LuminaDMR, LuminaPistol
+        from .weapon_info.character_specific_weapons import (
+            LuminaDMR, LuminaPistol,
+            GalinaBR, GalinaSplaser, GalinaGrenadeLauncher,
+            SilviaLSW, SilviaPistol,
+        )
 
+        if not len(self.get_character_id_with_name("Silvia")) > 0:
+            ch_id = self.create_character("silvia:SilviaFerreyra")
+            self.equip(
+                ch_id,
+                self.register_weapon(SilviaLSW()),
+            )
+            self.equip(
+                ch_id,
+                self.register_weapon(SilviaPistol()),
+            )
+        
+        
         if not len(self.get_character_id_with_name("Lumina")) > 0:
             ch_id = self.create_character("lumina:LuminaGale")
-            char = self.get_character(ch_id)
             self.equip(
                 ch_id,
                 self.register_weapon(LuminaDMR()),
@@ -90,8 +108,21 @@ class GameState:
             )
             
         
-        if not self.get_character_id_with_name("Galina"):
-            self.create_character("galina:GalinaNovikova")
+        if not len(self.get_character_id_with_name("Galina")) > 0:
+            ch_id = self.create_character("galina:GalinaNovikova")
+            self.equip(
+                ch_id,
+                self.register_weapon(GalinaBR()),
+            )
+            self.equip(
+                ch_id,
+                self.register_weapon(GalinaSplaser()),
+            )
+            self.equip(
+                ch_id,
+                self.register_weapon(GalinaGrenadeLauncher()),
+            )
+        
 
     def on_stop(self, *args):
         #self._export_save_data()
@@ -154,8 +185,8 @@ class GameState:
         if chr_id is None:
             chr_id = self.current_character
         
-        self.character_list[self.current_character] = dataclasses.replace(
-            self.character_list[self.current_character], **replacements
+        self.character_list[chr_id] = dataclasses.replace(
+            self.character_list[chr_id], **replacements
         )
     
         if chr_id == self.current_character:

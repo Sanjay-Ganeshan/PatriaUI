@@ -79,6 +79,17 @@ class HelpText:
             "WIS_SOCIAL": "FILLMEIN - SOCIAL",
         }
 
+        self.SPELL_DESCRIPTIONS = {
+            "INCINERATE": "10m ranged spell attack, deals 3d10 on hit",
+            "ELECTROCUTE": "Melee spell attack, deals 3d12 on hit + enemy can't make reactions",
+            "FREEZE": "16m ranged spell. CON save or 3d6 damage + disadvantage on next atk/saving/ability roll",
+            "WARP": "12m range, 4m AoE. Enemies make a DEX save. 3d8 damage on failed save, half on success",
+            "DEFLECT": "As a reaction, add your INT modifier to your armor for the NEXT ATTACK. Or, reflect a grenade",
+            "REPULSE": "Melee force attack requiring a STR save. Success - Enemy knocked prone + 3d8 damage. Failure - Enemy sent <= 10m + 3d8 damage. Enemy can take additional fall or collision damage.",
+            "FEEDBACK": "12m ranged spell. WIS save. Fail - 3d8 + half movement speed. Success - half damage",
+            "TELEKINESIS": "Move a small object within 10m of you to a point within 10m of you",
+        }
+
         self.ADVANTAGE = (
             (f"Your next roll is at {constants.NEXT_ROLL_STATUS.value}" if constants.NEXT_ROLL_STATUS != RollStatus.STANDARD else "") +
             (f"With advantage, you roll an extra die, drop the LOWEST roll.")

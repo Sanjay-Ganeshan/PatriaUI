@@ -43,6 +43,7 @@ class Weapon(DataClassJsonMixin):
     allowed_modes: T.List[str] = field(default_factory=lambda: ["default"])
     burst_size_ix: int = 0
     allowed_burst_sizes: T.List[int] = field(default_factory=lambda: [1])
+    burst_improves_accuracy: bool = True
     attachments: T.List["WeaponAttachment"] = field(default_factory=list)
     tags: T.Set[str] = field(default_factory=set)
 
@@ -93,7 +94,7 @@ class Weapon(DataClassJsonMixin):
 
         cur_new, mx_new = self.ammo_count[new]
         self.ammo_count[new] = (cur_new + self.clip_capacity, mx_new + self.clip_capacity)
-        
+        self.notify_listeners()
         return self
 
     def attack(self, equipped_by: Constants) -> RollParams:
@@ -115,7 +116,7 @@ class Weapon(DataClassJsonMixin):
         )
 
         # Burst - add half of proficiency bonus, rounded up
-        if n_rounds > 1:
+        if n_rounds > 1 and self.burst_improves_accuracy:
             burst_bonus = math.ceil(equipped_by.S_PROFICIENCY_BONUS / 2)
             params = params.replace(
                 modifier=params.modifier+burst_bonus,
@@ -203,7 +204,9 @@ class Weapon(DataClassJsonMixin):
         ammo_types=self.get_ammo_types()
         next_type = ammo_types[(ammo_types.index(self.loaded_ammo) + 1) % len(ammo_types)]
         if next_type != self.loaded_ammo:
+            self.clip_current = 0
             self.loaded_ammo = next_type
+            self.reload()
             self.notify_listeners()
         return self.loaded_ammo
 
@@ -211,3 +214,11 @@ class Weapon(DataClassJsonMixin):
         self.attachments.append(attachment)
         attachment.attach_to(self)
         return self
+    
+    def restore(self) -> None:
+        self.burst_size_ix = 0
+        for ammo_type in self.ammo_count:
+            cur, mx = self.ammo_count[ammo_type]
+            self.ammo_count[ammo_type] = mx, mx
+        self.clip_current = self.clip_capacity
+        self.notify_listeners()

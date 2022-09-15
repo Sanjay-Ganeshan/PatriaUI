@@ -42,6 +42,6 @@ class ProjectSplazer(Weapon):
 
     def _damage_impl(self, equipped_by: Constants) -> RollParams:
         return RollParams(
-            Dice.D4,
-            n_dice=2,
+            Dice.D20,
+            n_dice=1000,
         )

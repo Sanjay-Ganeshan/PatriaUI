@@ -68,3 +68,13 @@ class TelescopicSight(WeaponAttachment):
             modifier=attack.modifier+2,
         )
 
+
+class Suppressor(WeaponAttachment):
+    def attach_to(self, weapon: "Weapon") -> None:
+        weapon.tags.add("suppressed")
+
+    
+class SkinsuitInterface(WeaponAttachment):
+    def attach_to(self, weapon: "Weapon") -> None:
+        weapon.allowed_modes.append("braced")
+        weapon.tags.add("bipod")

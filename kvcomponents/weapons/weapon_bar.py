@@ -15,15 +15,6 @@ from ..resource_list import Resources
 from ..shared.touchable_mixin import TouchableMixin
 from ..shared.spacer import Spacer
 
-
-
-class WPAmmoSwitcher:
-    """
-    Swap ammo
-    """
-    pass
-
-
 class WPModeSwitcher:
     """
     Swap modes
@@ -59,12 +50,15 @@ class WPAmmoCount(ProgressiveText, NeedsWeapon, TouchableMixin):
         if self.bound_weapon is not None:
             self.current_value = self.bound_weapon.clip_current
             self.maximum_value = self.bound_weapon.clip_capacity
+            self.tooltip_text = self.get_tooltip_text()
 
     def weapon_modified(self, wep):
         super().weapon_modified(wep)
         if self.bound_weapon is not None:
             self.current_value = self.bound_weapon.clip_current
             self.maximum_value = self.bound_weapon.clip_capacity
+            self.text = self.get_text()
+            self.tooltip_text = self.get_tooltip_text()
 
     def on_left_click(self, position):
         super().on_left_click(position)
@@ -75,6 +69,16 @@ class WPAmmoCount(ProgressiveText, NeedsWeapon, TouchableMixin):
         super().on_right_click(position)
         if self.bound_weapon is not None:
             self.bound_weapon.reload()
+
+    def get_tooltip_text(self) -> str:
+        if self.bound_weapon is None:
+            return ""
+        else:
+            return (
+                f"Loaded bullets: {self.bound_weapon.clip_current}x{self.bound_weapon.loaded_ammo}\n"
+                f"Total Remaining Ammo (including bullets in active magazine): \n"
+                + "\n".join((f"{ammo_type}: {self.bound_weapon.ammo_count[ammo_type][0]}" for ammo_type in sorted(self.bound_weapon.ammo_count)))
+            )
 
     def get_text(self):
         if self.bound_weapon is not None:
@@ -130,13 +134,21 @@ class WPIcon(Image, BoxSized, NeedsConstants, TouchableMixin, OptionalTooltip):
             wep.short_name,
             Resources.DEATH_FAIL,
         )
-        self.tooltip_text = f"{wep.name}\n{wep.description}"
+        self.tooltip_text = (
+            f"{wep.name}\n{wep.description}\nModifications: {', '.join([str(type(t).__name__) for t in wep.attachments])}\n"
+            f"LClick - Change weapons, RClick - Fully resupply this weapon"
+        )
     
     def on_left_click(self, position):
         super().on_left_click(position)
         THE_GAME.adjust_current_character(
             ACTIVE_WEAPON=((self.constants.ACTIVE_WEAPON + 1) % len(self.constants.WEAPONS))
         )
+    
+    def on_right_click(self, position):
+        super().on_right_click(position)
+        wep = self.constants.get_active_weapon()
+        wep.restore()
 
 class WPWeaponName(CenteredLabel, NeedsConstants, TouchableMixin):
     def __init__(self, **kwargs):
@@ -171,7 +183,14 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, NeedsWeapon):
     def on_left_click(self, position):
         super().on_left_click(position)
         if self.bound_weapon is not None and self.constants is not None:
-            getattr(self.bound_weapon, self.which_func)(self.constants).roll()
+            if self.which_func == "attack":
+                fired = self.bound_weapon.fire()
+            else:
+                fired = True
+            if fired:
+                getattr(self.bound_weapon, self.which_func)(self.constants).roll()
+            else:
+                THE_GAME.game_log.log(f"{self.constants.CHARACTER_NAME} tries can't fire {self.bound_weapon.loaded_ammo} - clip is empty!")
     
 class WPAttackOrDamage(MDBoxLayout, BoxSized, NeedsWeapon):
     def __init__(self, which_func, **kwargs):
@@ -194,15 +213,21 @@ class WPAttackOrDamage(MDBoxLayout, BoxSized, NeedsWeapon):
 
     def weapon_modified(self, wep: "Weapon"):
         super().weapon_modified(wep)
-        if self.bound_weapon is not None:
-            self.dmg.text = str(getattr(self.bound_weapon, self.which_func)(self.constants))
+        self.weapon_common()
 
     
     def weapon_changed(self, *args):
         super().weapon_changed(*args)
+        self.weapon_common()
+    
+    def weapon_common(self):
+        if self.bound_weapon is None:
+            self.dmg.text = ""
+        else:
+            roll_s = str(getattr(self.bound_weapon, self.which_func)(self.constants))
+            self.dmg.text = roll_s
 
-        if self.bound_weapon is not None:
-            self.dmg.text = str(getattr(self.bound_weapon, self.which_func)(self.constants))
+        
     
 class WeaponBar(MDBoxLayout, BoxSized, NeedsConstants):
     def __init__(self, **kwargs):
@@ -246,6 +271,7 @@ class WPAmmoType(CenteredLabel, NeedsWeapon, TouchableMixin):
             text="",
             box_width=1,
             box_height=2,
+            font_style="Body1",
             **kwargs,
         )
         self.constants_init()
@@ -254,20 +280,42 @@ class WPAmmoType(CenteredLabel, NeedsWeapon, TouchableMixin):
         
     def weapon_changed(self, *args):
         super().weapon_changed(*args)
-        if self.bound_weapon is not None:
-            self.text = self.bound_weapon.loaded_ammo
+        self.weapon_common()
 
     def weapon_modified(self, wep: "Weapon"):
         super().weapon_modified(wep)
+        self.weapon_common()
+    
+    def weapon_common(self):
         if self.bound_weapon is not None:
-            self.text = self.bound_weapon.loaded_ammo
+            ammo_pref = f"Firing {self.bound_weapon.allowed_burst_sizes[self.bound_weapon.burst_size_ix]}x {self.bound_weapon.loaded_ammo}"
+            cal_suff = f"{self.bound_weapon.caliber} cal @ {self.bound_weapon.range_meters}m"
+            self.text = f"{ammo_pref}\n{cal_suff}"
+        else:
+            self.text = "N/A"
+        self.bound_weapon.loaded_ammo
+        self.tooltip_text = self.get_tooltip_text()
 
     def on_left_click(self, position):
         super().on_left_click(position)
         if self.bound_weapon is not None:
             self.bound_weapon.switch_ammo()
-        
     
+    def on_right_click(self, position):
+        super().on_right_click(position)
+        if self.bound_weapon is not None:
+            self.bound_weapon.switch_burst()
+        
+    def get_tooltip_text(self) -> str:
+        if self.bound_weapon is None:
+            return ""
+        else:
+            return (
+                f"Available ammo types: {sorted(self.bound_weapon.ammo_count.keys())}\n"
+                f"Available burst size: {sorted(self.bound_weapon.allowed_burst_sizes)}\n"
+                f"LClick: change ammo, RClick: change burst size\n"
+                f"Hover over ammo count to see counts for each."
+            )
 
 
 

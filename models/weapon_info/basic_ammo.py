@@ -36,6 +36,18 @@ class EMChamber(WeaponAttachment):
             weapon.ammo_count["EM"] = (0,0)
             weapon.replace_magazine("FMJ", "EM")
 
+    def modify_damage(
+        self, 
+        equipped_by: Constants,
+        weapon: "Weapon",
+        damage: RollParams
+    ) -> RollParams:
+        if weapon.loaded_ammo == "EM":
+            return damage.replace(
+                post_roll_desc=lambda tot,r:"This damage ignores shields."
+            )
+        else:
+            return damage
 
 class APChamber(WeaponAttachment):
     """

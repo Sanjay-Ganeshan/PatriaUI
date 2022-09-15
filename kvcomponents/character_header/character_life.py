@@ -59,7 +59,7 @@ class CHDeathSuccesses(ProgressiveIcon, NeedsConstants, TouchableMixin):
             current_value=0,
             maximum_value=1,
             pr_empty_color="black",
-            pr_full_color="darkgreen",
+            pr_full_color="green",
             orientation="horizontal",
         )
         self.constants_init()
@@ -216,6 +216,8 @@ class CHHitpoints(ProgressiveText, NeedsConstants, TouchableMixin):
         new_value = min(self.maximum_value, self.current_value + 1)
         THE_GAME.adjust_current_character(
             CURRENT_HP=new_value,
+            CURRENT_DEATH_FAILS=0,
+            CURRENT_DEATH_SUCCESS=0,
         )
 
 
