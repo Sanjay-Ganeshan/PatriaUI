@@ -41,5 +41,5 @@ class UnderbarrelGrenadeLauncher(Weapon):
         return RollParams(
             Dice.D6,
             n_dice=4,
-            post_roll_desc=lambda total, raw:f"8m splash damage, {total // 2} dex save of 15",
+            post_roll_desc=lambda total, raw:f"8m splash damage, reduced to {(total+1) // 2} on a successful dex save of 15",
         )
