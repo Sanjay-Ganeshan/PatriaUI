@@ -1,7 +1,7 @@
 import kivy
 from kivy.config import Config
 
-from InteractiveTerminal.models.game import THE_GAME
+from .models.game import THE_GAME
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
 import os
