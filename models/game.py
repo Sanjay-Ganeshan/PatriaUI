@@ -80,9 +80,9 @@ class GameState:
 
     def _add_default_characters(self) -> None:
         from .weapon_info.character_specific_weapons import (
-            LuminaDMR, LuminaPistol,
-            GalinaBR, GalinaSplaser, GalinaGrenadeLauncher,
-            SilviaLSW, SilviaPistol,
+            LuminaDMR, LuminaPistol, LuminaGrenades,
+            GalinaBR, GalinaSplaser, GalinaGrenadeLauncher, GalinaGrenades,
+            SilviaLSW, SilviaPistol, SilviaGrenades,
         )
 
         if not len(self.get_character_id_with_name("Silvia")) > 0:
@@ -95,6 +95,10 @@ class GameState:
                 ch_id,
                 self.register_weapon(SilviaPistol()),
             )
+            self.equip(
+                ch_id,
+                self.register_weapon(SilviaGrenades()),
+            )
         
         
         if not len(self.get_character_id_with_name("Lumina")) > 0:
@@ -106,6 +110,10 @@ class GameState:
             self.equip(
                 ch_id,
                 self.register_weapon(LuminaPistol()),
+            )
+            self.equip(
+                ch_id,
+                self.register_weapon(LuminaGrenades()),
             )
             
         
@@ -122,6 +130,10 @@ class GameState:
             self.equip(
                 ch_id,
                 self.register_weapon(GalinaGrenadeLauncher()),
+            )
+            self.equip(
+                ch_id,
+                self.register_weapon(GalinaGrenades()),
             )
         
     def on_stop(self, *args):

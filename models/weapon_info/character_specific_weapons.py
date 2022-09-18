@@ -7,6 +7,7 @@ from .underbarrel_grenade_launcher import UnderbarrelGrenadeLauncher
 from .basic_ammo import PlasmaChamber, EMChamber, APChamber
 from .stat_mod_attachments import TelescopicSight, HolographicSight, Bipod, Suppressor
 from .training import BasicTraining, SpecializedTraining
+from .grenade_pack import GrenadePack
 
 
 def LuminaDMR() -> ProjectLadaDMR:
@@ -30,6 +31,16 @@ def LuminaPistol() -> CoalitionPistol:
         .add_attachment(BasicTraining())
     )
 
+def LuminaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo_count = {
+            "Flashbang": (2, 2),
+            "Concussion": (2, 2),
+            "Fragmentation": (0, 0),
+            "Smoke": (0, 0),
+        },
+    )
+
 
 def GalinaBR() -> ProjectLadaBR:
     return (
@@ -50,6 +61,15 @@ def GalinaSplaser() -> ProjectSplazer:
 def GalinaGrenadeLauncher() -> UnderbarrelGrenadeLauncher:
     return UnderbarrelGrenadeLauncher().add_attachment(BasicTraining())
 
+def GalinaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo_count = {
+            "Flashbang": (2, 2),
+            "Concussion": (0, 0),
+            "Fragmentation": (0, 0),
+            "Smoke": (2, 2),
+        },
+    )
 
 def SilviaLSW() -> ProjectVesnaLSW:
     return (
@@ -70,4 +90,14 @@ def SilviaPistol() -> CoalitionPistol:
         .add_attachment(HolographicSight())
         .add_attachment(Suppressor())
         .add_attachment(BasicTraining())
+    )
+
+def SilviaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo_count = {
+            "Flashbang": (2, 2),
+            "Concussion": (0, 0),
+            "Fragmentation": (0, 0),
+            "Smoke": (2, 2),
+        },
     )
