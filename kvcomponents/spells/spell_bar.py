@@ -62,7 +62,7 @@ class SpellIncinerate(SpellIcon):
             faces=Dice.D20,
             modifier=char.S_PROFICIENCY_BONUS + char.S_INTELLIGENCE,
             description = f"{char.CHARACTER_NAME} attacks with INCINERATE (10m)",
-            post_roll_desc = "(RClick for damage)"
+            post_roll_desc = lambda total,raw:"(RClick for damage)"
         )
     
     def _roll_damage(self):
@@ -89,7 +89,7 @@ class SpellElectrocute(SpellIcon):
             faces=Dice.D20,
             modifier=char.S_PROFICIENCY_BONUS + char.S_INTELLIGENCE,
             description = f"{char.CHARACTER_NAME} attacks with ELECTROCUTE (melee)",
-            post_roll_desc = "(RClick for damage)"
+            post_roll_desc = lambda total,raw:"(RClick for damage)"
         )
     
     def _roll_damage(self):
