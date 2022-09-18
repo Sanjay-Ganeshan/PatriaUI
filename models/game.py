@@ -26,6 +26,7 @@ class GameLog:
         self.callbacks.append(callback)
 
 
+
 class GameState:
     def __init__(self) -> None:
         self.current_character = 0
@@ -123,7 +124,6 @@ class GameState:
                 self.register_weapon(GalinaGrenadeLauncher()),
             )
         
-
     def on_stop(self, *args):
         #self._export_save_data()
         pass
