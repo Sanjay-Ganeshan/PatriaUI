@@ -245,6 +245,7 @@ class WeaponBar(MDBoxLayout, BoxSized, NeedsConstants):
         self.damage = WPAttackOrDamage(which_func="damage")
         self.attack = WPAttackOrDamage(which_func="attack")
         self.ammo_type = WPAmmoType()
+        self.mode_switcher = WPModeSwitcher()
         self.spacer = Spacer(
             box_height=2,
             box_width=self.box_width - sum(
@@ -253,6 +254,8 @@ class WeaponBar(MDBoxLayout, BoxSized, NeedsConstants):
                     self.ammo.box_width,
                     self.damage.box_width,
                     self.attack.box_width,
+                    self.mode_switcher.box_width,
+                    self.ammo_type.box_width,
                 ]
             )
         )
@@ -260,6 +263,7 @@ class WeaponBar(MDBoxLayout, BoxSized, NeedsConstants):
         self.add_widget(self.weapon_icon)
         self.add_widget(self.ammo)
         self.add_widget(self.ammo_type)
+        self.add_widget(self.mode_switcher)
         self.add_widget(self.spacer)
         self.add_widget(self.attack)
         self.add_widget(self.damage)
@@ -316,7 +320,48 @@ class WPAmmoType(CenteredLabel, NeedsWeapon, TouchableMixin):
                 f"Hover over ammo count to see counts for each."
             )
 
+class WPModeSwitcher(CenteredLabel, NeedsWeapon, TouchableMixin):
+    def __init__(self, **kwargs):
+        super().__init__(
+            text="",
+            box_width=1,
+            box_height=2,
+            font_style="Body1",
+            **kwargs,
+        )
+        self.constants_init()
+        self.weapons_init()
+        self.touch_init()
+        
+    def weapon_changed(self, *args):
+        super().weapon_changed(*args)
+        self.weapon_common()
 
+    def weapon_modified(self, wep: "Weapon"):
+        super().weapon_modified(wep)
+        self.weapon_common()
+    
+    def weapon_common(self):
+        if self.bound_weapon is not None:
+            self.text = f"Mode: {self.bound_weapon.get_current_mode()}"
+        else:
+            self.text = "N/A"
+        self.tooltip_text = self.get_tooltip_text()
+
+    def on_left_click(self, position):
+        super().on_left_click(position)
+        if self.bound_weapon is not None:
+            self.bound_weapon.switch_mode()
+    
+        
+    def get_tooltip_text(self) -> str:
+        if self.bound_weapon is None:
+            return ""
+        else:
+            return (
+                f"Allowed modes: {sorted(self.bound_weapon.allowed_modes)}\n"
+                f"LClick: change mode"
+            )
 
 
     
