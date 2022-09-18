@@ -1,4 +1,3 @@
-from sympy import maximum
 from ...models.weapon import Weapon
 from ...models.character import Constants
 from ..shared.centered_label import CenteredLabel
