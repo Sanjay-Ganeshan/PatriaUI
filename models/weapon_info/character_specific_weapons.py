@@ -34,10 +34,10 @@ def LuminaPistol() -> CoalitionPistol:
 def LuminaGrenades() -> GrenadePack:
     return GrenadePack(
         ammo_count = {
-            "Flashbang": (2, 2),
-            "Concussion": (2, 2),
-            "Fragmentation": (0, 0),
-            "Smoke": (0, 0),
+            "Flashbang": (2, 4),
+            "Concussion": (2, 4),
+            "Fragmentation": (0, 4),
+            "Smoke": (0, 4),
         },
     )
 
@@ -64,10 +64,10 @@ def GalinaGrenadeLauncher() -> UnderbarrelGrenadeLauncher:
 def GalinaGrenades() -> GrenadePack:
     return GrenadePack(
         ammo_count = {
-            "Flashbang": (2, 2),
-            "Concussion": (0, 0),
-            "Fragmentation": (0, 0),
-            "Smoke": (2, 2),
+            "Flashbang": (2, 4),
+            "Concussion": (0, 4),
+            "Fragmentation": (0, 4),
+            "Smoke": (2, 4),
         },
     )
 
@@ -95,9 +95,9 @@ def SilviaPistol() -> CoalitionPistol:
 def SilviaGrenades() -> GrenadePack:
     return GrenadePack(
         ammo_count = {
-            "Flashbang": (2, 2),
-            "Concussion": (0, 0),
-            "Fragmentation": (0, 0),
-            "Smoke": (2, 2),
+            "Flashbang": (2, 4),
+            "Concussion": (0, 4),
+            "Fragmentation": (0, 4),
+            "Smoke": (2, 4),
         },
     )
