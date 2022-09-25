@@ -1,12 +1,11 @@
 import typing as T
 import dataclasses
 from dataclasses import dataclass, field
-from dataclasses_json import DataClassJsonMixin, config as json_config
 
 from .roll_status import RollStatus
 
 @dataclass(frozen=True)
-class Constants(DataClassJsonMixin):
+class Constants:
     # General
     ICON_SRC: str = "sinon3.png"
     CHARACTER_NAME: str = "Lumina Gale"
@@ -71,10 +70,6 @@ class Constants(DataClassJsonMixin):
 
     NEXT_ROLL_STATUS: RollStatus = field(
         default=RollStatus.STANDARD,
-        metadata=json_config(
-            encoder=lambda o: o.value,
-            decoder=lambda val: RollStatus(val),
-        )
     )
 
     ACTIVE_WEAPON: int = 0

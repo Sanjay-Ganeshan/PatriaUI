@@ -6,15 +6,16 @@ from .weapon import Weapon
 from .roll_status import RollStatus
 from .character import Constants
 from .. import save
+from ..save.powerful_json import loads, dumps
+import os
+
 import inspect
 
-class CharacterList(list):
-    pass
-
-
+@dataclasses.dataclass
 class GameLog:
-    def __init__(self):
-        self.logs = []
+    logs: T.List[str] = dataclasses.field(default_factory=list)
+    
+    def __post_init__(self):
         self.callbacks = []
 
     def log(self, msg):
@@ -26,15 +27,15 @@ class GameLog:
         self.callbacks.append(callback)
 
 
-
+@dataclasses.dataclass
 class GameState:
-    def __init__(self) -> None:
-        self.current_character = 0
-        self.character_list: T.List[Constants] = CharacterList()
-        self.weapon_lookup: T.Dict[str, Weapon] = {}
+    current_character: int = 0
+    weapon_lookup: T.Dict[str, Weapon] = dataclasses.field(default_factory=dict, metadata={"IGNORESAVE": False})
+    character_list: T.List[Constants] = dataclasses.field(default_factory=list, metadata={"IGNORESAVE": False})
+
+    def __post_init__(self) -> None:
         self.game_log = GameLog()
         self.app = None
-        self.restore_state()
         self._add_default_characters()
 
     def set_app_instance(self, app):
@@ -137,24 +138,13 @@ class GameState:
             )
         
     def on_stop(self, *args):
-        #self._export_save_data()
+        self.export_save_data()
         pass
 
-    def export_obj(self, obj: T.Any, obj_id: str, obj_prefix: str) -> None:
-        modname = ".".join(inspect.getmodule(obj).__name__.split(".")[-2])
-        classname = type(obj).__name__
-        d = obj.to_dict()
-        d["modname"] = modname
-        d["classname"] = classname
-        save.save(d, f"{obj_prefix}_{obj_id}")
-
-    def _export_save_data(self):
-        for each_char in self.character_list:
-            chid = each_char.CHARACTER_NAME.split()[0].lower()
-            self.export_obj(each_char, chid, "ch")
-            
-        for wp_id in self.weapon_lookup:
-            self.export_obj(self.weapon_lookup[wp_id], wp_id, "wp")
+    def export_save_data(self) -> None:
+        save_data = dumps(self, indent=4)
+        with open(save.path_for("SAVE.json"), "w") as f:
+            f.write(save_data)
     
     def restore_state(self):
         for each_obj in save.query():
@@ -217,4 +207,9 @@ class GameState:
         )
 
 
-THE_GAME = GameState()
+
+if os.path.isfile(save.path_for("SAVE.json")):
+    with open(save.path_for("SAVE.json")) as _f:
+        THE_GAME = loads(_f.read())
+else:
+    THE_GAME = GameState()

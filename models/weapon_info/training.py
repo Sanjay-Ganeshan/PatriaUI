@@ -8,7 +8,7 @@ class SpecializedTraining(WeaponAttachment):
     Grants expertise with a weapon
     """
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("expert")
+        weapon.add_tag("expert")
     
     def modify_attack(
         self,
@@ -26,7 +26,7 @@ class BasicTraining(WeaponAttachment):
     Grants proficiency with a weapon
     """
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("proficient")
+        weapon.add_tag("proficient")
     
     def modify_attack(
         self,

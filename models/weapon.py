@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from dataclasses_json import DataClassJsonMixin
 import typing as T
 import math
 
@@ -7,7 +6,7 @@ from .character import Constants
 from .dice import RollParams
 
 @dataclass
-class WeaponAttachment(DataClassJsonMixin):
+class WeaponAttachment:
     def attach_to(self, weapon: "Weapon") -> None:
         return
     
@@ -28,7 +27,7 @@ class WeaponAttachment(DataClassJsonMixin):
         return damage
 
 @dataclass
-class Weapon(DataClassJsonMixin):
+class Weapon:
     name: str = "Project Lada Designated Marksman's Rifle"
     short_name: str = "Lada DMR"
     description: str = ""
@@ -45,9 +44,9 @@ class Weapon(DataClassJsonMixin):
     allowed_burst_sizes: T.List[int] = field(default_factory=lambda: [1])
     burst_improves_accuracy: bool = True
     attachments: T.List["WeaponAttachment"] = field(default_factory=list)
-    tags: T.Set[str] = field(default_factory=set)
+    tags: T.List[str] = field(default_factory=list)
 
-    callbacks: T.List[T.Callable[["Weapon"], None]] = field(default_factory=list)
+    callbacks: T.List[T.Callable[["Weapon"], None]] = field(default_factory=list, metadata = {"IGNORESAVE": True})
 
     def __post_init__(self) -> None:
         assert (
@@ -222,3 +221,11 @@ class Weapon(DataClassJsonMixin):
             self.ammo_count[ammo_type] = mx, mx
         self.clip_current = self.clip_capacity
         self.notify_listeners()
+
+    def add_tag(self, tag: str) -> None:
+        if tag not in self.tags:
+            self.tags.append(tag)
+    
+    def remove_tag(self, tag: str) -> None:
+        if tag in self.tags:
+            self.tags.pop(tag)

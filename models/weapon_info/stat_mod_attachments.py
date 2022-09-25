@@ -7,7 +7,7 @@ import math
 class Bipod(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
         weapon.allowed_modes.append("braced")
-        weapon.tags.add("bipod")
+        weapon.add_tag("bipod")
     
     def modify_attack(
         self, 
@@ -26,7 +26,7 @@ class Bipod(WeaponAttachment):
 
 class VerticalGrip(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("vertical-grip")
+        weapon.add_tag("vertical-grip")
     
     def modify_attack(
         self, 
@@ -41,7 +41,7 @@ class VerticalGrip(WeaponAttachment):
 
 class HolographicSight(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("holo-sight")
+        weapon.add_tag("holo-sight")
     
     def modify_attack(
         self, 
@@ -56,7 +56,7 @@ class HolographicSight(WeaponAttachment):
 
 class TelescopicSight(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("telescopic-sight")
+        weapon.add_tag("telescopic-sight")
     
     def modify_attack(
         self, 
@@ -71,10 +71,10 @@ class TelescopicSight(WeaponAttachment):
 
 class Suppressor(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
-        weapon.tags.add("suppressed")
+        weapon.add_tag("suppressed")
 
     
 class SkinsuitInterface(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
         weapon.allowed_modes.append("braced")
-        weapon.tags.add("bipod")
+        weapon.add_tag("bipod")
