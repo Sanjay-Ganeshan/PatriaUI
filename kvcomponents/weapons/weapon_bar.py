@@ -191,6 +191,12 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, NeedsWeapon):
             else:
                 THE_GAME.game_log.log(f"{self.constants.CHARACTER_NAME} tries can't fire {self.bound_weapon.loaded_ammo} - clip is empty!")
     
+    def on_right_click(self, position):
+        super().on_right_click(position)
+        # no ammo check
+        if self.bound_weapon is not None and self.constants is not None:
+            getattr(self.bound_weapon, self.which_func)(self.constants).roll()
+    
 class WPAttackOrDamage(MDBoxLayout, BoxSized, NeedsWeapon):
     def __init__(self, which_func, **kwargs):
         assert which_func in ["damage", "attack"], f"bad {which_func}"
