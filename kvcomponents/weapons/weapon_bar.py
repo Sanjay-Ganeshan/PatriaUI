@@ -165,7 +165,7 @@ class WPWeaponName(CenteredLabel, NeedsConstants, TouchableMixin):
         wep = self.constants.get_active_weapon()
         self.text = wep.short_name  
 
-class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, NeedsWeapon):
+class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, NeedsWeapon, OptionalTooltip):
     def __init__(self, which_func, **kwargs):
         self.which_func = which_func
         super().__init__(
@@ -173,6 +173,7 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, NeedsWeapon):
             box_width=0.5,
             box_height=2,
             color="darkred",
+            tooltip_text = "LClick - fire, RClick - roll, no ammo reduction",
             **kwargs
         )
         self.constants_init()
