@@ -67,6 +67,7 @@ class Resources:
         "Pistol": "pistol.png",
         "Splazer": "splaser.png",
         "Lada BR": "battle_rifle.png",
+        "Lada CQ": "smg.png",
         "Vesna LSW": "lsw.png",
         "Grenade Launcher": "grenade_launcher.png",
         "Siren Knife": "knife.png",
