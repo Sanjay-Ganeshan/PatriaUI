@@ -28,12 +28,12 @@ class WeaponAttachment:
 
 @dataclass
 class Weapon:
-    name: str = "Project Lada Designated Marksman's Rifle"
-    short_name: str = "Lada DMR"
-    description: str = ""
+    name: str = field(default="Project Lada Designated Marksman's Rifle", metadata = {"IGNORESAVE": True})
+    short_name: str = field(default="Lada DMR", metadata = {"IGNORESAVE": True})
+    description: str = field(default="", metadata = {"IGNORESAVE": True})
 
-    caliber: float = 7.8
-    range_meters: int = 1200
+    caliber: float = field(default=7.8, metadata = {"IGNORESAVE": True})
+    range_meters: int = field(default=1200, metadata = {"IGNORESAVE": True})
     loaded_ammo: str = "Standard"
     ammo_count: T.Dict[str, T.Tuple[int, int]] = field(default_factory=lambda:{"Standard":0})
     clip_current: int = 0
@@ -107,12 +107,13 @@ class Weapon:
         
         n_rounds = self.allowed_burst_sizes[self.burst_size_ix]
         rounds_s = "rounds" if n_rounds > 1 else "round"
-        params = params.replace(
-            description=(
-                f"{equipped_by.CHARACTER_NAME} fires "
-                f"{n_rounds} {self.short_name} {self.loaded_ammo} {rounds_s}"
+        if not params.description:
+            params = params.replace(
+                description=(
+                    f"{equipped_by.CHARACTER_NAME} fires "
+                    f"{n_rounds} {self.short_name} {self.loaded_ammo} {rounds_s}"
+                )
             )
-        )
 
         # Burst - add half of proficiency bonus, rounded up
         if n_rounds > 1 and self.burst_improves_accuracy:

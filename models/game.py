@@ -84,6 +84,7 @@ class GameState:
             LuminaDMR, LuminaPistol, LuminaGrenades,
             GalinaBR, GalinaSplaser, GalinaGrenadeLauncher, GalinaGrenades,
             SilviaLSW, SilviaPistol, SilviaGrenades,
+            Knife,
         )
 
         if not len(self.get_character_id_with_name("Silvia")) > 0:
@@ -100,6 +101,7 @@ class GameState:
                 ch_id,
                 self.register_weapon(SilviaGrenades()),
             )
+            self.equip(ch_id, self.register_weapon(Knife()))
         
         
         if not len(self.get_character_id_with_name("Lumina")) > 0:
@@ -116,6 +118,7 @@ class GameState:
                 ch_id,
                 self.register_weapon(LuminaGrenades()),
             )
+            self.equip(ch_id, self.register_weapon(Knife()))
             
         
         if not len(self.get_character_id_with_name("Galina")) > 0:
@@ -136,6 +139,7 @@ class GameState:
                 ch_id,
                 self.register_weapon(GalinaGrenades()),
             )
+            self.equip(ch_id, self.register_weapon(Knife()))
         
     def on_stop(self, *args):
         self.export_save_data()

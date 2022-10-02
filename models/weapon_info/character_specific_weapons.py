@@ -8,6 +8,7 @@ from .basic_ammo import PlasmaChamber, EMChamber, APChamber
 from .stat_mod_attachments import TelescopicSight, HolographicSight, Bipod, Suppressor
 from .training import BasicTraining, SpecializedTraining
 from .grenade_pack import GrenadePack
+from .siren_knife import SirenKnife
 
 
 def LuminaDMR() -> ProjectLadaDMR:
@@ -100,4 +101,10 @@ def SilviaGrenades() -> GrenadePack:
             "Fragmentation": (0, 4),
             "Smoke": (2, 4),
         },
+    )
+
+
+def Knife() -> SirenKnife:
+    return SirenKnife().add_attachment(
+        BasicTraining()
     )
