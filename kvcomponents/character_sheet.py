@@ -13,6 +13,53 @@ from .spells.spell_bar import SpellBar
 
 from kivy.core.window import Window
 
+class DetailsSheet(MDBoxLayout, BoxSized, NeedsConstants):
+    def __init__(self, **kwargs):
+        super().__init__(
+            box_width=BOX_WIDTH,
+            box_height=10,
+            orientation="vertical",
+            **kwargs,
+        )
+
+        self.box_init()
+        self.constants_init()
+
+        self.stats = CharacterStats()
+        self.weapon_bar = WeaponBar()
+        self.spell_bar = SpellBar()
+        self.dice_bar = DiceBar()
+        self.add_widget(self.stats)
+        self.add_widget(self.weapon_bar)
+        self.add_widget(self.spell_bar)
+        self.add_widget(self.dice_bar)
+
+class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants):
+    def __init__(self, **kwargs):
+        super().__init__(
+            box_width=BOX_WIDTH,
+            box_height=10,
+            orientation="vertical",
+            **kwargs,
+        )
+
+        self.details = DetailsSheet()
+        self.empty = Spacer(box_width=BOX_WIDTH,box_height=10)
+
+        self.box_init()
+        self.constants_init()
+
+        self.possible_views = [self.details, self.empty]
+        self.which_view = 0
+
+        self.add_widget(self.possible_views[self.which_view])
+
+    def switch_view(self) -> None:
+        self.remove_widget(self.possible_views[self.which_view])
+        self.which_view += 1
+        self.which_view %= len(self.possible_views)
+        self.add_widget(self.possible_views[self.which_view])
+
 class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
     """
     All character info
@@ -32,12 +79,9 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
         # General info
         self.character = CharacterGeneralInfo()
 
-        self.stats = CharacterStats()
+        self.details = CenterHolder()
 
         self.game_log_window = GameLogAndControls()
-        self.dice_bar = DiceBar()
-        self.weapon_bar = WeaponBar()
-        self.spell_bar = SpellBar()
 
         self.rest = Spacer(
             box_width=BOX_WIDTH,
@@ -45,23 +89,17 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
                 BOX_HEIGHT
                 - sum(
                     [
-                        self.stats.box_height,
                         self.character.box_height,
                         self.game_log_window.box_height,
-                        self.dice_bar.box_height,
-                        self.weapon_bar.box_height,
-                        self.spell_bar.box_height,
+                        self.details.box_height,
                     ]
                 )
             ),
         )
 
         self.add_widget(self.character)
-        self.add_widget(self.stats)
-        self.add_widget(self.weapon_bar)
-        self.add_widget(self.spell_bar)
+        self.add_widget(self.details)
         self.add_widget(self.rest)
-        self.add_widget(self.dice_bar)
         self.add_widget(self.game_log_window)
 
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self, "text")

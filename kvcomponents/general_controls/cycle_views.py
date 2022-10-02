@@ -20,5 +20,5 @@ class CycleViews(Image, BoxSized, TouchableMixin):
 
     def on_left_click(self, position):
         super().on_left_click(position)
-        THE_GAME.change_character()
+        THE_GAME.app.character_sheet.details.switch_view()
 
