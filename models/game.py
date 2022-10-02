@@ -84,39 +84,45 @@ class GameState:
             LuminaDMR, LuminaPistol, LuminaGrenades,
             GalinaBR, GalinaSplaser, GalinaGrenadeLauncher, GalinaGrenades,
             SilviaLSW, SilviaPistol, SilviaGrenades,
-            Knife,
+            Knife, ReplacementSMG
         )
 
         if not len(self.get_character_id_with_name("Silvia")) > 0:
             ch_id = self.create_character("silvia:SilviaFerreyra")
+            """
             self.equip(
                 ch_id,
                 self.register_weapon(SilviaLSW()),
             )
             self.equip(
                 ch_id,
-                self.register_weapon(SilviaPistol()),
+                self.register_weapon(SilviaGrenades()),
             )
+            """
+            self.equip(ch_id, self.register_weapon(ReplacementSMG()))
             self.equip(
                 ch_id,
-                self.register_weapon(SilviaGrenades()),
+                self.register_weapon(SilviaPistol()),
             )
             self.equip(ch_id, self.register_weapon(Knife()))
         
         
         if not len(self.get_character_id_with_name("Lumina")) > 0:
             ch_id = self.create_character("lumina:LuminaGale")
+            """
             self.equip(
                 ch_id,
                 self.register_weapon(LuminaDMR()),
             )
             self.equip(
                 ch_id,
-                self.register_weapon(LuminaPistol()),
+                self.register_weapon(LuminaGrenades()),
             )
+            """
+            self.equip(ch_id, self.register_weapon(ReplacementSMG()))
             self.equip(
                 ch_id,
-                self.register_weapon(LuminaGrenades()),
+                self.register_weapon(LuminaPistol()),
             )
             self.equip(ch_id, self.register_weapon(Knife()))
             

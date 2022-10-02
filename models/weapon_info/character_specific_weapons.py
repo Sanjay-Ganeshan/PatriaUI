@@ -5,10 +5,11 @@ from .coalition_pistol import CoalitionPistol
 from .vesna_lsw import ProjectVesnaLSW
 from .underbarrel_grenade_launcher import UnderbarrelGrenadeLauncher
 from .basic_ammo import PlasmaChamber, EMChamber, APChamber
-from .stat_mod_attachments import TelescopicSight, HolographicSight, Bipod, Suppressor
+from .stat_mod_attachments import TelescopicSight, HolographicSight, Bipod, Suppressor, VerticalGrip
 from .training import BasicTraining, SpecializedTraining
 from .grenade_pack import GrenadePack
 from .siren_knife import SirenKnife
+from .lada_smg import ProjectLadaSMG
 
 
 def LuminaDMR() -> ProjectLadaDMR:
@@ -108,3 +109,17 @@ def Knife() -> SirenKnife:
     return SirenKnife().add_attachment(
         BasicTraining()
     )
+
+def ReplacementSMG() -> ProjectLadaSMG:
+    ret =  ProjectLadaSMG().add_attachment(
+        BasicTraining()
+    ).add_attachment(PlasmaChamber()).add_attachment(
+        HolographicSight()
+    ).add_attachment(
+        Suppressor()
+    ).add_attachment(
+        VerticalGrip()
+    ).replace_magazine("FMJ", "Plasma").replace_magazine("FMJ", "Plasma").replace_magazine("FMJ", "Plasma")
+    ret.switch_ammo()
+    return ret
+
