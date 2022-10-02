@@ -69,6 +69,8 @@ class Resources:
         "Lada BR": "battle_rifle.png",
         "Vesna LSW": "lsw.png",
         "Grenade Launcher": "grenade_launcher.png",
+        "Siren Knife": "knife.png",
+        "Grenades": "grenade.png",
     }
 
     BULLET = "bullet.png"
