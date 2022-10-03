@@ -7,7 +7,7 @@ from .character_header import CharacterGeneralInfo
 from .general_controls import GameLogAndControls
 from .shared.spacer import Spacer
 from .character_details import DetailsSheet
-from .map.map_view import MapView
+from .map.map_view import MapContainer
 from .shared.needs_map_mixin import NeedsMap
 
 from kivy.core.window import Window
@@ -24,7 +24,7 @@ class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants, NeedsMap):
         )
 
         self.details = DetailsSheet()
-        self.mapv = MapView()
+        self.mapv = MapContainer()
         self.empty = Spacer(box_width=BOX_WIDTH, box_height=10)
 
         self.box_init()

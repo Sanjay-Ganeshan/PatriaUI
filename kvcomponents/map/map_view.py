@@ -2,19 +2,22 @@ from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from kivy.core.image import Image as CImage
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, NumericProperty
 from kivy.graphics.texture import Texture
 from kivy.graphics import (
     Rectangle,
     Line,
     Color,
     InstructionGroup,
+    ScissorPop,
+    ScissorPush,
 )
 
 from ...models.location import Vector2
 
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.needs_map_mixin import NeedsMap
+from ..shared.spacer import Spacer
 from ...models.app_settings import BOX_WIDTH
 from ...models.map.maps import Map, MapLine, MapImage, MapLayer, TMapInstruction
 import typing as T
@@ -41,9 +44,12 @@ class MapDrawing(InstructionGroup):
         self.pos: Vector2 = pos
         self.size: Vector2 = size
 
+        # Don't want to render outside my drawing area
+        self.add(ScissorPush(x=int(self.pos.x), y=int(self.pos.y), width=int(self.size.x), height=int(self.size.y)))
         for each_layer in the_map.layers:
             for each_instruction in each_layer.instructions:
                 self.draw(each_instruction)
+        self.add(ScissorPop())
 
     def _load_texture(self, tex_name: str) -> T.Optional[Texture]:
         if tex_name not in self.cached_textures:
@@ -97,12 +103,12 @@ class MapDrawing(InstructionGroup):
 
 
 class MapView(Widget, BoxSized, NeedsMap):
-    northeast_corner: ObjectProperty = ObjectProperty(Vector2.one())
-    southwest_corner: ObjectProperty = ObjectProperty(Vector2.zero())
+    map_center: ObjectProperty = ObjectProperty(Vector2.zero())
+    map_scale: NumericProperty = NumericProperty(1.0)
 
     def __init__(self, **kwargs):
         super().__init__(
-            box_width=BOX_WIDTH,
+            box_width=10,
             box_height=10,
             **kwargs,
         )
@@ -113,6 +119,8 @@ class MapView(Widget, BoxSized, NeedsMap):
         self.bind(
             pos=self.update,
             size=self.update,
+            map_center=self.update,
+            map_scale=self.update,
         )
 
 
@@ -130,31 +138,52 @@ class MapView(Widget, BoxSized, NeedsMap):
         self.ins_group.clear()
 
         if self.the_map is not None:
+            # Prevent negative and div by zero
+            scale = min(0.001, self.map_scale)
+            # We want to keep square pixels representing
+            # square areas, so let's adjust the aspect ratio
+            # according to our render area
+            w, h = self.size
+            
+            # This vector goes from the center to the top-right
+            # corner
+            quarter_viewport = Vector2(w * scale, h * scale)
+
+
             self.ins_group.add(MapDrawing(
                 self.the_map,
-                self.southwest_corner,
-                self.northeast_corner,
+                self.map_center - quarter_viewport,
+                self.map_center + quarter_viewport,
                 Vector2(*self.pos),
                 Vector2(*self.size),
             ))
         
 
+class MapContainer(MDBoxLayout, BoxSized, NeedsMap):
+    map_center: ObjectProperty = ObjectProperty(Vector2.zero())
+    map_scale: NumericProperty = NumericProperty(1.0)
 
-    def _get_background_tex_coords(self):
-        return [
-            # Bottom Left 
-            0.0,
-            1.0,
+    def __init__(self, **kwargs):
+        super().__init__(
+            box_width=BOX_WIDTH,
+            box_height=10,
+            orientation="horizontal",
+            **kwargs
+        )
 
-            # Bottom Right
-            1.0,
-            1.0,
-            
-            # Top Right
-            1.0,
-            0.0,
+        self.toolbox = Spacer(box_width=2, box_height=10)
+        self.view = MapView()
 
-            # Top Left
-            0.0,
-            0.0,
-        ]
+        self.box_init()
+        self.map_init()
+
+        self.add_widget(self.toolbox)
+        self.add_widget(self.view)
+
+        self.bind(map_center=self.update_view, map_scale=self.update_view)
+
+        self.update_view()
+
+    def update_view(self, *args):
+        self.view.map_center = self.map_center
+        self.view.map_scale = self.map_scale
