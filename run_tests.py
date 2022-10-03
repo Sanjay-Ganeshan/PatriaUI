@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode = True
+
 import importlib
 import unittest
 import typing as T

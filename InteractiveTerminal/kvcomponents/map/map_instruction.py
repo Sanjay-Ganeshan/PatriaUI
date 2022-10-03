@@ -54,7 +54,7 @@ class MapDrawing(InstructionGroup):
 
     def _load_texture(self, tex_name: str) -> T.Optional[Texture]:
         if tex_name not in self.cached_textures:
-            tex = CImage(f"images/maps/{tex_name}.png").texture
+            tex = CImage(f"maps/{tex_name}.png").texture
             self.cached_textures[tex_name] = tex
 
         return self.cached_textures.get(tex_name, None)

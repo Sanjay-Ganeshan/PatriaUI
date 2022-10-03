@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode = True
+
 import kivy
 from kivy.config import Config
 
@@ -42,7 +45,7 @@ class PatriaApp(MDApp):
         return self.character_sheet
 
 
-if __name__ == "__main__":
+def main():
     Window.size = (1200, 800)
     Window.left = 100
     Window.top = 100
