@@ -3,7 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from .shared.box_sized_mixin import BoxSized
 from .shared.needs_character_mixin import NeedsConstants
 from ..models.app_settings import BOX_WIDTH
-from .stats_and_skills import CharacterStats
+from .stats_and_skills.stats_bar import CharacterStats
 from .general_controls.dice_bar import DiceBar
 from .weapons.weapon_bar import WeaponBar
 from .spells.spell_bar import SpellBar

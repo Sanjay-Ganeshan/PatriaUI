@@ -3,8 +3,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from .shared.box_sized_mixin import BoxSized
 from .shared.needs_character_mixin import NeedsConstants
 from ..models.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
-from .character_header import CharacterGeneralInfo
-from .general_controls import GameLogAndControls
+from .character_header.header import CharacterGeneralInfo
+from .general_controls.game_log_and_controls import GameLogAndControls
 from .shared.spacer import Spacer
 from .character_details import DetailsSheet
 from .map.map_container import MapContainer

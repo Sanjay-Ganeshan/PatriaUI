@@ -5,7 +5,7 @@ import importlib
 from .weapon import Weapon
 from .roll_status import RollStatus
 from .character import Constants
-from .. import save
+from ..save.file_io import path_for, query
 from ..save.powerful_json import loads, dumps
 from .map.maps import Map
 import os
@@ -153,11 +153,11 @@ class GameState:
 
     def export_save_data(self) -> None:
         save_data = dumps(self, indent=4)
-        with open(save.path_for("SAVE.json"), "w") as f:
+        with open(path_for("SAVE.json"), "w") as f:
             f.write(save_data)
     
     def restore_state(self):
-        for each_obj in save.query():
+        for each_obj in query():
             if each_obj.startswith("ch"):
                 self.character_list.append(self.import_obj(each_obj))
             
@@ -218,8 +218,8 @@ class GameState:
 
 
 
-if os.path.isfile(save.path_for("SAVE.json")):
-    with open(save.path_for("SAVE.json")) as _f:
+if os.path.isfile(path_for("SAVE.json")):
+    with open(path_for("SAVE.json")) as _f:
         THE_GAME = loads(_f.read())
 else:
     THE_GAME = GameState()
