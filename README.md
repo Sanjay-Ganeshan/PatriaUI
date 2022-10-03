@@ -3,8 +3,7 @@ To install:
 pip install -r requirements.txt
 ```
 
-To run
+To run (assuming CWD is this repo)
 ```
-cd ..
-python -m PatriaUI
+python -m InteractiveTerminal
 ```
