@@ -7,6 +7,7 @@ from .roll_status import RollStatus
 from .character import Constants
 from .. import save
 from ..save.powerful_json import loads, dumps
+from .map.maps import Map
 import os
 
 import inspect
@@ -32,6 +33,7 @@ class GameState:
     current_character: int = 0
     weapon_lookup: T.Dict[str, Weapon] = dataclasses.field(default_factory=dict, metadata={"IGNORESAVE": False})
     character_list: T.List[Constants] = dataclasses.field(default_factory=list, metadata={"IGNORESAVE": False})
+    the_map: Map = dataclasses.field(default_factory=Map)
 
     def __post_init__(self) -> None:
         self.game_log = GameLog()
@@ -45,6 +47,7 @@ class GameState:
     def _update_app(self):
         if self.app is not None:
             self.app.character_sheet.constants = self.character_list[self.current_character]
+            self.app.character_sheet.the_map = self.the_map
 
     def register_weapon(self, wep: Weapon) -> str:
         orig_id = str(wep.short_name)
@@ -89,7 +92,7 @@ class GameState:
 
         if not len(self.get_character_id_with_name("Silvia")) > 0:
             ch_id = self.create_character("silvia:SilviaFerreyra")
-            """
+
             self.equip(
                 ch_id,
                 self.register_weapon(SilviaLSW()),
@@ -98,8 +101,7 @@ class GameState:
                 ch_id,
                 self.register_weapon(SilviaGrenades()),
             )
-            """
-            self.equip(ch_id, self.register_weapon(ReplacementSMG()))
+            # self.equip(ch_id, self.register_weapon(ReplacementSMG()))
             self.equip(
                 ch_id,
                 self.register_weapon(SilviaPistol()),
@@ -109,7 +111,6 @@ class GameState:
         
         if not len(self.get_character_id_with_name("Lumina")) > 0:
             ch_id = self.create_character("lumina:LuminaGale")
-            """
             self.equip(
                 ch_id,
                 self.register_weapon(LuminaDMR()),
@@ -118,8 +119,7 @@ class GameState:
                 ch_id,
                 self.register_weapon(LuminaGrenades()),
             )
-            """
-            self.equip(ch_id, self.register_weapon(ReplacementSMG()))
+            # self.equip(ch_id, self.register_weapon(ReplacementSMG()))
             self.equip(
                 ch_id,
                 self.register_weapon(LuminaPistol()),

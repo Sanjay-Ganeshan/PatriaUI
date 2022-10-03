@@ -2,6 +2,8 @@ import typing as T
 import dataclasses
 from dataclasses import dataclass, field
 
+from .location import Vector2
+
 from .roll_status import RollStatus
 
 @dataclass(frozen=True)
@@ -72,9 +74,14 @@ class Constants:
         default=RollStatus.STANDARD,
     )
 
+
+    # Weaponry
     ACTIVE_WEAPON: int = 0
 
     WEAPONS: T.Tuple[str, ...] = field(default_factory=tuple)
+
+    # Map
+    Position: Vector2 = Vector2.zero()
 
     @classmethod
     def expand_stat_abbreviation(

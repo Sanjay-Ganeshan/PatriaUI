@@ -7,12 +7,14 @@ from .character_header import CharacterGeneralInfo
 from .general_controls import GameLogAndControls
 from .shared.spacer import Spacer
 from .character_details import DetailsSheet
+from .map.map_view import MapView
+from .shared.needs_map_mixin import NeedsMap
 
 from kivy.core.window import Window
 
 
 
-class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants):
+class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants, NeedsMap):
     def __init__(self, **kwargs):
         super().__init__(
             box_width=BOX_WIDTH,
@@ -22,12 +24,14 @@ class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants):
         )
 
         self.details = DetailsSheet()
-        self.empty = Spacer(box_width=BOX_WIDTH,box_height=10)
+        self.mapv = MapView()
+        self.empty = Spacer(box_width=BOX_WIDTH, box_height=10)
 
         self.box_init()
         self.constants_init()
+        self.map_init()
 
-        self.possible_views = [self.details, self.empty]
+        self.possible_views = [self.details, self.mapv]
         self.which_view = 0
 
         self.add_widget(self.possible_views[self.which_view])
@@ -38,7 +42,7 @@ class CenterHolder(MDBoxLayout, BoxSized, NeedsConstants):
         self.which_view %= len(self.possible_views)
         self.add_widget(self.possible_views[self.which_view])
 
-class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
+class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants, NeedsMap):
     """
     All character info
     """
@@ -53,6 +57,7 @@ class CharacterSheet(MDBoxLayout, BoxSized, NeedsConstants):
         )
         self.box_init()
         self.constants_init()
+        self.map_init()
 
         # General info
         self.character = CharacterGeneralInfo()
