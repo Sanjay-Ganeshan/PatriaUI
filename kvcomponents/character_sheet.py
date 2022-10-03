@@ -7,7 +7,7 @@ from .character_header import CharacterGeneralInfo
 from .general_controls import GameLogAndControls
 from .shared.spacer import Spacer
 from .character_details import DetailsSheet
-from .map.map_view import MapContainer
+from .map.map_container import MapContainer
 from .shared.needs_map_mixin import NeedsMap
 
 from kivy.core.window import Window
