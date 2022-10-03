@@ -1,4 +1,5 @@
 from enum import Enum, unique
+import typing as T
 from .stats import Stat
 
 @unique
@@ -39,3 +40,7 @@ class Proficiency(Enum):
             Proficiency.SURVIVAL: Stat.WISDOM,
             Proficiency.SOCIAL: Stat.WISDOM,
         }[self]
+
+    @classmethod
+    def all(cls) -> T.List["Stat"]:
+        return list(cls.__members__.values())
