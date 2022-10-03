@@ -12,7 +12,8 @@ def get_recursive_modules(module_name: str) -> T.Generator[str, None, None]:
 
 def populate_test_cases(modules: T.List[str]) -> T.Generator[T.Tuple[str, unittest.TestCase], None, None]:
     for module_name in modules:
-        if "tests" not in module_name.split("."):
+        base_name = module_name.split(".")[-1]        
+        if not base_name.startswith("test_"):
             continue
         mod = importlib.import_module(module_name)
         attr_names = dir(mod)
