@@ -26,7 +26,7 @@ class StatBlock:
     def create(
         cls,
         proficiency_bonus: int,
-        *assignments: T.Tuple[T.Union[Stat, Proficiency], int]
+        assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]]
     ) -> "StatBlock":
         stat_modifiers = {}
         proficiency_multipliers = {}
@@ -49,12 +49,14 @@ class StatBlock:
     def copy(
         self,
         proficiency_bonus: T.Optional[int] = None,
-        *assignments: T.Tuple[T.Union[Stat, Proficiency], int]
+        assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]] = None
     ) -> "StatBlock":
         if proficiency_bonus is None:
             proficiency_bonus = self.proficiency_bonus
+        if assignments is None:
+            assignments = []
         
-        desired = StatBlock.create(0, *assignments)
+        desired = StatBlock.create(proficiency_bonus=0, assignments=assignments)
         
         proficiency_multipliers = {}
         stat_modifiers = {}

@@ -3,9 +3,8 @@ sys.dont_write_bytecode = True
 
 import kivy
 from kivy.config import Config
-
-from .models.game import THE_GAME
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
+
 
 import os
 from kivy.resources import resource_add_path
@@ -14,14 +13,16 @@ mydir = os.path.dirname(os.path.abspath(__file__))
 resource_add_path(os.path.join(mydir, "images"))
 
 from kivymd.app import MDApp
-
 from kivy.core.window import Window
 
 from kivymd.font_definitions import theme_font_styles
 import typing as T
 
-from .kvcomponents.character_sheet import CharacterSheet
-
+from .views.home import Home
+from .new_models.state.state_manager import StateManager
+from .new_models.specific.lumina import LuminaGale
+from .new_models.events.view_events import SwitchFocusedView, SwitchFocusedCharacter
+from .new_models.state.view_state import Views
 
 
 
@@ -31,18 +32,13 @@ from .kvcomponents.character_sheet import CharacterSheet
 
 class PatriaApp(MDApp):
     def build(self):
-        print(theme_font_styles)
-        #for each_style in theme_font_styles:
-        # self.theme_cls.font_styles[each_style][0] = "ALIENLEAGUEBOLD"
-        #    print(each_style, self.theme_cls.font_styles[each_style])
-
-        THE_GAME.set_app_instance(self)
-        self.character_sheet = CharacterSheet()
-        self.character_sheet.constants = THE_GAME.get_current_character()
-        self.character_sheet.the_map = THE_GAME.the_map
-        THE_GAME.game_log.log("Welcome!")
-
-        return self.character_sheet
+        self.state_manager = StateManager()
+        self.state_manager.game_state.characters["lumina"] = LuminaGale()
+        self.home = Home()
+        self.home.state_manager = self.state_manager
+        self.state_manager.push_event(SwitchFocusedView(new_focus=Views.CHARACTER_DETAILS))
+        self.state_manager.push_event(SwitchFocusedCharacter(new_focus="lumina"))
+        return self.home
 
 
 def main():

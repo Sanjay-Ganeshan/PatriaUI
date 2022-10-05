@@ -2,7 +2,6 @@ from enum import Enum, unique
 import typing as T
 from .stats import Stat
 
-@unique
 class Proficiency(Enum):
     # STR
     ATHLETICS = "ATHLETICS" 
@@ -42,5 +41,5 @@ class Proficiency(Enum):
         }[self]
 
     @classmethod
-    def all(cls) -> T.List["Stat"]:
-        return list(cls.__members__.values())
+    def all(cls) -> T.List["Proficiency"]:
+        return list(Proficiency.__members__.values())

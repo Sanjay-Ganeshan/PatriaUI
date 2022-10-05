@@ -9,7 +9,7 @@ class Status:
     deflects: int = 1
     hit_dice: int = 2
     suit_power: int = 6
-    shield_power: int = 6
+    shield_power: int = 2
 
     death_fails: int = 2
     death_successes: int = 3
