@@ -2,7 +2,6 @@ import math
 
 from kivy.core.image import Image as CImage
 from kivy.graphics import Color, InstructionGroup, Rectangle
-from kivy.graphics.texture import Texture
 from kivy.properties import (BooleanProperty, ColorProperty, NumericProperty,
                              StringProperty)
 from kivy.uix.widget import Widget
