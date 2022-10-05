@@ -1,4 +1,3 @@
-from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from ...new_models.events.ev_base import GameOrViewEvent
@@ -7,6 +6,7 @@ from ...new_models.state.state_manager import StateManager
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
 from .icon import CHIcon
+from .name_and_role import CHNamecard
 
 
 class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -25,8 +25,10 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.listener_init()
 
         self.icon = CHIcon()
+        self.namecard = CHNamecard()
         
         self.add_widget(self.icon)
+        self.add_widget(self.namecard)
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
