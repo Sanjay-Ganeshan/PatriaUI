@@ -1,7 +1,9 @@
-from enum import Enum, unique
 import typing as T
+from enum import Enum, unique
+
 from .stats import Stat
 
+@unique
 class Proficiency(Enum):
     # STR
     ATHLETICS = "ATHLETICS" 

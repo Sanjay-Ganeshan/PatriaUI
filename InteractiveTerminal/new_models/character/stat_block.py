@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from .proficiencies import Proficiency
 from .stats import Stat
 
+
 @dataclass(frozen=True)
 class StatBlock:
     """

@@ -1,7 +1,7 @@
-from ..new_models.character.stats import Stat
+import typing as T
+
 from ..new_models.character.proficiencies import Proficiency
 
-import typing as T
 
 class Resources:
     ARMOR_ICON: str = "shield_white.png"

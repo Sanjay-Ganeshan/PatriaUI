@@ -1,14 +1,12 @@
 from kivy.properties import StringProperty
 
+from ...new_models.character.character import Character
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.view_events import SwitchFocusedCharacter
+from ...new_models.state.state_manager import StateManager
 from ..shared.centered_label import CenteredLabel
-from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
 
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.state.state_manager import StateManager
-from ...new_models.events.view_events import SwitchFocusedCharacter
-
-from ...new_models.character.character import Character
 
 class CHNamecard(CenteredLabel, ListenForStateChanges):
     character_name: str = StringProperty("<name>")

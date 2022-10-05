@@ -3,8 +3,9 @@
 # itself
 
 import typing as T
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, unique
+
 
 @unique
 class Views(Enum):

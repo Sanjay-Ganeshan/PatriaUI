@@ -2,19 +2,19 @@
 Game events actually impact game state
 """
 
-from .ev_base import GameEvent, RollEvent, GameOrViewEvent
-from dataclasses import dataclass
 import typing as T
+from dataclasses import dataclass
 
+from ..character.active_effects import Debuffs
 from ..character.character import Character
-from ..character.active_effects import Debuffs, Buffs
-from ..character.stats import Stat
 from ..character.proficiencies import Proficiency
+from ..character.stats import Stat
+from ..dice.advantage import RollStatus
+from ..dice.dice import Dice
+from ..dice.rolls import CompletedRoll, Roll
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
-from ..dice.rolls import Roll, CompletedRoll
-from ..dice.dice import Dice
-from ..dice.advantage import RollStatus
+from .ev_base import GameEvent, GameOrViewEvent, RollEvent
 
 
 @dataclass(frozen=True)
@@ -27,7 +27,7 @@ class ApplyEffectToCharacter(GameEvent):
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
         assert self.effect.strip(), "Empty effect"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
         if char.has_effect(self.effect):
             # We're not actually adding it, so we don't want to undo it
             return None
@@ -40,7 +40,7 @@ class ApplyEffectToCharacter(GameEvent):
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
         assert self.effect.strip(), "Empty effect"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
         assert char.has_effect(
             self.effect
         ), f"{char.nameplate.name} is not affected by {self.effect}"
@@ -57,7 +57,7 @@ class RemoveEffectFromCharacter(GameEvent):
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
         assert self.effect.strip(), "Empty effect"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
         if not char.has_effect(self.effect):
             # Don't have it, can't remove it
             return None
@@ -70,7 +70,7 @@ class RemoveEffectFromCharacter(GameEvent):
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
         assert self.effect.strip(), "Empty effect"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
         assert not char.has_effect(
             self.effect
         ), f"{char.nameplate.name} is already affected by {self.effect}"
@@ -85,7 +85,7 @@ class ConsumeSkinsuitCharge(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Reduce suit power by 1
         new_status = char.current_life.delta(suit_power=-1, max_st=char.max_life)
@@ -100,7 +100,7 @@ class ConsumeSkinsuitCharge(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(suit_power=1, max_st=char.max_life)
@@ -116,7 +116,7 @@ class RestoreSkinsuitCharge(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by up to 2
         new_status = char.current_life.delta(
@@ -141,7 +141,7 @@ class RestoreSkinsuitCharge(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Reduce skinsuit power by however much we restored
         new_status = char.current_life.delta(suit_power=-1 * self.amount_restored)
@@ -157,7 +157,7 @@ class ModifyArmorRating(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(armor_rating=self.armor_mod)
         if char.current_life == new_status:
@@ -179,7 +179,7 @@ class ModifyArmorRating(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(armor_rating=-1 * self.armor_mod)
@@ -194,7 +194,7 @@ class ConsumeShield(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Reduce shield power by 1
         new_status = char.current_life.delta(shield_power=-1, max_st=char.max_life)
@@ -209,7 +209,7 @@ class ConsumeShield(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(shield_power=1, max_st=char.max_life)
@@ -226,7 +226,7 @@ class RestoreShield(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Roll 1d2 to restore shields
         if self.roll is None:
@@ -258,7 +258,7 @@ class RestoreShield(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Reduce skinsuit power by however much we restored
         new_status = char.current_life.delta(shield_power=-1 * self.amount_restored)
@@ -277,7 +277,7 @@ class ChangeHP(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         hp_delta = self.amount
 
@@ -319,7 +319,7 @@ class ChangeHP(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(
@@ -340,7 +340,7 @@ class ChangeDeathFail(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         fail_delta = self.amount
         if not char.current_life.HP <= 0:
@@ -368,7 +368,7 @@ class ChangeDeathFail(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             death_fails=-1 * self.amount, max_st=char.max_life
@@ -385,7 +385,7 @@ class ChangeDeathSuccess(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         success_delta = self.amount
         if not char.current_life.HP <= 0:
@@ -413,7 +413,7 @@ class ChangeDeathSuccess(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             death_successes=-1 * self.amount, max_st=char.max_life
@@ -433,7 +433,7 @@ class DeathSave(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         if char.current_life.HP > 0:
             # Not knocked out
@@ -497,7 +497,7 @@ class DeathSave(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(
@@ -524,7 +524,7 @@ class CastDeflect(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         hp_delta = 0
         deflect_delta = 0
@@ -554,7 +554,7 @@ class CastDeflect(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(
@@ -579,7 +579,7 @@ class RestoreDeflect(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             deflects=char.max_life.deflects - char.current_life.deflects,
@@ -601,7 +601,7 @@ class RestoreDeflect(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
         new_status = char.current_life.delta(
@@ -624,7 +624,7 @@ class ConsumeRevival(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         if char.current_life.HP > 0 or char.current_life.revives < 1:
             # Nothing to revive
@@ -653,7 +653,7 @@ class ConsumeRevival(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             revives=-1 * self._revive_delta,
@@ -677,7 +677,7 @@ class RestoreRevival(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(revives=1, max_st=char.max_life)
         if char.current_life == new_status:
@@ -690,7 +690,7 @@ class RestoreRevival(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         # Reduce revives by however much we restored
         new_status = char.current_life.delta(revives=-1)
@@ -706,7 +706,7 @@ class RestoreHitDice(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             hit_dice=char.max_life.hit_dice, max_st=char.max_life
@@ -727,7 +727,7 @@ class RestoreHitDice(GameEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             hit_dice=-1 * self._hit_dice_restored, max_st=char.max_life
@@ -747,7 +747,7 @@ class UseHitDice(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         if char.current_life.hit_dice < 1 or char.current_life.HP >= char.max_life.HP:
             # No hit dice, or no need to heal
@@ -789,7 +789,7 @@ class UseHitDice(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
             HP=-1 * self._hp_delta,
@@ -818,7 +818,7 @@ class StatOrSkillTest(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         if self.roll is None:
             # Roll 1d6 to restore HP
@@ -859,7 +859,7 @@ class StatOrSkillTest(RollEvent):
         assert (
             self.character_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char = g.characters[self.character_id]
+        char: Character = g.characters[self.character_id]
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status

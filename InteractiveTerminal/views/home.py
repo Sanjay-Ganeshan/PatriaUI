@@ -1,24 +1,15 @@
 # The main page, regardless of contents
+from kivy.core.window import Window
 from kivymd.uix.boxlayout import MDBoxLayout
 
-
+from ..new_models.events.ev_base import GameOrViewEvent
+from ..new_models.state.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
+from ..new_models.state.state_manager import StateManager
+from .page.body import Body
+from .page.footer import Footer
+from .page.header import Header
 from .shared.box_sized_mixin import BoxSized
 from .shared.listens_for_state_changes import ListenForStateChanges
-
-from .page.header import Header
-from .page.footer import Footer
-from .page.body import Body
-
-from ..new_models.state.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
-from ..new_models.state.view_state import ViewState
-from ..new_models.state.state_manager import StateManager
-from ..new_models.events.ev_base import GameOrViewEvent
-
-from kivy.properties import ObjectProperty
-
-from kivy.core.window import Window
-
-
 
 
 class Home(MDBoxLayout, BoxSized, ListenForStateChanges):

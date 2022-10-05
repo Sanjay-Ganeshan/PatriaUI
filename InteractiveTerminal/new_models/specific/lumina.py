@@ -1,14 +1,10 @@
-from ..character.nameplate import Nameplate
+from ...utils import use_passed_or_default
 from ..character.character import Character
+from ..character.nameplate import Nameplate
+from ..character.proficiencies import Proficiency
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
-from ..character.proficiencies import Proficiency
-
-import typing as T
-from dataclasses import dataclass
-
-from ...utils import use_passed_or_default
 
 
 class LuminaGale(Character):

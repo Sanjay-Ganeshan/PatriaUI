@@ -1,11 +1,9 @@
 import random
-
 import typing as T
-
 from dataclasses import dataclass, field
 
-from .dice import Dice
 from .advantage import RollStatus
+from .dice import Dice
 
 
 @dataclass(frozen=True)

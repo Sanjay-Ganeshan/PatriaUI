@@ -1,24 +1,22 @@
-from ..shared.progressive_icon import ProgressiveIcon
-from ..shared.touchable_mixin import TouchableMixin
-from ..shared.listens_for_state_changes import ListenForStateChanges
+import typing as T
 
-from ..resource_list import Resources
+from kivy.properties import BooleanProperty, NumericProperty
+from kivymd.uix.boxlayout import MDBoxLayout
 
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.state.state_manager import StateManager
 from ...new_models.character.character import Character
 from ...new_models.character.status import Status
-
-from ...new_models.events.game_events import ChangeDeathFail, ChangeDeathSuccess, ChangeHP, DeathSave
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.game_events import (ChangeDeathFail,
+                                              ChangeDeathSuccess, ChangeHP,
+                                              DeathSave)
 from ...new_models.help import help_generator
-from ...new_models.character.active_effects import Buffs
-
+from ...new_models.state.state_manager import StateManager
+from ..resource_list import Resources
 from ..shared.box_sized_mixin import BoxSized
-from ..shared.progressive_icon import ProgressiveText
+from ..shared.listens_for_state_changes import ListenForStateChanges
+from ..shared.progressive_icon import ProgressiveIcon, ProgressiveText
+from ..shared.touchable_mixin import TouchableMixin
 
-from kivymd.uix.boxlayout import MDBoxLayout
-import typing as T
-from kivy.properties import NumericProperty, BooleanProperty
 
 class CHDeathFails(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
     current_death_fails: int = NumericProperty(0)

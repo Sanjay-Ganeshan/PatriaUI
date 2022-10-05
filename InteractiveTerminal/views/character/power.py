@@ -1,24 +1,21 @@
-from ..shared.box_sized_mixin import BoxSizedBoxLayout, BoxSized
-from ..shared.progressive_icon import ProgressiveIcon
-from ..shared.touchable_mixin import TouchableMixin
-from ..shared.centered_label import CenteredLabel
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import NumericProperty
-
-from ..resource_list import Resources
-from ..shared.listens_for_state_changes import ListenForStateChanges
-from ...new_models.help import help_generator
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.game_events import (
-    ConsumeSkinsuitCharge,
-    RestoreSkinsuitCharge,
-    ConsumeShield,
-    RestoreShield,
-)
-from ...new_models.state.state_manager import StateManager
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from ...new_models.character.character import Character
 from ...new_models.character.status import Status
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.game_events import (ConsumeShield,
+                                              ConsumeSkinsuitCharge,
+                                              RestoreShield,
+                                              RestoreSkinsuitCharge)
+from ...new_models.help import help_generator
+from ...new_models.state.state_manager import StateManager
+from ..resource_list import Resources
+from ..shared.box_sized_mixin import BoxSized, BoxSizedBoxLayout
+from ..shared.centered_label import CenteredLabel
+from ..shared.listens_for_state_changes import ListenForStateChanges
+from ..shared.progressive_icon import ProgressiveIcon
+from ..shared.touchable_mixin import TouchableMixin
 
 
 class SkinSuitPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):

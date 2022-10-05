@@ -1,9 +1,10 @@
 # The main page, regardless of contents
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import ObjectProperty
+from kivymd.uix.boxlayout import MDBoxLayout
 
-from ..shared.box_sized_mixin import BoxSized
 from ...new_models.state.app_settings import BOX_WIDTH
+from ..shared.box_sized_mixin import BoxSized
+
 
 class Footer(MDBoxLayout, BoxSized):
     """

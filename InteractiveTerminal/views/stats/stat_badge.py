@@ -1,19 +1,16 @@
+from kivy.properties import NumericProperty, ObjectProperty
+
+from ...new_models.character.character import Character
+from ...new_models.character.stats import Stat
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.game_events import StatOrSkillTest
+from ...new_models.help import help_generator
+from ...new_models.state.state_manager import StateManager
+from ..resource_list import Resources
 from ..shared.centered_label import CenteredLabel
+from ..shared.listens_for_state_changes import ListenForStateChanges
 from ..shared.progressive_icon import ProgressiveIconImpl
 from ..shared.touchable_mixin import TouchableMixin
-from ..shared.listens_for_state_changes import ListenForStateChanges
-from ...new_models.character.stats import Stat
-from ...new_models.character.stat_block import StatBlock
-from ...new_models.help import help_generator
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.state.state_manager import StateManager
-from ...new_models.character.character import Character
-from ...new_models.events.game_events import StatOrSkillTest
-
-from ..resource_list import Resources
-
-
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
 
 
 class StatBadge(

@@ -1,4 +1,3 @@
-from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from ...new_models.events.ev_base import GameOrViewEvent

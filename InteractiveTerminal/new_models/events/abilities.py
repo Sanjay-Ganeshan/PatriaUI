@@ -1,12 +1,9 @@
-from .ev_base import GameOrViewEvent
-from .game_events import (
-    ModifyArmorRating,
-    ConsumeSkinsuitCharge,
-    ApplyEffectToCharacter,
-    RemoveEffectFromCharacter,
-)
-from ..character.active_effects import Buffs
 import typing as T
+
+from ..character.active_effects import Buffs
+from .ev_base import GameOrViewEvent
+from .game_events import (ApplyEffectToCharacter, ConsumeSkinsuitCharge,
+                          ModifyArmorRating, RemoveEffectFromCharacter)
 
 # Some abilities as event chains
 

@@ -1,8 +1,8 @@
+import typing as T
 from dataclasses import dataclass, field
 
-import typing as T
-
 from ..character.character import Character
+
 
 @dataclass
 class GameState:

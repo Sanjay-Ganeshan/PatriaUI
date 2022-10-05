@@ -1,21 +1,19 @@
 
-from ..shared.centered_label import CenteredLabel
-from ..shared.touchable_mixin import TouchableMixin
-from ..shared.progressive_icon import ProgressiveIconImpl
-from ..shared.listens_for_state_changes import ListenForStateChanges
-
 from kivy.properties import NumericProperty
-from ..resource_list import Resources
 
-from ...new_models.events.ev_base import GameOrViewEvent
 from ...new_models.character.character import Character
 from ...new_models.character.status import Status
-
-from ...new_models.events.view_events import SwitchFocusedCharacter
-from ...new_models.events.abilities import cast_reactive_armor, expire_reactive_armor
-from ...new_models.state.state_manager import StateManager
-
+from ...new_models.events.abilities import (cast_reactive_armor,
+                                            expire_reactive_armor)
+from ...new_models.events.ev_base import GameOrViewEvent
 from ...new_models.help import help_generator
+from ...new_models.state.state_manager import StateManager
+from ..resource_list import Resources
+from ..shared.centered_label import CenteredLabel
+from ..shared.listens_for_state_changes import ListenForStateChanges
+from ..shared.progressive_icon import ProgressiveIconImpl
+from ..shared.touchable_mixin import TouchableMixin
+
 
 # Not a kivy image because we want the text on top
 class CHArmor(CenteredLabel, ProgressiveIconImpl, ListenForStateChanges, TouchableMixin):

@@ -1,34 +1,33 @@
 import sys
+
 sys.dont_write_bytecode = True
 
 import kivy
 from kivy.config import Config
+
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
 
 import os
+
 from kivy.resources import resource_add_path
 
 mydir = os.path.dirname(os.path.abspath(__file__))
 resource_add_path(os.path.join(mydir, "images"))
 
-from kivymd.app import MDApp
-from kivy.core.window import Window
-
-from kivymd.font_definitions import theme_font_styles
 import typing as T
 
-from .views.home import Home
-from .new_models.state.state_manager import StateManager
-from .new_models.specific.lumina import LuminaGale
+from kivy.core.window import Window
+from kivymd.app import MDApp
+
+from .new_models.events.view_events import (SwitchFocusedCharacter,
+                                            SwitchFocusedView)
 from .new_models.specific.galina import GalinaNovikova
+from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
-from .new_models.events.view_events import SwitchFocusedView, SwitchFocusedCharacter
+from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
-
-
-
-
+from .views.home import Home
 
 # Replace these with character's current info
 

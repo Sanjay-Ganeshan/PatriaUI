@@ -1,5 +1,7 @@
-from .box_sized_mixin import BoxSized
 from kivy.uix.widget import Widget
+
+from .box_sized_mixin import BoxSized
+
 
 class Spacer(BoxSized, Widget):
     def __init__(self, **kwargs):

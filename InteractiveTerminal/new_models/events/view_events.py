@@ -3,12 +3,12 @@ View events do NOT impact game state - they just impact how we are
 displaying the UI
 """
 
-from .ev_base import GameOrViewEvent, ViewEvent
-from ..state.game_state import GameState
-from ..state.view_state import ViewState, Views
-
-from dataclasses import dataclass
 import typing as T
+from dataclasses import dataclass
+
+from ..state.game_state import GameState
+from ..state.view_state import Views, ViewState
+from .ev_base import GameOrViewEvent, ViewEvent
 
 
 @dataclass(frozen=True)

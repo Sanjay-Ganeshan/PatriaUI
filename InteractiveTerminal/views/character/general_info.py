@@ -1,20 +1,20 @@
 from kivymd.uix.boxlayout import MDBoxLayout
 
+from ...new_models.character.stats import Stat
 from ...new_models.events.ev_base import GameOrViewEvent
 from ...new_models.state.app_settings import BOX_WIDTH
 from ...new_models.state.state_manager import StateManager
-from ...new_models.character.stats import Stat
+from ..resource_list import Resources
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
-from .icon import CHIcon
-from .name_and_role import CHNamecard
-from .armor import CHArmor
-from .power import CHPower
-from .life_and_death import CHLife
-from .restoration import CHRestoration
 from ..stats.stat_badge import StatBadge
+from .armor import CHArmor
+from .icon import CHIcon
+from .life_and_death import CHLife
+from .name_and_role import CHNamecard
+from .power import CHPower
+from .restoration import CHRestoration
 
-from ..resource_list import Resources
 
 class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
     """

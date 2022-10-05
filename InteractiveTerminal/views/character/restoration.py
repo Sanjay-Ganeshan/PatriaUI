@@ -1,19 +1,21 @@
+from kivy.properties import NumericProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
+from ...new_models.character.character import Character
+from ...new_models.character.stats import Stat
+from ...new_models.character.status import Status
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.game_events import (CastDeflect, ConsumeRevival,
+                                              RestoreDeflect, RestoreHitDice,
+                                              RestoreRevival, UseHitDice)
+from ...new_models.help import help_generator
+from ...new_models.state.state_manager import StateManager
+from ..resource_list import Resources
 from ..shared.box_sized_mixin import BoxSized
+from ..shared.listens_for_state_changes import ListenForStateChanges
 from ..shared.progressive_icon import ProgressiveIcon
 from ..shared.touchable_mixin import TouchableMixin
-from ..resource_list import Resources
 
-from ..shared.listens_for_state_changes import ListenForStateChanges
-from ...new_models.help import help_generator
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.game_events import CastDeflect, RestoreDeflect, ConsumeRevival, RestoreRevival, RestoreHitDice, UseHitDice
-from ...new_models.state.state_manager import StateManager
-from ...new_models.character.character import Character
-from ...new_models.character.status import Status
-from ...new_models.character.stats import Stat
-from kivy.properties import NumericProperty
 
 class CHDeflections(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
     current_deflects: int = NumericProperty(1)

@@ -1,23 +1,15 @@
-from kivy.properties import (
-    StringProperty,
-    NumericProperty,
-    ColorProperty,
-    BooleanProperty,
-)
-
-from kivy.core.image import Image as CImage
-from kivy.graphics.texture import Texture
-from kivy.graphics import (
-    Rectangle,
-    Color,
-    InstructionGroup,
-)
 import math
 
-from .centered_label import CenteredLabel
-from .box_sized_mixin import BoxSized
-from .tooltip import OptionalTooltip
+from kivy.core.image import Image as CImage
+from kivy.graphics import Color, InstructionGroup, Rectangle
+from kivy.graphics.texture import Texture
+from kivy.properties import (BooleanProperty, ColorProperty, NumericProperty,
+                             StringProperty)
 from kivy.uix.widget import Widget
+
+from .box_sized_mixin import BoxSized
+from .centered_label import CenteredLabel
+from .tooltip import OptionalTooltip
 
 
 class ProgressiveIconImpl:

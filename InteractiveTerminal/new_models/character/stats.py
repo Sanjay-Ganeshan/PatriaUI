@@ -1,5 +1,6 @@
-from enum import Enum
 import typing as T
+from enum import Enum
+
 
 class Stat(Enum):
     STRENGTH = "STRENGTH"

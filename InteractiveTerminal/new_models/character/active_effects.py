@@ -1,5 +1,6 @@
 from enum import Enum, unique
 
+
 @unique
 class Buffs(Enum):
     # Grants access to the "designate" ability

@@ -1,6 +1,7 @@
 from kivy.properties import NumericProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
+
 class BoxSized:
     box_width = NumericProperty(1)
     box_height = NumericProperty(1)

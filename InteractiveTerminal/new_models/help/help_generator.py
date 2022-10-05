@@ -1,5 +1,6 @@
 from ..character.stats import Stat
 
+
 def armor_rating(
     current_armor_rating: int,
     base_armor_rating: int,

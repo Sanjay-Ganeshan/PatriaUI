@@ -1,5 +1,6 @@
 from enum import IntEnum, unique
 
+
 @unique
 class Dice(IntEnum):
     D2 = 2

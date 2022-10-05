@@ -1,12 +1,12 @@
+import typing as T
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from uuid import uuid4
-import typing as T
 
 from ..dice.rolls import CompletedRoll
-from abc import ABC, abstractmethod
-
-from ..state.view_state import ViewState
 from ..state.game_state import GameState
+from ..state.view_state import ViewState
+
 
 @dataclass(frozen=True)
 class GameOrViewEvent(ABC):

@@ -1,10 +1,10 @@
-from dataclasses import dataclass, field
 import typing as T
+from dataclasses import dataclass, field
 
+from ..events.ev_base import GameOrViewEvent
 from .game_state import GameState
 from .view_state import ViewState
 
-from ..events.ev_base import GameOrViewEvent
 
 @dataclass
 class StateManager:

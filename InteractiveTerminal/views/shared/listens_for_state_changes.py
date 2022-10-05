@@ -1,9 +1,10 @@
-from kivy.properties import ObjectProperty, NumericProperty
-
-from ...new_models.state.state_manager import StateManager
-from ...new_models.events.ev_base import GameOrViewEvent
-
 from abc import ABC, abstractmethod
+
+from kivy.properties import NumericProperty, ObjectProperty
+
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.state.state_manager import StateManager
+
 
 class ListenForStateChanges:
     state_manager: StateManager = ObjectProperty(None)

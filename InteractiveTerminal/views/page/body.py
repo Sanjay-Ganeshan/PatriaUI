@@ -1,12 +1,12 @@
 # The main page, regardless of contents
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import ObjectProperty
+from kivymd.uix.boxlayout import MDBoxLayout
 
+from ...new_models.state.app_settings import BOX_WIDTH
+from ...new_models.state.view_state import Views, ViewState
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.spacer import Spacer
-from ...new_models.state.app_settings import BOX_WIDTH
 
-from ...new_models.state.view_state import ViewState, Views
 
 class Body(MDBoxLayout, BoxSized):
     """

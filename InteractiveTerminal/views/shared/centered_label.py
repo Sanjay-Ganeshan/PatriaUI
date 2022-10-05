@@ -1,6 +1,8 @@
+from kivymd.uix.label import MDLabel
+
 from .box_sized_mixin import BoxSized
 from .tooltip import OptionalTooltip
-from kivymd.uix.label import MDLabel
+
 
 class CenteredLabel(MDLabel, BoxSized, OptionalTooltip):
     def __init__(self, **kwargs):

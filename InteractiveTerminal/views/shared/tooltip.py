@@ -1,7 +1,8 @@
-from kivymd.uix.tooltip import MDTooltip
-from ...new_models.state.app_settings import AppSettings
-
 import typing as T
+
+from kivymd.uix.tooltip import MDTooltip
+
+from ...new_models.state.app_settings import AppSettings
 
 
 class OptionalTooltip(MDTooltip):
