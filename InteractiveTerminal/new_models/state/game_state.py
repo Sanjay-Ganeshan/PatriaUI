@@ -11,3 +11,5 @@ class GameState:
     """
 
     characters: T.Dict[str, Character] = field(default_factory=dict)
+
+    chat_log: T.List[str] = field(default_factory=list)

@@ -41,6 +41,7 @@ class PatriaApp(MDApp):
         self.home.state_manager = self.state_manager
         self.state_manager.push_event(SwitchFocusedView(new_focus=Views.CHARACTER_DETAILS))
         self.state_manager.push_event(SwitchFocusedCharacter(new_focus="lumina"))
+        self.state_manager.clear_history()
         return self.home
 
 

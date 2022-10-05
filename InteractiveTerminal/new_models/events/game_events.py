@@ -543,11 +543,12 @@ class CastDeflect(GameEvent):
             # No HP to burn
             return None
         else:
+            char.current_life = new_status
             return CastDeflect(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                _hp_delta=hp_delta,
-                _deflect_delta=deflect_delta,
+                _hp_delta=new_status.HP - old_status.HP,
+                _deflect_delta=new_status.deflects - old_status.deflects,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -591,7 +592,8 @@ class RestoreDeflect(GameEvent):
             # No change
             return None
         else:
-            return CastDeflect(
+            char.current_life = new_status
+            return RestoreDeflect(
                 event_id=self.event_id,
                 character_id=self.character_id,
                 _deflect_delta=new_status.deflects - old_status.deflects,
@@ -847,6 +849,14 @@ class StatOrSkillTest(RollEvent):
             prev_roll_status = None
             completed = self.roll
 
+        chat_msg = (
+            f"{char.nameplate.name} tests {self.stat_or_skill.value}. {completed.total()}!"
+            f"{completed.is_critical().msg()}\n"
+            f"{completed.roll}"
+        )
+
+        g.chat_log.append(chat_msg)
+
         return StatOrSkillTest(
             event_id=self.event_id,
             roll=completed,
@@ -863,3 +873,6 @@ class StatOrSkillTest(RollEvent):
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status
+        
+        # We added this, so it won't be length 0
+        g.chat_log.pop()

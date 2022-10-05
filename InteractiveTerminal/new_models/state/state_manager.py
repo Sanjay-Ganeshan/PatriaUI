@@ -96,7 +96,11 @@ class StateManager:
                 # False = undo
                 each_listener(ev, False, self)
 
-            
+    def clear_history(self) -> None:
+        """
+        Clears all history, so that it's no longer possible to go back
+        """
+        self._history.clear()
 
     
     
