@@ -1,1 +1,1 @@
-__all__ = ['ev_base', 'game_events', 'view_events']
+__all__ = ['abilities', 'ev_base', 'game_events', 'view_events']
