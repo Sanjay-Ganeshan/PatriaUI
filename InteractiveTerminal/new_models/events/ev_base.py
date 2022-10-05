@@ -38,5 +38,5 @@ class GameEvent(GameOrViewEvent):
 
 @dataclass(frozen=True)
 class RollEvent(GameEvent):
-    roll: CompletedRoll = field(default_factory=CompletedRoll)
+    roll: T.Optional[CompletedRoll] = None
 

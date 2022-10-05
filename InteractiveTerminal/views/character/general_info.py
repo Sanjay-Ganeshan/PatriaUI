@@ -3,6 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from ...new_models.events.ev_base import GameOrViewEvent
 from ...new_models.state.app_settings import BOX_WIDTH
 from ...new_models.state.state_manager import StateManager
+from ...new_models.character.stats import Stat
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
 from .icon import CHIcon
@@ -11,7 +12,9 @@ from .armor import CHArmor
 from .power import CHPower
 from .life_and_death import CHLife
 from .restoration import CHRestoration
+from ..stats.stat_badge import StatBadge
 
+from ..resource_list import Resources
 
 class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
@@ -34,6 +37,12 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.power = CHPower()
         self.life = CHLife()
         self.restoration = CHRestoration()
+        self.proficiency = StatBadge(
+            which_stat=Stat.PROFICIENCY_BONUS,
+            source=Resources.PROFICIENCY_STAT_ICON,
+            box_height=3,
+            pr_full_color="white",
+        )
         
         self.add_widget(self.icon)
         self.add_widget(self.namecard)
@@ -41,6 +50,7 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.power)
         self.add_widget(self.life)
         self.add_widget(self.restoration)
+        self.add_widget(self.proficiency)
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:

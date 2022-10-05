@@ -7,6 +7,7 @@ class Stat(Enum):
     INTELLIGENCE = "INTELLIGENCE"
     CONSTITUTION = "CONSTITUTION"
     WISDOM = "WISDOM"
+    PROFICIENCY_BONUS = "PROFICIENCY"
 
     @classmethod
     def all(cls) -> T.List["Stat"]:

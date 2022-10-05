@@ -10,7 +10,6 @@ class StatBlock:
     Tracks how good a character is at particular
     stats and skills
     """
-    proficiency_bonus: int = 4
     stat_modifiers: T.Dict[Stat, int] = field(default_factory=dict)
     proficiency_multipliers: T.Dict[Proficiency, int] = field(default_factory=dict)
 
@@ -25,7 +24,6 @@ class StatBlock:
     @classmethod
     def create(
         cls,
-        proficiency_bonus: int,
         assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]]
     ) -> "StatBlock":
         stat_modifiers = {}
@@ -41,22 +39,18 @@ class StatBlock:
                 proficiency_multipliers[key] = val
 
         return cls(
-            proficiency_bonus=proficiency_bonus,
             stat_modifiers=stat_modifiers,
             proficiency_multipliers=proficiency_multipliers,
         )
     
     def copy(
         self,
-        proficiency_bonus: T.Optional[int] = None,
         assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]] = None
     ) -> "StatBlock":
-        if proficiency_bonus is None:
-            proficiency_bonus = self.proficiency_bonus
         if assignments is None:
             assignments = []
         
-        desired = StatBlock.create(proficiency_bonus=0, assignments=assignments)
+        desired = StatBlock.create(assignments=assignments)
         
         proficiency_multipliers = {}
         stat_modifiers = {}
@@ -68,7 +62,6 @@ class StatBlock:
         proficiency_multipliers.update(desired.proficiency_multipliers)
 
         return StatBlock(
-            proficiency_bonus=proficiency_bonus,
             stat_modifiers=stat_modifiers,
             proficiency_multipliers=proficiency_multipliers,
         )

@@ -5,6 +5,7 @@ from .stat_block import StatBlock
 from .nameplate import Nameplate
 from .status import Status
 from .active_effects import Buffs, Debuffs
+from ..dice.advantage import RollStatus
 
 
 # NOT frozen
@@ -26,6 +27,7 @@ class Character:
     max_life: Status = field(default_factory=Status)
 
     active_effects: T.List[str] = field(default_factory=list)
+    next_roll_status: RollStatus = RollStatus.STANDARD
 
     def __post_init__(self):
         if self.current_life is None:

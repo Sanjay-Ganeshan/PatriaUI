@@ -8,6 +8,8 @@ import typing as T
 
 from ..character.character import Character
 from ..character.active_effects import Debuffs, Buffs
+from ..character.stats import Stat
+from ..character.proficiencies import Proficiency
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
 from ..dice.rolls import Roll, CompletedRoll
@@ -227,8 +229,11 @@ class RestoreShield(RollEvent):
         char = g.characters[self.character_id]
 
         # Roll 1d2 to restore shields
-        roll = Roll(faces=Dice.D2)
-        completed = CompletedRoll.realize(roll)
+        if self.roll is None:
+            roll = Roll(faces=Dice.D2)
+            completed = CompletedRoll.realize(roll)
+        else:
+            completed = self.roll
 
         new_status = char.current_life.delta(
             shield_power=completed.total(), max_st=char.max_life
@@ -305,8 +310,9 @@ class ChangeHP(GameEvent):
                 event_id=self.event_id,
                 character_id=self.character_id,
                 amount=new_status.HP - old_status.HP,
-                _death_fail_delta = new_status.death_fails - old_status.death_fails,
-                _death_success_delta = new_status.death_successes - old_status.death_successes,
+                _death_fail_delta=new_status.death_fails - old_status.death_fails,
+                _death_success_delta=new_status.death_successes
+                - old_status.death_successes,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -320,7 +326,7 @@ class ChangeHP(GameEvent):
             HP=-1 * self.amount,
             death_fails=-1 * self._death_fail_delta,
             death_successes=-1 * self._death_success_delta,
-            max_st=char.max_life
+            max_st=char.max_life,
         )
         char.current_life = new_status
 
@@ -441,8 +447,11 @@ class DeathSave(RollEvent):
             # Already dead
             return None
 
-        roll = Roll(Dice.D20)
-        completed = CompletedRoll.realize(roll)
+        if self.roll is None:
+            roll = Roll(Dice.D20)
+            completed = CompletedRoll.realize(roll)
+        else:
+            completed = self.roll
 
         death_success_delta = 0
         death_fail_delta = 0
@@ -647,10 +656,10 @@ class ConsumeRevival(GameEvent):
         char = g.characters[self.character_id]
 
         new_status = char.current_life.delta(
-            revives=-1*self._revive_delta,
-            HP=-1*self._hp_delta,
-            death_fails=-1*self._death_fail_delta,
-            death_successes=-1*self._death_success_delta,
+            revives=-1 * self._revive_delta,
+            HP=-1 * self._hp_delta,
+            death_fails=-1 * self._death_fail_delta,
+            death_successes=-1 * self._death_success_delta,
             max_st=char.max_life,
         )
         char.current_life = new_status
@@ -661,6 +670,7 @@ class RestoreRevival(GameEvent):
     """
     Restores a single revival to character_id
     """
+
     character_id: str = ""
 
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
@@ -669,9 +679,7 @@ class RestoreRevival(GameEvent):
         ), f"Not a character: {self.character_id}"
         char = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(
-            revives=1, max_st=char.max_life
-        )
+        new_status = char.current_life.delta(revives=1, max_st=char.max_life)
         if char.current_life == new_status:
             # No change .. no-op
             return None
@@ -700,7 +708,9 @@ class RestoreHitDice(GameEvent):
         ), f"Not a character: {self.character_id}"
         char = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(hit_dice=char.max_life.hit_dice, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            hit_dice=char.max_life.hit_dice, max_st=char.max_life
+        )
         if char.current_life == new_status:
             # Already full .. no-op
             return None
@@ -710,7 +720,7 @@ class RestoreHitDice(GameEvent):
             return RestoreHitDice(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                _hit_dice_restored = new_status.hit_dice - old_status.hit_dice
+                _hit_dice_restored=new_status.hit_dice - old_status.hit_dice,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -719,7 +729,9 @@ class RestoreHitDice(GameEvent):
         ), f"Not a character: {self.character_id}"
         char = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(hit_dice=-1*self._hit_dice_restored, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            hit_dice=-1 * self._hit_dice_restored, max_st=char.max_life
+        )
         char.current_life = new_status
 
 
@@ -740,10 +752,13 @@ class UseHitDice(RollEvent):
         if char.current_life.hit_dice < 1 or char.current_life.HP >= char.max_life.HP:
             # No hit dice, or no need to heal
             return None
-        
-        # Roll 1d6 to restore HP
-        roll = Roll(faces=Dice.D6)
-        completed = CompletedRoll.realize(roll)
+
+        if self.roll is None:
+            # Roll 1d6 to restore HP
+            roll = Roll(faces=Dice.D6)
+            completed = CompletedRoll.realize(roll)
+        else:
+            completed = self.roll
 
         to_heal = completed.total()
         if to_heal > 1 and char.has_effect(Debuffs.HARD_TO_TREAT):
@@ -754,7 +769,7 @@ class UseHitDice(RollEvent):
             hit_dice=-1,
             death_fails=char.max_life.death_fails,
             death_successes=char.max_life.death_successes,
-            max_st=char.max_life
+            max_st=char.max_life,
         )
 
         old_status = char.current_life
@@ -766,7 +781,8 @@ class UseHitDice(RollEvent):
             roll=completed,
             _hp_delta=new_status.HP - old_status.HP,
             _death_fail_delta=new_status.death_fails - old_status.death_fails,
-            _death_success_delta=new_status.death_successes - old_status.death_successes,
+            _death_success_delta=new_status.death_successes
+            - old_status.death_successes,
         )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -778,8 +794,72 @@ class UseHitDice(RollEvent):
         new_status = char.current_life.delta(
             HP=-1 * self._hp_delta,
             hit_dice=1,
-            death_fails=-1*self._death_fail_delta,
-            death_successes=-1*self._death_success_delta,
-            max_st=char.max_life
+            death_fails=-1 * self._death_fail_delta,
+            death_successes=-1 * self._death_success_delta,
+            max_st=char.max_life,
         )
         char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class StatOrSkillTest(RollEvent):
+    character_id: str = ""
+    stat_or_skill: T.Union[Stat, Proficiency] = Stat.PROFICIENCY_BONUS
+
+    _prev_roll_status: T.Optional[RollStatus] = None
+
+    def __post_init__(self):
+        assert (
+            self.stat_or_skill != Stat.PROFICIENCY_BONUS
+        ), "Cannot roll in Proficiency - it must be a stat or skill"
+        assert isinstance(self.stat_or_skill, (Stat, Proficiency))
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        if self.roll is None:
+            # Roll 1d6 to restore HP
+            if isinstance(self.stat_or_skill, Stat):
+                modifier = char.stat_block[self.stat_or_skill]
+            elif isinstance(self.stat_or_skill, Proficiency):
+                modifier = (
+                    char.stat_block[self.stat_or_skill]
+                    * char.stat_block[Stat.PROFICIENCY_BONUS]
+                    + char.stat_block[self.stat_or_skill.corresponding_stat()]
+                )
+
+            roll = Roll(
+                faces=Dice.D20,
+                n_dice=1,
+                modifier=modifier,
+                status=char.next_roll_status,
+            )
+
+            # Clear the next roll status, save info for undo
+            prev_roll_status = char.next_roll_status
+            char.next_roll_status = RollStatus.STANDARD
+
+            completed = CompletedRoll.realize(roll)
+        else:
+            prev_roll_status = None
+            completed = self.roll
+
+        return StatOrSkillTest(
+            event_id=self.event_id,
+            roll=completed,
+            character_id=self.character_id,
+            stat_or_skill=self.stat_or_skill,
+            _prev_roll_status=prev_roll_status,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        if self._prev_roll_status is not None:
+            char.next_roll_status = self._prev_roll_status

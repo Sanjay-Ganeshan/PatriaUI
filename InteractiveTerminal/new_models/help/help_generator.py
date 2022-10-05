@@ -1,3 +1,5 @@
+from ..character.stats import Stat
+
 def armor_rating(
     current_armor_rating: int,
     base_armor_rating: int,
@@ -68,3 +70,20 @@ def hit_dice() -> str:
         f"During a short rest, you can spend hit dice to recover. Each heals 1d6.\n"
         f"They are restored during a long rest."
     )
+
+def stat_description(which_stat: Stat, stat_value: int) -> str:
+    if which_stat == Stat.STRENGTH:
+        return "Your physical capability",
+    if which_stat == Stat.DEXTERITY:
+        return "Your overall deftness",
+    if which_stat == Stat.CONSTITUTION:
+        return "Your overall hardiness",
+    if which_stat == Stat.INTELLIGENCE:
+        return "Your knowledge and learned skills",
+    if which_stat == Stat.WISDOM:
+        return "Your acquired cleverness",
+    if which_stat == Stat.PROFICIENCY_BONUS:
+        return (
+            f"If you are proficient in an action, add ({stat_value:+d})\n"
+            f"If you are an expert add double that ({2*stat_value:+d})"
+        )

@@ -33,6 +33,7 @@ class SilviaFerreyra(Character):
                         (Stat.CONSTITUTION, 1),
                         (Stat.INTELLIGENCE, 2),
                         (Stat.WISDOM, 1),
+                        (Stat.PROFICIENCY_BONUS, 4),
                         (Proficiency.ATHLETICS, 1),
                         (Proficiency.COMBATIVES, 1),
                         (Proficiency.STEALTH, 1),
@@ -41,7 +42,6 @@ class SilviaFerreyra(Character):
                         (Proficiency.MEDICINE, 1),
                         (Proficiency.PERCEPTION, 1),
                     ],
-                    proficiency_bonus=4,
                 ),
                 current_life=None,
                 max_life=Status(
