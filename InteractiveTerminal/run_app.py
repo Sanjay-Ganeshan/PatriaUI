@@ -21,6 +21,8 @@ import typing as T
 from .views.home import Home
 from .new_models.state.state_manager import StateManager
 from .new_models.specific.lumina import LuminaGale
+from .new_models.specific.galina import GalinaNovikova
+from .new_models.specific.silvia import SilviaFerreyra
 from .new_models.events.view_events import SwitchFocusedView, SwitchFocusedCharacter
 from .new_models.state.view_state import Views
 
@@ -34,6 +36,8 @@ class PatriaApp(MDApp):
     def build(self):
         self.state_manager = StateManager()
         self.state_manager.game_state.characters["lumina"] = LuminaGale()
+        self.state_manager.game_state.characters["galina"] = GalinaNovikova()
+        self.state_manager.game_state.characters["silvia"] = SilviaFerreyra()
         self.home = Home()
         self.home.state_manager = self.state_manager
         self.state_manager.push_event(SwitchFocusedView(new_focus=Views.CHARACTER_DETAILS))
