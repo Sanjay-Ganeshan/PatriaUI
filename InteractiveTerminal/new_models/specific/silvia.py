@@ -55,6 +55,6 @@ class SilviaFerreyra(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                active_effects=[Debuffs.HARD_TO_TREAT],
             )
         )
+        self.add_effect(Debuffs.HARD_TO_TREAT)

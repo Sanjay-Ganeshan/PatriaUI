@@ -45,15 +45,45 @@ class StateManager:
         """
         return self._listeners.pop(sub_id, None) is not None
 
-    def push_event(self, ev: GameOrViewEvent) -> None:
+    def push_event(self, ev: T.Union[GameOrViewEvent, T.List[GameOrViewEvent]]) -> None:
+        """
+        Push's the given event or chain of events.
+
+        With one event, will DO the event
+        With a chain, if any of them is a no-op, will do none of them.
+        If ALL succeed, will DO all of them
+        """
         # After do-ing the event we might have filled more info
         # in.
-        ev = ev.do(self.view_state, self.game_state)
-        self._history.append(ev)
+        if isinstance(ev, GameOrViewEvent):
+            chain = [ev]
+        else:
+            chain = ev
 
-        for (_sub_id, each_listener) in self._listeners.items():
-            # True = do
-            each_listener(ev, True, self)
+        updated_evs: T.List[GameOrViewEvent] = []
+        success = True
+        for each_ev in chain:
+            updated = each_ev.do(self.view_state, self.game_state)
+            if updated is None:
+                # Something failed!
+                success = False
+                break
+            else:
+                updated_evs.append(updated)
+        
+        if success:
+            for each_updated_ev in updated_evs:
+                # Let's commit all these to history, and notify our listeners
+                self._history.append(each_updated_ev)
+
+                for (_sub_id, each_listener) in self._listeners.items():
+                    # True = do
+                    each_listener(each_updated_ev, True, self)
+    
+        else:
+            # Failed! Let's just undo everything, and forget about it
+            for each_updated_ev in reversed(updated_evs):
+                each_updated_ev.undo(self.view_state, self.game_state)
 
     def pop_event(self) -> None:
         if len(self._history) > 0:
@@ -64,6 +94,7 @@ class StateManager:
                 # False = undo
                 each_listener(ev, False, self)
 
+            
 
     
     

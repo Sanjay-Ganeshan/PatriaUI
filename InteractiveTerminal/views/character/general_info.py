@@ -7,6 +7,7 @@ from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
 from .icon import CHIcon
 from .name_and_role import CHNamecard
+from .armor import CHArmor
 
 
 class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -26,9 +27,11 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
 
         self.icon = CHIcon()
         self.namecard = CHNamecard()
+        self.armor = CHArmor()
         
         self.add_widget(self.icon)
         self.add_widget(self.namecard)
+        self.add_widget(self.armor)
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:

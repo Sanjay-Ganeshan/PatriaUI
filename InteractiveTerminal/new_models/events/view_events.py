@@ -19,7 +19,7 @@ class SwitchFocusedCharacter(ViewEvent):
     # We'll fix these
     old_focus: T.Optional[str] = None
 
-    def do(self, v: ViewState, g: GameState) -> GameOrViewEvent:
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         prev_focus = v.focused_character
         v.focused_character = self.new_focus
         return SwitchFocusedCharacter(
@@ -28,7 +28,7 @@ class SwitchFocusedCharacter(ViewEvent):
             new_focus=self.new_focus,
         )
 
-    def undo(self, v: ViewState, g: GameState):
+    def undo(self, v: ViewState, g: GameState) -> None:
         assert v.focused_character == self.new_focus, "Invalid event order"
         v.focused_character = self.old_focus
 
@@ -41,7 +41,7 @@ class SwitchFocusedView(ViewEvent):
     # We'll fix these
     old_focus: Views = Views.EMPTY
 
-    def do(self, v: ViewState, g: GameState) -> GameOrViewEvent:
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         prev_focus = v.focused_view
         v.focused_view = self.new_focus
         return SwitchFocusedView(
@@ -50,6 +50,6 @@ class SwitchFocusedView(ViewEvent):
             new_focus=self.new_focus,
         )
 
-    def undo(self, v: ViewState, g: GameState):
+    def undo(self, v: ViewState, g: GameState) -> None:
         assert v.focused_view == self.new_focus, "Invalid event order"
         v.focused_view = self.old_focus

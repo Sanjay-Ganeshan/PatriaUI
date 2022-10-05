@@ -54,6 +54,6 @@ class GalinaNovikova(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                active_effects=[Buffs.LEADERSHIP],
             )
         )
+        self.add_effect(Buffs.LEADERSHIP)

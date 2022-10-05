@@ -54,6 +54,5 @@ class LuminaGale(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                active_effects=[],
             )
         )

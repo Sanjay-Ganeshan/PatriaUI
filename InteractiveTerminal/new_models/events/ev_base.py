@@ -13,7 +13,7 @@ class GameOrViewEvent(ABC):
     event_id: str = field(default_factory=lambda:str(uuid4()))
     
     @abstractmethod
-    def do(self, v: ViewState, g: GameState) -> "GameOrViewEvent":
+    def do(self, v: ViewState, g: GameState) -> T.Optional["GameOrViewEvent"]:
         """
         Performs any necessary mutations to ViewState / GameState.
         Returns an event that can be undone to undo all modifications.
