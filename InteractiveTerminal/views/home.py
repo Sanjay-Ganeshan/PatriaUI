@@ -1,8 +1,10 @@
 # The main page, regardless of contents
+import random
+
 from kivy.core.window import Window
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from ..new_models.events.ev_base import GameOrViewEvent
+from ..new_models.events.ev_base import GameOrViewEvent, RollEvent
 from ..new_models.state.app_settings import BOX_HEIGHT, BOX_WIDTH, AppSettings
 from ..new_models.state.state_manager import StateManager
 from .page.body import Body
@@ -10,6 +12,8 @@ from .page.footer import Footer
 from .page.header import Header
 from .shared.box_sized_mixin import BoxSized
 from .shared.listens_for_state_changes import ListenForStateChanges
+from .sound_player import SoundPlayer
+from ..new_models.dice.dice import Critical
 
 
 class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -47,7 +51,22 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
-        pass
+        if not is_forward:
+            if SoundPlayer.keypress.state == "stop":
+                SoundPlayer.keypress.volume = 0.3
+                SoundPlayer.keypress.play()
+        
+        else:
+            if isinstance(ev, RollEvent):
+                if all((d.state == "stop" for d in SoundPlayer.dice_rolls)):
+                    if ev.roll.is_critical() != Critical.NO:
+                        r = SoundPlayer.dice_rolls[0]
+                    else:
+                        r = SoundPlayer.dice_rolls[random.randrange(1, len(SoundPlayer.dice_rolls))]
+                    r.volume = 0.8
+                    r.play()
+        
+        
 
     def _keyboard_closed(self):
         print("My keyboard have been closed!")

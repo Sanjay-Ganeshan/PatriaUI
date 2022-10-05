@@ -90,7 +90,7 @@ class StateManager:
             for each_updated_ev in reversed(updated_evs):
                 each_updated_ev.undo(self.view_state, self.game_state)
 
-    def pop_event(self) -> None:
+    def pop_event(self) -> bool:
         assert not self._locked, "Listeners cannot pop events"
 
         if len(self._history) > 0:
@@ -106,6 +106,9 @@ class StateManager:
                     # False = undo
                     each_listener(ev, False, self)
             self._locked = False
+            return True
+        else:
+            return False
 
     def clear_history(self) -> None:
         """
