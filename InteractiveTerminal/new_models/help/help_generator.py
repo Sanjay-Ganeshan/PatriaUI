@@ -1,4 +1,5 @@
 from ..character.stats import Stat
+from ..character.proficiencies import Proficiency
 
 
 def armor_rating(
@@ -74,17 +75,64 @@ def hit_dice() -> str:
 
 def stat_description(which_stat: Stat, stat_value: int) -> str:
     if which_stat == Stat.STRENGTH:
-        return "Your physical capability",
+        return "Your physical capability"
     if which_stat == Stat.DEXTERITY:
-        return "Your overall deftness",
+        return "Your overall deftness"
     if which_stat == Stat.CONSTITUTION:
-        return "Your overall hardiness",
+        return "Your overall hardiness"
     if which_stat == Stat.INTELLIGENCE:
-        return "Your knowledge and learned skills",
+        return "Your knowledge and learned skills"
     if which_stat == Stat.WISDOM:
-        return "Your acquired cleverness",
+        return "Your acquired cleverness"
     if which_stat == Stat.PROFICIENCY_BONUS:
         return (
             f"If you are proficient in an action, add ({stat_value:+d})\n"
             f"If you are an expert add double that ({2*stat_value:+d})"
         )
+    else:
+        raise Exception(f"Unexpected stat - {which_stat}")
+
+def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, proficiency_bonus: int, total_bonus: int) -> str:
+    SKILL_DESCRIPTIONS = {
+        # STR
+        Proficiency.ATHLETICS: "Your overall fitness.",
+        Proficiency.COMBATIVES: "Your skill in hand-to-hand combat.",
+        # DEX
+        Proficiency.ACROBATICS: "Your overall agility.",
+        Proficiency.STEALTH: "Your skill at remaining undetected.",
+        # INT
+        Proficiency.INVESTIGATION: "Your ability to make logical deductions.",
+        Proficiency.NATURE: "How well you recall knowledge about terrain and wildlife.",
+        Proficiency.ANIMAL_HANDLING: "How well you cn coax animals to do your bidding.",
+        # WIS
+        Proficiency.INSIGHT: "Your ability to determine someone's true intentions, based on their actions and other signs.",
+        Proficiency.MEDICINE: "Your ability to treat wounds.",
+        Proficiency.PERCEPTION: "How aware you are of your surroundings.",
+        Proficiency.SURVIVAL: "Your ability to survive 'in the wild'.",
+        Proficiency.SOCIAL: "How well you interact outside of combat.",
+    }
+    skill_desc = SKILL_DESCRIPTIONS[which_skill]
+
+    if multiplier == 0:
+        general_desc = (
+            f"You have no additional bonuses past your "
+            f"stat modifier ({stat_mod:+d})."
+        )
+    elif multiplier == 1:
+        general_desc = (
+            f"You are proficient in {which_skill.value}.\n"
+            f"Add your proficiency bonus ({proficiency_bonus:+d}) to rolls,\n"
+            f"in addition to your stat modifier ({stat_mod:+d})\n"
+            f"Total: {total_bonus:+d}"
+        )
+    elif multiplier == 2:
+        general_desc = (
+            f"You are proficient in {which_skill.value}.\n"
+            f"Add DOUBLE your proficiency bonus ({2*proficiency_bonus:+d}) to rolls,\n"
+            f"in addition to your stat modifier ({stat_mod:+d})\n"
+            f"Total: {total_bonus:+d}"
+        )
+    else:
+        general_desc = ""
+
+    return f"{skill_desc}\n{general_desc}"

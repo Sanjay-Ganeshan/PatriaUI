@@ -6,6 +6,8 @@ from ..new_models.character.proficiencies import Proficiency
 class Resources:
     ARMOR_ICON: str = "shield_white.png"
 
+    MISSING: str = "missing.png"
+
     SKINSUIT_ICON: str = "suit.png"
     ENERGY_SHIELD_ICON: str = "shield_filled_white.png"
 
@@ -22,11 +24,11 @@ class Resources:
     STAT_ICON: str = "stat_triangle.png"
     PROFICIENCY_STAT_ICON: str = "proficiency_skill_tag.png"
 
-    PROFICIENCY_MULTIPLIER_TO_SKILL_TAG: T.Dict[int, str] = {
-        0: "skilltag_basic.png",
-        1: "skilltag_prof.png",
-        2: "skilltag_expert.png"
-    }
+    PROFICIENCY_MULTIPLIER_TO_SKILL_TAG: T.List[str] = [
+        "skilltag_basic.png",
+        "skilltag_prof.png",
+        "skilltag_expert.png"
+    ]
 
     SKILL_TO_ICON = {
         Proficiency.ATHLETICS: "athletics.png",

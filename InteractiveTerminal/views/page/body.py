@@ -6,9 +6,14 @@ from ...new_models.state.app_settings import BOX_WIDTH
 from ...new_models.state.view_state import Views, ViewState
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.spacer import Spacer
+from ..shared.listens_for_state_changes import ListenForStateChanges
+from .details import DetailsSheet
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.view_events import SwitchFocusedView
+from ...new_models.state.state_manager import StateManager
 
 
-class Body(MDBoxLayout, BoxSized):
+class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
     A container for the main content we want to display
     """
@@ -22,8 +27,12 @@ class Body(MDBoxLayout, BoxSized):
             **kwargs,
         )
         self.box_init()
+        self.listener_init()
 
-        self.content = Spacer(box_width=BOX_WIDTH, box_height=10)
+
+        self.empty = Spacer(box_width=BOX_WIDTH, box_height=10)
+        self.details = DetailsSheet()
+        self.content = self.empty
 
         self.bind(which_view=self.update_which_view)
 
@@ -31,11 +40,23 @@ class Body(MDBoxLayout, BoxSized):
         self.remove_widget(self.content)
         
         if self.which_view is None or self.which_view == Views.EMPTY:
-            self.content = Spacer(box_width=BOX_WIDTH, box_height=10)
+            self.content = self.empty
 
         elif self.which_view == Views.CHARACTER_DETAILS:
-            pass
+            self.content = self.details
 
         elif self.which_view == Views.MAP:
             pass
+    
+        self.add_widget(self.content)
+
+
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
+        if not isinstance(ev, SwitchFocusedView):
+            return
+
+        self.which_view = state_manager.view_state.focused_view
+        
 

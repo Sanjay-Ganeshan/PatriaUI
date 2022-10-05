@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from kivy.properties import NumericProperty, ObjectProperty
 
 from ...new_models.events.ev_base import GameOrViewEvent
@@ -10,7 +8,6 @@ class ListenForStateChanges:
     state_manager: StateManager = ObjectProperty(None)
     _subscription_id: int = NumericProperty(-1)
 
-    @abstractmethod
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
         pass
 
