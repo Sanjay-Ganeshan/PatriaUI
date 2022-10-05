@@ -10,15 +10,20 @@ Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
 import os
 
-from kivy.resources import resource_add_path
+from kivy.resources import resource_add_path, resource_find
 
 mydir = os.path.dirname(os.path.abspath(__file__))
 resource_add_path(os.path.join(mydir, "images"))
+resource_add_path(os.path.join(mydir, "fonts"))
+
+FONT = resource_find("Montserrat-SemiBold.ttf")
 
 import typing as T
 
 from kivy.core.window import Window
 from kivymd.app import MDApp
+
+from kivymd.font_definitions import theme_font_styles
 
 from .new_models.events.view_events import (SwitchFocusedCharacter,
                                             SwitchFocusedView)
@@ -33,6 +38,8 @@ from .views.home import Home
 
 class PatriaApp(MDApp):
     def build(self):
+        for each_style in theme_font_styles:
+            self.theme_cls.font_styles[each_style][0] = FONT 
         self.state_manager = StateManager()
         self.state_manager.game_state.characters["lumina"] = LuminaGale()
         self.state_manager.game_state.characters["galina"] = GalinaNovikova()

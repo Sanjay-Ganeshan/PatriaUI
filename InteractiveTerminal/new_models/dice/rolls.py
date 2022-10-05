@@ -17,14 +17,14 @@ class Roll:
         msg = f"{self.n_dice}d{self.faces.value}"
         mod_msg = "" if self.modifier == 0 else f"{self.modifier:+d}"
         status_msg = (
-            chr(24)  # up arrow ASCII
+            "(+)"
             if self.status == RollStatus.ADVANTAGE
-            else chr(25)  # down arrow ASCII
+            else "(-)"  # down arrow unicode
             if self.status == RollStatus.DISADVANTAGE
-            else " "
+            else ""
         )
 
-        return status_msg + mod_msg + msg
+        return status_msg + msg + mod_msg
 
 
 @dataclass(frozen=True)
@@ -66,3 +66,6 @@ class CompletedRoll:
 
         tot += self.roll.modifier
         return tot
+
+    def __str__(self) -> str:
+        return f"{self.roll} {self.raw[:10]} => {self.total()}"

@@ -852,7 +852,7 @@ class StatOrSkillTest(RollEvent):
         chat_msg = (
             f"{char.nameplate.name} tests {self.stat_or_skill.value}. {completed.total()}!"
             f"{completed.is_critical().msg()}\n"
-            f"{completed.roll}"
+            f"{completed}"
         )
 
         g.chat_log.append(chat_msg)

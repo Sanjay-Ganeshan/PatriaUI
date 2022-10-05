@@ -27,3 +27,4 @@ class Views(Enum):
 class ViewState:
     focused_view: Views = Views.EMPTY
     focused_character: T.Optional[str] = None
+    chat_log_index: int = -1
