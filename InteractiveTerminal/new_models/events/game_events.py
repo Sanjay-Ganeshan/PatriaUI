@@ -9,6 +9,9 @@ import typing as T
 from ..character.character import Character
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
+from ..dice.rolls import Roll, CompletedRoll
+from ..dice.dice import Dice
+from ..dice.advantage import RollStatus
 
 
 @dataclass(frozen=True)
@@ -101,6 +104,45 @@ class ConsumeSkinsuitCharge(GameEvent):
 
 
 @dataclass(frozen=True)
+class RestoreSkinsuitCharge(GameEvent):
+    character_id: str = ""
+    amount_restored: int = 2
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Increase suit power by up to 2
+        new_status = char.current_life.delta(suit_power=self.amount_restored, max_st=char.max_life)
+        if char.current_life == new_status:
+            # No change .. no-op
+            return None
+        else:
+            old_status = char.current_life
+            char.current_life = new_status
+
+            # Populate the amount restored - otherwise if we overcap then undo,
+            # we'll be at 1 less skinsuit charge
+            return RestoreSkinsuitCharge(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                amount_restored=new_status.suit_power-old_status.suit_power,
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Reduce skinsuit power by however much we restored
+        new_status = char.current_life.delta(suit_power=-1 * self.amount_restored)
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
 class ModifyArmorRating(GameEvent):
     character_id: str = ""
     armor_mod: int = 0
@@ -140,46 +182,77 @@ class ModifyArmorRating(GameEvent):
         char.current_life = new_status
 
 
-@dataclass(frozen=True)
-class DeathSave(RollEvent):
-    pass
-
 
 @dataclass(frozen=True)
-class StatTest(RollEvent):
-    pass
+class ConsumeShield(GameEvent):
+    character_id: str = ""
 
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
 
-@dataclass(frozen=True)
-class SkillTest(RollEvent):
-    pass
+        # Reduce shield power by 1
+        new_status = char.current_life.delta(shield_power=-1, max_st=char.max_life)
+        if char.current_life == new_status:
+            # No power .. no-op
+            return None
+        else:
+            char.current_life = new_status
+            return self
 
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
 
-@dataclass(frozen=True)
-class ChangeHP(GameEvent):
-    pass
-
-
-@dataclass(frozen=True)
-class ChangePower(GameEvent):
-    pass
-
-
-@dataclass(frozen=True)
-class ChangeShield(GameEvent):
-    pass
-
-
-@dataclass(frozen=True)
-class UseHitDice(GameEvent):
-    pass
+        # Increase suit power by 1
+        new_status = char.current_life.delta(shield_power=1, max_st=char.max_life)
+        char.current_life = new_status
 
 
 @dataclass(frozen=True)
-class SkillTest(GameEvent):
-    pass
+class RestoreShield(RollEvent):
+    character_id: str = ""
 
+    amount_restored: int = 0
 
-@dataclass(frozen=True)
-class SkillTest(GameEvent):
-    pass
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Roll 1d2 to restore shields
+        roll = Roll(faces=Dice.D2)
+        completed = CompletedRoll.realize(roll)
+
+        new_status = char.current_life.delta(shield_power=completed.total(), max_st=char.max_life)
+        if char.current_life == new_status:
+            # No change .. no-op
+            return None
+        else:
+            old_status = char.current_life
+            char.current_life = new_status
+
+            # Populate the amount restored - otherwise if we overcap then undo,
+            # we'll be at 1 less charge
+            return RestoreShield(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                amount_restored=new_status.shield_power-old_status.shield_power,
+                roll=completed,
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Reduce skinsuit power by however much we restored
+        new_status = char.current_life.delta(shield_power=-1 * self.amount_restored)
+        char.current_life = new_status
+
