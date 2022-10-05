@@ -70,6 +70,13 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
             # the system.
             return True
 
+        if keycode[1] == "z":
+            # Return True to accept the key. Otherwise, it will be used by
+            # the system.
+            if self.state_manager is not None:
+                self.state_manager.pop_event()
+            return True
+
         # If we hit escape, release the keyboard
         if keycode[1] == "escape":
             keyboard.release()

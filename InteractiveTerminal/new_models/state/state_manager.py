@@ -75,6 +75,7 @@ class StateManager:
             for each_updated_ev in updated_evs:
                 # Let's commit all these to history, and notify our listeners
                 self._history.append(each_updated_ev)
+                print("PUSH", each_updated_ev)
 
                 for (_sub_id, each_listener) in self._listeners.items():
                     # True = do
@@ -88,7 +89,8 @@ class StateManager:
     def pop_event(self) -> None:
         if len(self._history) > 0:
             ev = self._history.pop()
-            ev.undo(self.v, self.g)
+            print("POP", ev)
+            ev.undo(self.view_state, self.game_state)
 
             for (_sub_id, each_listener) in self._listeners.items():
                 # False = undo

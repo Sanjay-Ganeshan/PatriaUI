@@ -260,11 +260,13 @@ class RestoreShield(RollEvent):
         char.current_life = new_status
 
 
-
 @dataclass(frozen=True)
 class ChangeHP(GameEvent):
     character_id: str = ""
     amount: int = -1
+
+    _death_fail_delta: int = 0
+    _death_success_delta: int = 0
 
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         assert (
@@ -277,16 +279,21 @@ class ChangeHP(GameEvent):
         # Account for hard to treat debuff (-1 to heals, no less than 1)
         if hp_delta > 1 and char.has_effect(Debuffs.HARD_TO_TREAT):
             hp_delta -= 1
-    
+
         if hp_delta > 0:
             # This is a heal, clear out any death statuses
             death_fail_delta = char.max_life.death_fails
             death_success_delta = char.max_life.death_successes
         else:
-            death_fail_delta=0
-            death_success_delta=0
+            death_fail_delta = 0
+            death_success_delta = 0
 
-        new_status = char.current_life.delta(HP=hp_delta, death_fails=death_fail_delta, death_successes=death_success_delta, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            HP=hp_delta,
+            death_fails=death_fail_delta,
+            death_successes=death_success_delta,
+            max_st=char.max_life,
+        )
         if char.current_life == new_status:
             # No damage .. no-op
             return None
@@ -297,7 +304,9 @@ class ChangeHP(GameEvent):
             return ChangeHP(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                amount=new_status.HP - old_status.HP
+                amount=new_status.HP - old_status.HP,
+                _death_fail_delta = new_status.death_fails - old_status.death_fails,
+                _death_success_delta = new_status.death_successes - old_status.death_successes,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -307,9 +316,13 @@ class ChangeHP(GameEvent):
         char = g.characters[self.character_id]
 
         # Increase suit power by 1
-        new_status = char.current_life.delta(HP=-1 * self.amount, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            HP=-1 * self.amount,
+            death_fails=-1 * self._death_fail_delta,
+            death_successes=-1 * self._death_success_delta,
+            max_st=char.max_life
+        )
         char.current_life = new_status
-
 
 
 @dataclass(frozen=True)
@@ -329,8 +342,9 @@ class ChangeDeathFail(GameEvent):
             # Regardless of what was asked, just restore all death fails
             fail_delta = char.max_life.death_fails
 
-    
-        new_status = char.current_life.delta(death_fails=fail_delta, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            death_fails=fail_delta, max_st=char.max_life
+        )
         if char.current_life == new_status:
             # No change .. no-op
             return None
@@ -341,7 +355,7 @@ class ChangeDeathFail(GameEvent):
             return ChangeDeathFail(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                amount=new_status.death_fails - old_status.death_fails
+                amount=new_status.death_fails - old_status.death_fails,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -350,9 +364,10 @@ class ChangeDeathFail(GameEvent):
         ), f"Not a character: {self.character_id}"
         char = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(death_fails=-1 * self.amount, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            death_fails=-1 * self.amount, max_st=char.max_life
+        )
         char.current_life = new_status
-
 
 
 @dataclass(frozen=True)
@@ -372,8 +387,9 @@ class ChangeDeathSuccess(GameEvent):
             # Regardless of what was asked, just restore all death successes
             success_delta = char.max_life.death_successes
 
-    
-        new_status = char.current_life.delta(death_successes=success_delta, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            death_successes=success_delta, max_st=char.max_life
+        )
         if char.current_life == new_status:
             # No change .. no-op
             return None
@@ -384,7 +400,7 @@ class ChangeDeathSuccess(GameEvent):
             return ChangeDeathSuccess(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                amount=new_status.death_successes - old_status.death_successes
+                amount=new_status.death_successes - old_status.death_successes,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -393,7 +409,9 @@ class ChangeDeathSuccess(GameEvent):
         ), f"Not a character: {self.character_id}"
         char = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(death_successes=-1 * self.amount, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            death_successes=-1 * self.amount, max_st=char.max_life
+        )
         char.current_life = new_status
 
 
@@ -418,14 +436,14 @@ class DeathSave(RollEvent):
         if char.current_life.death_successes <= 0:
             # Stable, don't need death saves
             return None
-        
+
         if char.current_life.death_fails <= 0:
             # Already dead
             return None
 
         roll = Roll(Dice.D20)
         completed = CompletedRoll.realize(roll)
-        
+
         death_success_delta = 0
         death_fail_delta = 0
         hp_delta = 0
@@ -444,7 +462,12 @@ class DeathSave(RollEvent):
             # Success
             death_success_delta = -1
 
-        new_status = char.current_life.delta(HP=hp_delta, death_fails=death_fail_delta, death_successes=death_success_delta, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            HP=hp_delta,
+            death_fails=death_fail_delta,
+            death_successes=death_success_delta,
+            max_st=char.max_life,
+        )
         if char.current_life == new_status:
             # No damage .. no-op
             return None
@@ -472,7 +495,291 @@ class DeathSave(RollEvent):
             HP=-1 * self._hp_delta,
             death_fails=-1 * self._fail_delta,
             death_successes=-1 * self._success_delta,
-            max_st=char.max_life
+            max_st=char.max_life,
         )
         char.current_life = new_status
 
+
+@dataclass(frozen=True)
+class CastDeflect(GameEvent):
+    """
+    Cast deflect .. correctly uses free deflects before HP
+    """
+
+    character_id: str = ""
+
+    _hp_delta: int = 0
+    _deflect_delta: int = 0
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        hp_delta = 0
+        deflect_delta = 0
+
+        if char.current_life.deflects > 0:
+            deflect_delta = -1
+        else:
+            hp_delta = -1
+
+        new_status = char.current_life.delta(
+            HP=hp_delta, deflects=deflect_delta, max_st=char.max_life
+        )
+        old_status = char.current_life
+
+        if old_status == new_status:
+            # No HP to burn
+            return None
+        else:
+            return CastDeflect(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                _hp_delta=hp_delta,
+                _deflect_delta=deflect_delta,
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Increase suit power by 1
+        new_status = char.current_life.delta(
+            HP=-1 * self._hp_delta,
+            deflects=-1 * self._deflect_delta,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class RestoreDeflect(GameEvent):
+    """
+    Refresh free deflect casts
+    """
+
+    character_id: str = ""
+
+    _deflect_delta: int = 0
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(
+            deflects=char.max_life.deflects - char.current_life.deflects,
+            max_st=char.max_life,
+        )
+        old_status = char.current_life
+
+        if old_status == new_status:
+            # No change
+            return None
+        else:
+            return CastDeflect(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                _deflect_delta=new_status.deflects - old_status.deflects,
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Increase suit power by 1
+        new_status = char.current_life.delta(
+            deflects=-1 * self._deflect_delta,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class ConsumeRevival(GameEvent):
+    character_id: str = ""
+
+    _hp_delta: int = 0
+    _revive_delta: int = 0
+    _death_fail_delta: int = 0
+    _death_success_delta: int = 0
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        if char.current_life.HP > 0 or char.current_life.revives < 1:
+            # Nothing to revive
+            return None
+
+        new_status = char.current_life.delta(
+            revives=-1,
+            death_fails=char.max_life.death_fails,
+            death_successes=char.max_life.death_successes,
+            HP=1,
+            max_st=char.max_life,
+        )
+        old_status = char.current_life
+        char.current_life = new_status
+        return ConsumeRevival(
+            event_id=self.event_id,
+            character_id=self.character_id,
+            _hp_delta=new_status.HP - old_status.HP,
+            _revive_delta=new_status.revives - old_status.revives,
+            _death_fail_delta=new_status.death_fails - old_status.death_fails,
+            _death_success_delta=new_status.death_successes
+            - old_status.death_successes,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(
+            revives=-1*self._revive_delta,
+            HP=-1*self._hp_delta,
+            death_fails=-1*self._death_fail_delta,
+            death_successes=-1*self._death_success_delta,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class RestoreRevival(GameEvent):
+    """
+    Restores a single revival to character_id
+    """
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(
+            revives=1, max_st=char.max_life
+        )
+        if char.current_life == new_status:
+            # No change .. no-op
+            return None
+        else:
+            return self
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        # Reduce revives by however much we restored
+        new_status = char.current_life.delta(revives=-1)
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class RestoreHitDice(GameEvent):
+    character_id: str = ""
+    _hit_dice_restored: int = 0
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(hit_dice=char.max_life.hit_dice, max_st=char.max_life)
+        if char.current_life == new_status:
+            # Already full .. no-op
+            return None
+        else:
+            old_status = char.current_life
+            char.current_life = new_status
+            return RestoreHitDice(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                _hit_dice_restored = new_status.hit_dice - old_status.hit_dice
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(hit_dice=-1*self._hit_dice_restored, max_st=char.max_life)
+        char.current_life = new_status
+
+
+@dataclass(frozen=True)
+class UseHitDice(RollEvent):
+    character_id: str = ""
+
+    _hp_delta: int = 0
+    _death_fail_delta: int = 0
+    _death_success_delta: int = 0
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        if char.current_life.hit_dice < 1 or char.current_life.HP >= char.max_life.HP:
+            # No hit dice, or no need to heal
+            return None
+        
+        # Roll 1d6 to restore HP
+        roll = Roll(faces=Dice.D6)
+        completed = CompletedRoll.realize(roll)
+
+        to_heal = completed.total()
+        if to_heal > 1 and char.has_effect(Debuffs.HARD_TO_TREAT):
+            to_heal -= 1
+
+        new_status = char.current_life.delta(
+            HP=to_heal,
+            hit_dice=-1,
+            death_fails=char.max_life.death_fails,
+            death_successes=char.max_life.death_successes,
+            max_st=char.max_life
+        )
+
+        old_status = char.current_life
+        char.current_life = new_status
+
+        return UseHitDice(
+            event_id=self.event_id,
+            character_id=self.character_id,
+            roll=completed,
+            _hp_delta=new_status.HP - old_status.HP,
+            _death_fail_delta=new_status.death_fails - old_status.death_fails,
+            _death_success_delta=new_status.death_successes - old_status.death_successes,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(
+            HP=-1 * self._hp_delta,
+            hit_dice=1,
+            death_fails=-1*self._death_fail_delta,
+            death_successes=-1*self._death_success_delta,
+            max_st=char.max_life
+        )
+        char.current_life = new_status

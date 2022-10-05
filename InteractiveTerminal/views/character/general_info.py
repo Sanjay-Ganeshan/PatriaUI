@@ -10,6 +10,7 @@ from .name_and_role import CHNamecard
 from .armor import CHArmor
 from .power import CHPower
 from .life_and_death import CHLife
+from .restoration import CHRestoration
 
 
 class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -32,12 +33,14 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.armor = CHArmor()
         self.power = CHPower()
         self.life = CHLife()
+        self.restoration = CHRestoration()
         
         self.add_widget(self.icon)
         self.add_widget(self.namecard)
         self.add_widget(self.armor)
         self.add_widget(self.power)
         self.add_widget(self.life)
+        self.add_widget(self.restoration)
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
