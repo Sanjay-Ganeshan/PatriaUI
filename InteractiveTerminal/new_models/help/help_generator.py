@@ -29,3 +29,16 @@ def shield(shield_power: int, shield_capacity: int) -> str:
         f"Your shield absorbs damage as temporary HP. \n"
         f"Recharges 1d2 (max {shield_capacity}) per turn when stationary."
     )
+
+def death(max_hp: int) -> str:
+    return (
+            f"When dying, make 1d20 death saves. Fail <= 10, Success > 10.\n"
+            f"At 2 failures, or on a critical failure, you die. \n"
+            f"On 3 successes, you're stabilized (don't roll saves)\n"
+            f"On critical success, revive with 1 HP.\n"
+            f"Taking DMG < {max_hp} destabilizes you and adds a fail. \n"
+            f"Taking DMG >= {max_hp} kills you."
+        )
+
+def HP() -> str:
+    return "Your health. At 0 HP, you are dying."

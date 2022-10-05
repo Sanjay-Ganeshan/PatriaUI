@@ -49,15 +49,24 @@ class Status:
         new_death_successes = max(0, self.death_successes + death_successes)
 
         if max_st is not None:
-            new_HP = min(new_HP, max_st.HP)
-            new_armor_rating = min(new_armor_rating, max_st.armor_rating)
-            new_revives = min(new_revives, max_st.revives)
-            new_deflects = min(new_deflects, max_st.deflects)
-            new_hit_dice = min(new_hit_dice, max_st.hit_dice)
-            new_suit_power = min(new_suit_power, max_st.suit_power)
-            new_shield_power = min(new_shield_power, max_st.shield_power)
-            new_death_fails = min(new_death_fails, max_st.death_fails)
-            new_death_successes = min(new_death_successes, max_st.death_successes)
+            if HP != 0:
+                new_HP = min(new_HP, max_st.HP)
+            if armor_rating != 0:
+                new_armor_rating = min(new_armor_rating, max_st.armor_rating)
+            if revives != 0:
+                new_revives = min(new_revives, max_st.revives)
+            if deflects != 0:
+                new_deflects = min(new_deflects, max_st.deflects)
+            if hit_dice != 0:
+                new_hit_dice = min(new_hit_dice, max_st.hit_dice)
+            if suit_power != 0:
+                new_suit_power = min(new_suit_power, max_st.suit_power)
+            if shield_power != 0:
+                new_shield_power = min(new_shield_power, max_st.shield_power)
+            if death_fails != 0:
+                new_death_fails = min(new_death_fails, max_st.death_fails)
+            if death_successes != 0:
+                new_death_successes = min(new_death_successes, max_st.death_successes)
 
         return Status(
             HP = new_HP,
