@@ -61,7 +61,7 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
             # the system.
             return True
 
-        if keycode[1] == "z":
+        if keycode[1] == "z" and 'ctrl' in modifiers:
             # Return True to accept the key. Otherwise, it will be used by
             # the system.
             if self.state_manager is not None:

@@ -14,7 +14,9 @@ class StateManager:
 
     _next_subscription_id: int = field(default=0, metadata={"IGNORESAVE": True})
     _listeners: T.Dict[int, T.Callable[[GameOrViewEvent, bool, "StateManager"], None]] = field(default_factory=dict, metadata={"IGNORESAVE": True})
-    _history: T.List[GameOrViewEvent] = field(default_factory=list, metadata={"IGNORESAVE": True})
+    _history: T.List[T.List[GameOrViewEvent]] = field(default_factory=list, metadata={"IGNORESAVE": True})
+
+    _locked: bool = False
 
     def subscribe(self, callback: T.Callable[[GameOrViewEvent, bool, "StateManager"], None]) -> int:
         """
@@ -53,6 +55,8 @@ class StateManager:
         With a chain, if any of them is a no-op, will do none of them.
         If ALL succeed, will DO all of them
         """
+        assert not self._locked, "Listeners cannot push events"
+
         # After do-ing the event we might have filled more info
         # in.
         if isinstance(ev, GameOrViewEvent):
@@ -72,29 +76,36 @@ class StateManager:
                 updated_evs.append(updated)
         
         if success:
+            self._locked = True
+            self._history.append(updated_evs)
             for each_updated_ev in updated_evs:
                 # Let's commit all these to history, and notify our listeners
-                self._history.append(each_updated_ev)
                 print("PUSH", each_updated_ev)
-
                 for (_sub_id, each_listener) in self._listeners.items():
                     # True = do
                     each_listener(each_updated_ev, True, self)
-    
+            self._locked = False
         else:
             # Failed! Let's just undo everything, and forget about it
             for each_updated_ev in reversed(updated_evs):
                 each_updated_ev.undo(self.view_state, self.game_state)
 
     def pop_event(self) -> None:
-        if len(self._history) > 0:
-            ev = self._history.pop()
-            print("POP", ev)
-            ev.undo(self.view_state, self.game_state)
+        assert not self._locked, "Listeners cannot pop events"
 
-            for (_sub_id, each_listener) in self._listeners.items():
-                # False = undo
-                each_listener(ev, False, self)
+        if len(self._history) > 0:
+            ev_chain = self._history.pop()
+
+            for ev in reversed(ev_chain):
+                print("POP", ev)
+                ev.undo(self.view_state, self.game_state)
+
+            self._locked = True
+            for ev in reversed(ev_chain):
+                for (_sub_id, each_listener) in self._listeners.items():
+                    # False = undo
+                    each_listener(ev, False, self)
+            self._locked = False
 
     def clear_history(self) -> None:
         """
