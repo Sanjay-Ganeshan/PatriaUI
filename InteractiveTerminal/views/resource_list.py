@@ -91,4 +91,5 @@ class Resources:
 
     SFX_DICE_ROLL = ["diceroll.mp3", "diceroll2.mp3","diceroll3.mp3","diceroll4.mp3"]
     SFX_KEYPRESS = "keypress.mp3"
+    SFX_COIN_FLIP = "coinflip.mp3"
 

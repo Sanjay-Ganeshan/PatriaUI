@@ -13,7 +13,7 @@ from .page.header import Header
 from .shared.box_sized_mixin import BoxSized
 from .shared.listens_for_state_changes import ListenForStateChanges
 from .sound_player import SoundPlayer
-from ..new_models.dice.dice import Critical
+from ..new_models.dice.dice import Critical, Dice
 
 
 class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -58,11 +58,14 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
         
         else:
             if isinstance(ev, RollEvent):
-                if all((d.state == "stop" for d in SoundPlayer.dice_rolls)):
-                    if ev.roll.is_critical() != Critical.NO:
-                        r = SoundPlayer.dice_rolls[0]
+                if all((d.state == "stop" for d in SoundPlayer.dice_rolls)) and SoundPlayer.coin_flip.state == "stop":
+                    if ev.roll.roll.faces == Dice.D2:
+                        r = SoundPlayer.coin_flip
                     else:
-                        r = SoundPlayer.dice_rolls[random.randrange(1, len(SoundPlayer.dice_rolls))]
+                        if ev.roll.is_critical() != Critical.NO:
+                            r = SoundPlayer.dice_rolls[0]
+                        else:
+                            r = SoundPlayer.dice_rolls[random.randrange(1, len(SoundPlayer.dice_rolls))]
                     r.volume = 0.8
                     r.play()
         

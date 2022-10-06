@@ -5,3 +5,4 @@ import typing as T
 class SoundPlayer:
     dice_rolls: T.List[Sound] = [SoundLoader.load(sf) for sf in Resources.SFX_DICE_ROLL]
     keypress: Sound = SoundLoader.load(Resources.SFX_KEYPRESS)
+    coin_flip: Sound = SoundLoader.load(Resources.SFX_COIN_FLIP)

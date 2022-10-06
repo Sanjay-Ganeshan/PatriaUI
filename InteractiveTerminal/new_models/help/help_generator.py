@@ -145,7 +145,7 @@ def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, 
         )
     elif multiplier == 2:
         general_desc = (
-            f"You are proficient in {which_skill.value}.\n"
+            f"You are an expert in {which_skill.value}.\n"
             f"Add DOUBLE your proficiency bonus ({2*proficiency_bonus:+d}) to rolls,\n"
             f"in addition to your stat modifier ({stat_mod:+d})\n"
             f"Total: {total_bonus:+d}"

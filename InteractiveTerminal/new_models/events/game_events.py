@@ -10,7 +10,7 @@ from ..character.character import Character
 from ..character.proficiencies import Proficiency
 from ..character.stats import Stat
 from ..dice.advantage import RollStatus
-from ..dice.dice import Dice
+from ..dice.dice import Dice, Critical
 from ..dice.rolls import CompletedRoll, Roll
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
@@ -457,19 +457,25 @@ class DeathSave(RollEvent):
         death_fail_delta = 0
         hp_delta = 0
 
-        if completed.total() == 20:
+        crit = completed.is_critical()
+        if crit == Critical.SUCCESS:
             hp_delta = 1
             death_success_delta = char.max_life.death_successes
             death_fail_delta = char.max_life.death_fails
+            chat_msg = f"{char.nameplate.name} rolls a death save.{crit.msg()} {char.nameplate.she.capitalize()} is back up!"
         elif completed.total() == 1:
             death_success_delta = char.max_life.death_successes
             death_fail_delta = char.current_life.death_fails
+            chat_msg = f"{char.nameplate.name} rolls a death save.{crit.msg()} {char.nameplate.she.capitalize()} is DEAD!"
         elif completed.total() <= 10:
             # Failure
             death_fail_delta = -1
+            flavor = "Death looms closer." if char.current_life.death_fails > 1 else f"Death claims {char.nameplate.her}."
+            chat_msg = f"{char.nameplate.name} fails a death save ({completed.total()}). {flavor}"
         else:
             # Success
             death_success_delta = -1
+            chat_msg = f"{char.nameplate.name} passes a death save ({completed.total()}). {char.nameplate.her.capitalize()} breathing eases."
 
         new_status = char.current_life.delta(
             HP=hp_delta,
@@ -483,6 +489,7 @@ class DeathSave(RollEvent):
         else:
             old_status = char.current_life
             char.current_life = new_status
+            g.chat_log.append(chat_msg)
 
             return DeathSave(
                 event_id=self.event_id,
@@ -507,6 +514,7 @@ class DeathSave(RollEvent):
             max_st=char.max_life,
         )
         char.current_life = new_status
+        g.chat_log.pop()
 
 
 @dataclass(frozen=True)
