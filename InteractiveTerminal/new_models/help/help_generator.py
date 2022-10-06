@@ -1,5 +1,6 @@
 from ..character.stats import Stat
 from ..character.proficiencies import Proficiency
+from ..dice.advantage import RollStatus
 
 
 def armor_rating(
@@ -91,6 +92,23 @@ def stat_description(which_stat: Stat, stat_value: int) -> str:
         )
     else:
         raise Exception(f"Unexpected stat - {which_stat}")
+
+
+def roll_status(help_for_status: RollStatus, current_status: RollStatus) -> str:
+    if help_for_status == RollStatus.ADVANTAGE:
+        description = "With advantage, you roll an extra die, and drop the LOWEST roll."
+    elif help_for_status == RollStatus.DISADVANTAGE:
+        description = "With disadvantage, you roll an extra die, and drop the HIGHEST roll."
+    else:
+        description = ""
+    
+    if current_status == RollStatus.STANDARD:
+        current = "Your next roll is normal."
+    else:
+        current = f"Your next roll is at {current_status.value}"
+
+    return f"{description}\n{current}"
+
 
 def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, proficiency_bonus: int, total_bonus: int) -> str:
     SKILL_DESCRIPTIONS = {

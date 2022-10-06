@@ -4,6 +4,7 @@ from ..shared.box_sized_mixin import BoxSized
 from ..shared.listens_for_state_changes import ListenForStateChanges
 from ...new_models.state.app_settings import BOX_WIDTH
 from ..stats.stats_and_skills import CharacterStats
+from ..dice_bar.dice_bar import DiceBar
 
 
 class DetailsSheet(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -19,4 +20,7 @@ class DetailsSheet(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.listener_init()
 
         self.stats = CharacterStats()
+        self.dice_bar = DiceBar()
+        
         self.add_widget(self.stats)
+        self.add_widget(self.dice_bar)

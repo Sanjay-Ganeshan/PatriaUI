@@ -39,7 +39,7 @@ class CompletedRoll:
         if r.status == RollStatus.ADVANTAGE or r.status == RollStatus.DISADVANTAGE:
             n += 1
 
-        for _ in range(r.n_dice):
+        for _ in range(n):
             raw.append(random.randrange(0, r.faces.value) + 1)
 
         return cls(roll=r, raw=raw)

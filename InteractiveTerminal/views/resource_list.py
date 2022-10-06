@@ -1,6 +1,7 @@
 import typing as T
 
 from ..new_models.character.proficiencies import Proficiency
+from ..new_models.dice.dice import Dice
 
 
 class Resources:
@@ -57,13 +58,13 @@ class Resources:
     }
 
     DICE_ICONS = {
-        2: "d2.png",
-        4: "d4.png",
-        6: "d6.png",
-        8: "d8.png",
-        10: "d10.png",
-        12: "d12.png",
-        20: "d20.png",
+        Dice.D2: "d2.png",
+        Dice.D4: "d4.png",
+        Dice.D6: "d6.png",
+        Dice.D8: "d8.png",
+        Dice.D10: "d10.png",
+        Dice.D12: "d12.png",
+        Dice.D20: "d20.png",
     }
 
     ADVANTAGE = "advantage.png"

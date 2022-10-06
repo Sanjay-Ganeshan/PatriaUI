@@ -3,7 +3,7 @@ Game events actually impact game state
 """
 
 import typing as T
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..character.active_effects import Debuffs
 from ..character.character import Character
@@ -876,3 +876,135 @@ class StatOrSkillTest(RollEvent):
         
         # We added this, so it won't be length 0
         g.chat_log.pop()
+
+
+@dataclass(frozen=True)
+class RandomRoll(RollEvent):
+    character_id: str = ""
+    faces: Dice = Dice.D20
+
+    _prev_roll_status: T.Optional[RollStatus] = None
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if self.roll is None:
+            roll = Roll(
+                faces=self.faces,
+                n_dice=1,
+                modifier=0,
+                status=char.next_roll_status,
+            )
+
+            # Clear the next roll status, save info for undo
+            prev_roll_status = char.next_roll_status
+            char.next_roll_status = RollStatus.STANDARD
+
+            completed = CompletedRoll.realize(roll)
+        else:
+            prev_roll_status = None
+            completed = self.roll
+
+        chat_msg = (
+            f"{char.nameplate.name} rolls a D{self.faces}. {completed.total()}!"
+            f"{completed.is_critical().msg()}\n"
+            f"{completed}"
+        )
+
+        g.chat_log.append(chat_msg)
+
+        return RandomRoll(
+            event_id=self.event_id,
+            roll=completed,
+            character_id=self.character_id,
+            faces=self.faces,
+            _prev_roll_status=prev_roll_status,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if self._prev_roll_status is not None:
+            char.next_roll_status = self._prev_roll_status
+        
+        # We added this, so it won't be length 0
+        g.chat_log.pop()
+
+
+@dataclass(frozen=True)
+class ToggleAdvantage(GameEvent):
+    character_id: str = ""
+
+    _prev_roll_status: RollStatus = RollStatus.STANDARD
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        prev_roll_status = char.next_roll_status
+
+        if char.next_roll_status == RollStatus.STANDARD:
+            char.next_roll_status = RollStatus.ADVANTAGE
+        elif char.next_roll_status == RollStatus.ADVANTAGE:
+            char.next_roll_status = RollStatus.STANDARD
+        elif char.next_roll_status == RollStatus.DISADVANTAGE:
+            char.next_roll_status = RollStatus.ADVANTAGE
+
+        return ToggleAdvantage(
+            event_id=self.event_id,
+            character_id=self.character_id,
+            _prev_roll_status=prev_roll_status,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        char.next_roll_status = self._prev_roll_status
+
+
+@dataclass(frozen=True)
+class ToggleDisadvantage(GameEvent):
+    character_id: str = ""
+
+    _prev_roll_status: RollStatus = RollStatus.STANDARD
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        prev_roll_status = char.next_roll_status
+
+        if char.next_roll_status == RollStatus.STANDARD:
+            char.next_roll_status = RollStatus.DISADVANTAGE
+        elif char.next_roll_status == RollStatus.ADVANTAGE:
+            char.next_roll_status = RollStatus.DISADVANTAGE
+        elif char.next_roll_status == RollStatus.DISADVANTAGE:
+            char.next_roll_status = RollStatus.STANDARD
+
+        return ToggleDisadvantage(
+            event_id=self.event_id,
+            character_id=self.character_id,
+            _prev_roll_status=prev_roll_status,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        char.next_roll_status = self._prev_roll_status
+        
