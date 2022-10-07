@@ -1,12 +1,12 @@
 import json
 import inspect
 from dataclasses import field, is_dataclass, fields
-from enum import Enum
+from enum import Enum, IntEnum
 import importlib
 
 def to_dict(obj):
     assert not isinstance(obj, type), f"Serializing type, not instance: {obj}"
-    if is_dataclass(obj) or isinstance(obj, Enum):
+    if is_dataclass(obj) or isinstance(obj, Enum) or isinstance(obj, IntEnum):
         modname = inspect.getmodule(obj).__name__
         classname = type(obj).__name__
         full_type = f"{modname}|{classname}"

@@ -1,1 +1,1 @@
-__all__ = ['file_io', 'powerful_json']
+__all__ = ['tests', 'file_io', 'powerful_json']

@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 import sys
 
 sys.dont_write_bytecode = True
@@ -24,30 +25,34 @@ from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
 
-from .new_models.events.view_events import (SwitchFocusedCharacter,
-                                            SwitchFocusedView)
+from .new_models.events.view_events import (LoadFinished)
 from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
+from .save.file_io import path_for
+from .save.powerful_json import loads, dumps
 
 # Replace these with character's current info
 
 class PatriaApp(MDApp):
+    def __init__(self, state_manager: StateManager, **kwargs):
+        super().__init__(**kwargs)
+
+        self.state_manager = state_manager
+
     def build(self):
         for each_style in theme_font_styles:
             self.theme_cls.font_styles[each_style][0] = FONT 
-        self.state_manager = StateManager()
-        self.state_manager.game_state.characters["lumina"] = LuminaGale()
-        self.state_manager.game_state.characters["galina"] = GalinaNovikova()
-        self.state_manager.game_state.characters["silvia"] = SilviaFerreyra()
+        
         self.home = Home()
         self.home.state_manager = self.state_manager
-        self.state_manager.push_event(SwitchFocusedView(new_focus=Views.CHARACTER_DETAILS))
-        self.state_manager.push_event(SwitchFocusedCharacter(new_focus="lumina"))
-        self.state_manager.clear_history()
+
+        # Everything's wired up to respond to events, so just send
+        # a no-op event down the pipeline so everything refreshes.
+        self.home.state_manager.push_event(LoadFinished())
         return self.home
 
 
@@ -55,5 +60,31 @@ def main():
     Window.size = (1200, 800)
     Window.left = 100
     Window.top = 100
-    app = PatriaApp()
+
+    SAVE_PATH = path_for("STATE")
+
+    init_with_default: bool = True
+
+    if os.path.isfile(SAVE_PATH):
+        with open(SAVE_PATH, "r") as f:
+            save_contents = f.read()
+        try:
+            state_manager = loads(save_contents)
+        except (JSONDecodeError, ValueError) as err:
+            print("SAVE FILE CORRUPTED. STARTING FRESH.")
+        else:
+            init_with_default = False
+    
+    if init_with_default:
+        state_manager = StateManager()
+        state_manager.game_state.characters["lumina"] = LuminaGale()
+        state_manager.game_state.characters["galina"] = GalinaNovikova()
+        state_manager.game_state.characters["silvia"] = SilviaFerreyra()
+        state_manager.view_state.focused_character = "lumina"
+
+    app = PatriaApp(state_manager)
     app.run()
+
+    with open(SAVE_PATH, "w") as f:
+        f.write(dumps(state_manager, indent=2))
+    

@@ -9,7 +9,7 @@ from ..shared.spacer import Spacer
 from ..shared.listens_for_state_changes import ListenForStateChanges
 from .details import DetailsSheet
 from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.view_events import SwitchFocusedView
+from ...new_models.events.view_events import LoadFinished, SwitchFocusedView
 from ...new_models.state.state_manager import StateManager
 
 
@@ -39,7 +39,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
     def update_which_view(self, *args):
         self.remove_widget(self.content)
         
-        if self.which_view is None or self.which_view == Views.EMPTY:
+        if self.which_view is None:
             self.content = self.empty
 
         elif self.which_view == Views.CHARACTER_DETAILS:
@@ -54,7 +54,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
     def listener(
         self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
     ) -> None:
-        if not isinstance(ev, SwitchFocusedView):
+        if not isinstance(ev, (SwitchFocusedView, LoadFinished)):
             return
 
         self.which_view = state_manager.view_state.focused_view

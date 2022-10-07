@@ -36,10 +36,10 @@ class SwitchFocusedCharacter(ViewEvent):
 @dataclass(frozen=True)
 class SwitchFocusedView(ViewEvent):
     # Need for create
-    new_focus: Views = Views.EMPTY
+    new_focus: Views = Views.CHARACTER_DETAILS
 
     # We'll fix these
-    old_focus: Views = Views.EMPTY
+    old_focus: Views = Views.CHARACTER_DETAILS
 
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         prev_focus = v.focused_view
@@ -53,3 +53,12 @@ class SwitchFocusedView(ViewEvent):
     def undo(self, v: ViewState, g: GameState) -> None:
         assert v.focused_view == self.new_focus, "Invalid event order"
         v.focused_view = self.old_focus
+
+
+@dataclass(frozen=True)
+class LoadFinished(ViewEvent):
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        return self
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        pass

@@ -43,9 +43,6 @@ class CHIcon(Image, BoxSized, TouchableMixin, ListenForStateChanges):
 
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
-        if not isinstance(ev, SwitchFocusedCharacter):
-            return
-
         # We might have changed the current character's icon. Look it up
         if state_manager.view_state.focused_character is None:
             self.icon_src = "missing.png"

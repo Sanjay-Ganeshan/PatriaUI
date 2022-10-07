@@ -12,9 +12,6 @@ class Views(Enum):
     """
     Controls the center of the page
     """
-    # Blank canvas
-    EMPTY = "EMPTY"
-    
     # Stats, skills, and abilities
     CHARACTER_DETAILS = "CHARACTER_DETAILS"
 
@@ -25,6 +22,6 @@ class Views(Enum):
 
 @dataclass
 class ViewState:
-    focused_view: Views = Views.EMPTY
+    focused_view: Views = Views.CHARACTER_DETAILS
     focused_character: T.Optional[str] = None
     chat_log_index: int = -1

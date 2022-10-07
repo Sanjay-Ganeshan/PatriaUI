@@ -39,4 +39,3 @@ class GameEvent(GameOrViewEvent):
 @dataclass(frozen=True)
 class RollEvent(GameEvent):
     roll: T.Optional[CompletedRoll] = None
-

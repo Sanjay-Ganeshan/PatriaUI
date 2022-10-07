@@ -11,16 +11,16 @@ class StatBlock:
     Tracks how good a character is at particular
     stats and skills
     """
-    stat_modifiers: T.Dict[Stat, int] = field(default_factory=dict)
-    proficiency_multipliers: T.Dict[Proficiency, int] = field(default_factory=dict)
+    stat_modifiers: T.Dict[str, int] = field(default_factory=dict)
+    proficiency_multipliers: T.Dict[str, int] = field(default_factory=dict)
 
     def __getitem__(self, key: T.Union[Stat, Proficiency]) -> int:
         assert isinstance(key, (Stat, Proficiency)), f"Weird key: {key}"
 
         if isinstance(key, Stat):
-            return self.stat_modifiers.get(key, 0)
+            return self.stat_modifiers.get(key.value, 0)
         if isinstance(key, Proficiency):
-            return self.proficiency_multipliers.get(key, 0)
+            return self.proficiency_multipliers.get(key.value, 0)
     
     @classmethod
     def create(
@@ -35,9 +35,9 @@ class StatBlock:
             assert isinstance(val, int), f"Weird value: {val}"
 
             if isinstance(key, Stat):
-                stat_modifiers[key] = val
+                stat_modifiers[key.value] = val
             else:
-                proficiency_multipliers[key] = val
+                proficiency_multipliers[key.value] = val
 
         return cls(
             stat_modifiers=stat_modifiers,

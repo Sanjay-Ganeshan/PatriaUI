@@ -5,7 +5,7 @@ import typing as T
 MYDIR = os.path.dirname(os.path.abspath(__file__))
 
 def path_for(name: str) -> None:
-    return os.path.join(MYDIR, f"{name}")
+    return os.path.join(MYDIR, f"{name}.json")
 
 def save(obj, name: str) -> None:
     with open(os.path.join(MYDIR, f"{name}.json"), "w") as f:
