@@ -16,7 +16,8 @@ class SilviaFerreyra(Character):
                 id_prefix="silvia",
                 nameplate=Nameplate(
                     icon="kanade.png",
-                    name="Silvia Ferreyra",
+                    name="Silvia",
+                    surname="Ferreyra",
                     role="Siren - Spotter",
                     she="she",
                     her="her",

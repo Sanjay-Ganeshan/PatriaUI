@@ -38,5 +38,5 @@ class CHNamecard(CenteredLabel, ListenForStateChanges):
             self.character_role = "<role>"
         else:
             ch: Character = state_manager.game_state.characters[state_manager.view_state.focused_character]
-            self.character_name = ch.nameplate.name
+            self.character_name = ch.nameplate.name + " " + ch.nameplate.surname
             self.character_role = ch.nameplate.role

@@ -15,7 +15,8 @@ class LuminaGale(Character):
                 id_prefix="lumina",
                 nameplate=Nameplate(
                     icon="sinon3.png",
-                    name="Lumina Gale",
+                    name="Lumina",
+                    surname="Gale",
                     role="Siren - Sniper",
                     she="she",
                     her="her",

@@ -8,6 +8,7 @@ class Nameplate:
     """
     icon: str = "missing.png"
     name: str = "<name>"
+    surname: str = "<surname>"
     role: str = "<role>"
     
     she: str = "<she>"

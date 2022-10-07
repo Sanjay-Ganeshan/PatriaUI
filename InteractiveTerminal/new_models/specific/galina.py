@@ -16,7 +16,8 @@ class GalinaNovikova(Character):
                 id_prefix="galina",
                 nameplate=Nameplate(
                     icon="yanfei.png",
-                    name="Galina Novikova",
+                    name="Galina",
+                    surname="Novikova",
                     role="Siren - Section Leader",
                     she="she",
                     her="her",

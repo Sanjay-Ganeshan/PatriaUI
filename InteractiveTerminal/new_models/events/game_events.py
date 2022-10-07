@@ -1156,11 +1156,11 @@ class SpellDamage(RollEvent):
             chat_message += (
                 f"The enemy must make {self.enemy_save.a_or_an()} {self.enemy_save.value[:3]} save (DC {spell_save_dc}).\n"
             )
-            chat_message += "FAIL: " + self.get_effect(char, completed, False) + "\n"
-            chat_message += "PASS: " + self.get_effect(char, completed, True) + "\n"
             common_effect = self.get_effect(char, completed, None)
             if common_effect is not None:
                 chat_message += common_effect + "\n"
+            chat_message += "FAIL: " + self.get_effect(char, completed, False) + "\n"
+            chat_message += "PASS: " + self.get_effect(char, completed, True) + "\n"
         
         chat_message += f"{completed}"
         
