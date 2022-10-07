@@ -1,6 +1,9 @@
 from ..character.stats import Stat
 from ..character.proficiencies import Proficiency
 from ..dice.advantage import RollStatus
+from ..dice.rolls import Roll
+from ..dice.dice import Dice
+from ..spells.spell_list import Spell
 
 
 def armor_rating(
@@ -154,3 +157,54 @@ def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, 
         general_desc = ""
 
     return f"{skill_desc}\n{general_desc}"
+
+def spell_description(which_spell: Spell, spell_save_dc: int, spell_attack_bonus: int, intelligence: int) -> str:
+    example_attack = Roll(faces=Dice.D20, n_dice=1, modifier=spell_attack_bonus)
+    if which_spell == Spell.INCINERATE:
+        return (
+            f"10m ranged spell attack ({example_attack} to hit).\n"
+            f"Deals 3d10 on hit."
+        )
+    if which_spell == Spell.ELECTROCUTE:
+        return (
+            f"Melee spell attack ({example_attack} to hit).\n"
+            f"Deals 3d12 on hit, and enemy can't make reactions for a turn."
+        )
+    if which_spell == Spell.FREEZE:
+        return (
+            f"16m ranged spell. CON save (DC {spell_save_dc}).\n"
+            f"Fail: 3d6 damage + disadvantage on next atk/saving/ability roll\n"
+            f"Save: No effect."
+        )
+    if which_spell == Spell.WARP:
+        return (
+            f"12m range, 4m AoE spell. DEX save (DC {spell_save_dc}).\n"
+            f"Fail: 3d8 damage on failed save"
+            f"Save: Half damage"
+        )
+    if which_spell == Spell.DEFLECT:
+        return (
+            f"As a reaction:\n"
+            f"Add your INT modifier ({intelligence:+d}) to your armor for the next attack\n"
+            f"OR\n"
+            f"Reflect a grenade to sender."
+        )
+    if which_spell == Spell.REPULSE:
+        return (
+            f"Melee force spell attack ({example_attack} to hit).\n"
+            f"On hit, enemy makes a STR save (DC {spell_save_dc}).\n"
+            f"Fail: 3d8 damage + enemy sent flying up to 10m away.\n"
+            f"Save: 3d8 damage + enemy is knocked prone."
+        )
+    if which_spell == Spell.FEEDBACK:
+        return (
+            f"12m ranged spell. WIS save (DC {spell_save_dc}).\n"
+            f"Half damage without line-of-sight\n"
+            f"Fail: 3d8 + half movement speed.\n"
+            f"Success: half damage"
+        )
+    if which_spell == Spell.TELEKINESIS:
+        return (
+            f"Move a small object from one point to another.\n"
+            f"Both points must be in a 10m radius of you."
+        )

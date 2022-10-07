@@ -2,6 +2,7 @@ import typing as T
 
 from ..new_models.character.proficiencies import Proficiency
 from ..new_models.dice.dice import Dice
+from ..new_models.spells.spell_list import Spell
 
 
 class Resources:
@@ -47,14 +48,25 @@ class Resources:
     }
 
     SPELLS = {
-        "INCINERATE": "flame.png",
-        "ELECTROCUTE": "bolt.png",
-        "FREEZE": "snowflake.png",
-        "WARP": "portal.png",
-        "DEFLECT": "deflect.png",
-        "REPULSE": "repulse.png",
-        "FEEDBACK": "feedback.png",
-        "TELEKINESIS": "hand.png",
+        Spell.INCINERATE: "flame.png",
+        Spell.ELECTROCUTE: "bolt.png",
+        Spell.FREEZE: "snowflake.png",
+        Spell.WARP: "portal.png",
+        Spell.DEFLECT: "deflect.png",
+        Spell.REPULSE: "repulse.png",
+        Spell.FEEDBACK: "feedback.png",
+        Spell.TELEKINESIS: "hand.png",
+    }
+
+    SPELL_COLORS = {
+        Spell.INCINERATE: "darkred",
+        Spell.ELECTROCUTE: "yellow",
+        Spell.FREEZE: "lightblue",
+        Spell.WARP: "magenta",
+        Spell.DEFLECT: "blue",
+        Spell.REPULSE: "darkorange",
+        Spell.FEEDBACK: "purple",
+        Spell.TELEKINESIS: "orange",
     }
 
     DICE_ICONS = {

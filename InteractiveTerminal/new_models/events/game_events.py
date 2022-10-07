@@ -14,6 +14,7 @@ from ..dice.dice import Dice, Critical
 from ..dice.rolls import CompletedRoll, Roll
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
+from ..spells.spell_list import Spell
 from .ev_base import GameEvent, GameOrViewEvent, RollEvent
 
 
@@ -552,6 +553,11 @@ class CastDeflect(GameEvent):
             return None
         else:
             char.current_life = new_status
+            g.chat_log.append(
+                f"{char.nameplate.name} casts DEFLECT. As a reaction, she "
+                f"can reflect a grenade, OR\n"
+                f"increase her armor rating by {char.stat_block[Stat.INTELLIGENCE]} for a single incoming attack"
+            )
             return CastDeflect(
                 event_id=self.event_id,
                 character_id=self.character_id,
@@ -572,6 +578,7 @@ class CastDeflect(GameEvent):
             max_st=char.max_life,
         )
         char.current_life = new_status
+        g.chat_log.pop()
 
 
 @dataclass(frozen=True)
@@ -1015,4 +1022,343 @@ class ToggleDisadvantage(GameEvent):
         char: Character = g.characters[self.character_id]
 
         char.next_roll_status = self._prev_roll_status
+
+
+
+@dataclass(frozen=True)
+class SpellAttack(RollEvent):
+    """
+    Cast any spell attack.
+    Spell attacks pit D20+INT+Proficiency against the
+    enemy's armor rating.
+    """
+
+    character_id: str = ""
+    which_spell: Spell = Spell.INCINERATE
+    
+    _prev_roll_status: T.Optional[RollStatus] = None
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        new_status = char.current_life.delta(
+            HP=-1, max_st=char.max_life
+        )
+
+        old_status = char.current_life
+        if old_status == new_status:
+            # No HP to burn
+            return None
+        else:
+            char.current_life = new_status
+            # Continue with spellcasting
+            if self.roll is None:
+                roll = Roll(
+                    faces=Dice.D20,
+                    n_dice=1,
+                    modifier=char.stat_block[Stat.INTELLIGENCE] + char.stat_block[Stat.PROFICIENCY_BONUS],
+                    status=char.next_roll_status,
+                )
+
+                # Clear the next roll status, save info for undo
+                prev_roll_status = char.next_roll_status
+                char.next_roll_status = RollStatus.STANDARD
+
+                completed = CompletedRoll.realize(roll)
+            else:
+                prev_roll_status = None
+                completed = self.roll
+
+            chat_message = (
+                f"{char.nameplate.name} attacks with {self.which_spell.value}. "
+                f"{completed.total()} to hit.{completed.is_critical().msg()}\n"
+                f"{completed}\n"
+                f"(RClick for damage)"
+            )
+
+            g.chat_log.append(chat_message)
+            return SpellAttack(
+                event_id=self.event_id,
+                roll=completed,
+                character_id=self.character_id,
+                which_spell=self.which_spell,
+                _prev_roll_status=prev_roll_status
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        # Restore the HP used to cast
+        new_status = char.current_life.delta(
+            HP=1,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+        if self._prev_roll_status:
+            char.next_roll_status = self._prev_roll_status
+        g.chat_log.pop()
+
+
+@dataclass(frozen=True)
+class SpellDamage(RollEvent):
+    """
+    Incinerate deals 3d10 on hit
+    Electrocute deals 3d12 on hit and prevents enemy reactions.
+    Repulse deals 3d8 on hit, and with a spell DC (11+INT+Proficiency)
+
+    """
+
+    character_id: str = ""
+
+    _prev_roll_status: T.Optional[RollStatus] = None
+
+    which_dice: Dice = field(default=Dice.D6, metadata={"IGNORESAVE": True})
+    which_spell: Spell = field(default=Spell.INCINERATE, metadata={"IGNORESAVE": True})
+    enemy_save: T.Optional[Stat] = field(default=None, metadata={"IGNORESAVE": True})
+    effective_range: str = field(default="10m", metadata={"IGNORESAVE": True})
+    
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if self.roll is None:
+            roll = Roll(
+                faces=self.which_dice,
+                n_dice=3,
+                status=char.next_roll_status,
+            )
+
+            # Clear the next roll status, save info for undo
+            prev_roll_status = char.next_roll_status
+            char.next_roll_status = RollStatus.STANDARD
+
+            completed = CompletedRoll.realize(roll)
+        else:
+            prev_roll_status = None
+            completed = self.roll
+
+        chat_message = (
+            f"{char.nameplate.name} deals {self.which_spell.value} damage (range: {self.effective_range}).\n"
+        )
+
+        if self.enemy_save is None:
+            chat_message += self.get_effect(char, completed, None) + "\n"
+        else:
+            spell_save_dc = 11 + char.stat_block[Stat.PROFICIENCY_BONUS] + char.stat_block[Stat.INTELLIGENCE]
+            chat_message += (
+                f"The enemy must make {self.enemy_save.a_or_an()} {self.enemy_save.value[:3]} save (DC {spell_save_dc}).\n"
+            )
+            chat_message += "FAIL: " + self.get_effect(char, completed, False) + "\n"
+            chat_message += "PASS: " + self.get_effect(char, completed, True) + "\n"
+            common_effect = self.get_effect(char, completed, None)
+            if common_effect is not None:
+                chat_message += common_effect + "\n"
         
+        chat_message += f"{completed}"
+        
+
+        g.chat_log.append(chat_message)
+        return SpellDamage(
+            event_id=self.event_id,
+            roll=completed,
+            character_id=self.character_id,
+            which_dice=self.which_dice,
+            which_spell=self.which_spell,
+            enemy_save=self.enemy_save,
+            effective_range=self.effective_range,
+            _prev_roll_status=prev_roll_status
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if self._prev_roll_status is not None:
+            char.next_roll_status = self._prev_roll_status
+        
+        g.chat_log.pop()
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        raise NotImplementedError()
+
+class IncinerateDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D10,
+            which_spell = Spell.INCINERATE,
+            enemy_save = None,
+            effective_range = "10m",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        return f"{char.nameplate.her.capitalize()} target takes {roll.total()} damage"
+
+class ElectrocuteDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D12,
+            which_spell = Spell.ELECTROCUTE,
+            enemy_save = None,
+            effective_range = "melee",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        return (
+            f"{char.nameplate.her.capitalize()} target takes {roll.total()} damage "
+            f"AND cannot make reactions until the end of {char.nameplate.name}'s next turn."
+        )
+
+class FreezeDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D6,
+            which_spell = Spell.FREEZE,
+            enemy_save = Stat.CONSTITUTION,
+            effective_range = "16m",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        if save_pass is True:
+            return "No effect."
+        elif save_pass is False:
+            return (
+                f"Target takes {roll.total()} damage and their next roll is at disadvantage (Attack / Save / Ability)"
+            )
+        else:
+            return None
+
+class WarpDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D8,
+            which_spell = Spell.WARP,
+            enemy_save = Stat.DEXTERITY,
+            effective_range = "12m, 4m AoE",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        if save_pass is True:
+            return f"Target(s) take {(roll.total() + 1) // 2} damage."
+        elif save_pass is False:
+            return (
+                f"Target(s) takes {roll.total()} damage."
+            )
+        else:
+            return f"(Targets in AoE roll saves independently)"
+    
+class RepulseDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D8,
+            which_spell = Spell.WARP,
+            enemy_save = Stat.STRENGTH,
+            effective_range = "melee",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        if save_pass is True:
+            return (
+                f"Target is knocked prone"
+            )
+        elif save_pass is False:
+            return f"Target is knocked up to 10m away. (May take fall / collision damage)"
+        else:
+            return f"Always: Target takes {roll.total()} damage"
+
+class FeedbackDamage(SpellDamage):
+    def __init__(
+        self, 
+        **kwargs
+    ) -> None:
+        super().__init__(
+            **kwargs,
+            which_dice = Dice.D8,
+            which_spell = Spell.FEEDBACK,
+            enemy_save = Stat.WISDOM,
+            effective_range = "12m",
+        )
+
+    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+        if save_pass is True:
+            return (
+                f"{(roll.total() + 1) // 2} damage."
+            )
+        elif save_pass is False:
+            return f"{roll.total()} damage."
+        else:
+            return f"(Effectiveness is halved without line of sight)"
+
+@dataclass(frozen=True)
+class CastTelekinesis(GameEvent):
+    """
+    Cast telekinesis
+    """
+
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if char.current_life.HP <= 0:
+            return None
+        else:
+            char.current_life = char.current_life.delta(HP=-1)
+
+            chat_message = (
+                f"{char.nameplate.name} casts {Spell.TELEKINESIS.value}. \n"
+                f"{char.nameplate.she.capitalize()} can move a small object within 10m "
+                f"to another point within 10m of {char.nameplate.her}."
+            )
+
+            g.chat_log.append(chat_message)
+            return CastTelekinesis(
+                event_id=self.event_id,
+                character_id=self.character_id,
+            )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        # Restore the HP used to cast
+        new_status = char.current_life.delta(
+            HP=1,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+        g.chat_log.pop()
