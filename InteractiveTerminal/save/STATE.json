@@ -4,9 +4,9 @@
     "__type__": "InteractiveTerminal.new_models.state.view_state|ViewState",
     "focused_view": {
       "__type__": "InteractiveTerminal.new_models.state.view_state|Views",
-      "value": "CHARACTER_DETAILS"
+      "value": "MAP"
     },
-    "focused_character": "galina",
+    "focused_character": "lumina",
     "chat_log_index": -1
   },
   "game_state": {
@@ -49,7 +49,7 @@
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
           "HP": 13,
           "armor_rating": 14,
-          "revives": 1,
+          "revives": 2,
           "deflects": 2,
           "hit_dice": 2,
           "suit_power": 6,
@@ -109,7 +109,7 @@
                     "capacity": 12
                   }
                 ],
-                "index": 3
+                "index": 0
               },
               "mode": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
@@ -258,7 +258,7 @@
               "tags": []
             }
           ],
-          "index": 0
+          "index": 2
         }
       },
       "galina": {
@@ -296,7 +296,7 @@
         },
         "current_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
-          "HP": 1,
+          "HP": 13,
           "armor_rating": 14,
           "revives": 2,
           "deflects": 1,
@@ -447,14 +447,14 @@
             {
               "__type__": "InteractiveTerminal.new_models.weapons.splazer|Splazer",
               "clip_capacity": 1,
-              "clip_current": 0,
+              "clip_current": 1,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "Laser",
-                    "current": 0,
+                    "current": 1,
                     "capacity": 1
                   }
                 ],
@@ -537,7 +537,7 @@
               "tags": []
             }
           ],
-          "index": 2
+          "index": 0
         }
       },
       "silvia": {
@@ -610,14 +610,14 @@
             {
               "__type__": "InteractiveTerminal.new_models.weapons.vesna_lsw|ProjectVesnaLSW",
               "clip_capacity": 80,
-              "clip_current": 40,
+              "clip_current": 80,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "FMJ",
-                    "current": 200,
+                    "current": 240,
                     "capacity": 240
                   },
                   {
@@ -792,35 +792,48 @@
         }
       }
     },
-    "chat_log": [
-      "Silvia attacks with her Vesna LSW. 18 to hit. \n[10xFMJ mode: Standard]\n1d20+9 [9] => 18",
-      "Silvia attacks with her Vesna LSW. 19 to hit. \n[10xFMJ mode: Standard]\n1d20+9 [10] => 19",
-      "Silvia attacks with her Vesna LSW. 19 to hit. \n[10xFMJ mode: Standard]\n1d20+9 [10] => 19",
-      "Silvia attacks with her Vesna LSW. 23 to hit. \n[10xFMJ mode: Standard]\n1d20+9 [14] => 23",
-      "Lumina casts DEFLECT. As a reaction, she can reflect a grenade, OR\nincrease her armor rating by 2 for a single incoming attack",
-      "Lumina attacks with REPULSE. 12 to hit.\n1d20+6 [6] => 12\n(RClick for damage)",
-      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [1, 8, 7] => 16",
-      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 15 damage.\nPASS: Target(s) take 8 damage.\n3d8 [5, 7, 3] => 15",
-      "Lumina deals FREEZE damage (range: 16m).\nThe enemy must make a CON save (DC 17).\nFAIL: Target takes 7 damage and their next roll is at disadvantage (Attack / Save / Ability)\nPASS: No effect.\n3d6 [5, 1, 1] => 7",
-      "Lumina rolls a D2. 1!\n1d2 [1] => 1",
-      "Lumina tests INTELLIGENCE. 6!\n1d20+2 [4] => 6",
-      "Lumina tests DEXTERITY. 14!\n1d20+1 [13] => 14",
-      "Lumina tests WISDOM. 6!\n1d20 [6] => 6",
-      "Galina attacks with her XM786. 15 to hit. \n[1xLaser mode: Beam]\n1d20+5 [10] => 15",
-      "Galina deals 10592 damage with her XM786\n[1xLaser mode: Beam]\n1000d20 [20, 8, 7, 11, 16, 7, 20, 9, 6, 8] => 10592",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 11 damage.\nPASS: 6 damage.\n3d8 [6, 4, 1] => 11",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 15 damage.\nPASS: 8 damage.\n3d8 [8, 1, 6] => 15",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 20 damage.\nPASS: 10 damage.\n3d8 [6, 6, 8] => 20",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [4, 5, 7] => 16",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 10 damage.\nPASS: 5 damage.\n3d8 [4, 4, 2] => 10",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 7 damage.\nPASS: 4 damage.\n3d8 [2, 1, 4] => 7",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 13 damage.\nPASS: 7 damage.\n3d8 [4, 7, 2] => 13",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 13 damage.\nPASS: 7 damage.\n3d8 [5, 1, 7] => 13",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 12 damage.\nPASS: 6 damage.\n3d8 [4, 2, 6] => 12",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 18 damage.\nPASS: 9 damage.\n3d8 [7, 4, 7] => 18",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [6, 8, 2] => 16",
-      "Galina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 16).\n(Effectiveness is halved without line of sight)\nFAIL: 13 damage.\nPASS: 7 damage.\n3d8 [1, 5, 7] => 13"
-    ]
+    "the_map": {
+      "__type__": "InteractiveTerminal.new_models.map.maps|Map",
+      "southwest_corner": {
+        "__type__": "InteractiveTerminal.new_models.map.location|Vector2",
+        "x": 0.0,
+        "y": 0.0
+      },
+      "northeast_corner": {
+        "__type__": "InteractiveTerminal.new_models.map.location|Vector2",
+        "x": 1.0,
+        "y": 1.0
+      },
+      "layers": [
+        {
+          "__type__": "InteractiveTerminal.new_models.map.maps|MapLayer",
+          "instructions": [
+            {
+              "__type__": "InteractiveTerminal.new_models.map.maps|MapLine",
+              "coords": [
+                {
+                  "__type__": "InteractiveTerminal.new_models.map.location|Vector2",
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.map.location|Vector2",
+                  "x": 1.0,
+                  "y": 1.0
+                }
+              ],
+              "color": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "width": 2
+            }
+          ]
+        }
+      ]
+    },
+    "chat_log": []
   },
   "_locked": false
 }

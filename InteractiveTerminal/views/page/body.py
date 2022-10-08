@@ -11,6 +11,7 @@ from .details import DetailsSheet
 from ...new_models.events.ev_base import GameOrViewEvent
 from ...new_models.events.view_events import LoadFinished, SwitchFocusedView
 from ...new_models.state.state_manager import StateManager
+from ..map.map_view import MapView
 
 
 class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -32,6 +33,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
 
         self.empty = Spacer(box_width=BOX_WIDTH, box_height=10)
         self.details = DetailsSheet()
+        self.map_view = MapView()
         self.content = self.empty
 
         self.bind(which_view=self.update_which_view)
@@ -46,7 +48,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
             self.content = self.details
 
         elif self.which_view == Views.MAP:
-            pass
+            self.content = self.map_view
     
         self.add_widget(self.content)
 

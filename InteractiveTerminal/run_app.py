@@ -34,6 +34,8 @@ from .new_models.state.view_state import Views
 from .views.home import Home
 from .save.file_io import path_for
 from .save.powerful_json import loads, dumps
+from .new_models.map.maps import MapLayer, MapLine
+from .new_models.map.location import Vector2
 
 # Replace these with character's current info
 
@@ -80,6 +82,7 @@ def main():
         state_manager.game_state.characters["lumina"] = LuminaGale()
         state_manager.game_state.characters["galina"] = GalinaNovikova()
         state_manager.game_state.characters["silvia"] = SilviaFerreyra()
+        state_manager.game_state.the_map.layers.append(MapLayer(instructions=[MapLine([Vector2.zero(), Vector2.one()])]))
         state_manager.view_state.focused_character = "lumina"
 
     app = PatriaApp(state_manager)

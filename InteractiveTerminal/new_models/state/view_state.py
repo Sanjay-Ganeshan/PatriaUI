@@ -18,6 +18,12 @@ class Views(Enum):
     # Where things are on the map
     MAP = "MAP"
 
+    def next(self) -> "Views":
+        if self == Views.CHARACTER_DETAILS:
+            return Views.MAP
+        else:
+            return Views.CHARACTER_DETAILS
+
 
 
 @dataclass

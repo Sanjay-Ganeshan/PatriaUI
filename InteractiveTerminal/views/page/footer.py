@@ -7,6 +7,7 @@ from ..shared.box_sized_mixin import BoxSized
 
 from ..chat.mini_chat import MiniChatbox
 from ..shared.listens_for_state_changes import ListenForStateChanges
+from .cycle_views import CycleViews
 
 class Footer(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
@@ -22,5 +23,7 @@ class Footer(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.box_init()
         self.listener_init()
         
+        self.cycler = CycleViews()
         self.chat = MiniChatbox()
+        self.add_widget(self.cycler)
         self.add_widget(self.chat)
