@@ -26,7 +26,7 @@ class ProjectLadaBR(Weapon):
                 burst=CircularList(items=[1, 2]),
                 mode=CircularList(items=["Standard"]),
                 ammo=CircularList(
-                    items=[AmmoPack(name="FMJ", current=6 * 12, capacity=6 * 12)]
+                    items=[AmmoPack(name="FMJ", current=6 * 20, capacity=6 * 20)]
                 ),
             )
         )

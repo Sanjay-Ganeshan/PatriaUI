@@ -1,1 +1,1 @@
-__all__ = ['body', 'details', 'footer', 'header']
+__all__ = ['body', 'cycle_views', 'details', 'footer', 'header']

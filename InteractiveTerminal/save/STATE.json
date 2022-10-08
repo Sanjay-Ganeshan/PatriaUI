@@ -4,9 +4,9 @@
     "__type__": "InteractiveTerminal.new_models.state.view_state|ViewState",
     "focused_view": {
       "__type__": "InteractiveTerminal.new_models.state.view_state|Views",
-      "value": "MAP"
+      "value": "CHARACTER_DETAILS"
     },
-    "focused_character": "lumina",
+    "focused_character": "galina",
     "chat_log_index": -1
   },
   "game_state": {
@@ -80,7 +80,7 @@
             {
               "__type__": "InteractiveTerminal.new_models.weapons.lada_dmr|ProjectLadaDMR",
               "clip_capacity": 12,
-              "clip_current": 12,
+              "clip_current": 0,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
@@ -258,7 +258,7 @@
               "tags": []
             }
           ],
-          "index": 2
+          "index": 0
         }
       },
       "galina": {
@@ -338,8 +338,8 @@
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "FMJ",
-                    "current": 12,
-                    "capacity": 12
+                    "current": 60,
+                    "capacity": 60
                   },
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",

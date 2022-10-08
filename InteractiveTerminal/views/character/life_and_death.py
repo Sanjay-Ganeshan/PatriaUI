@@ -38,6 +38,7 @@ class CHDeathFails(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
         self.listener_init()
 
         self.bind(current_death_fails=self.update_fails, max_death_fails=self.update_fails)
+        self.update_fails()
 
     def update_fails(self, *args):
         self.current_value = self.current_death_fails
