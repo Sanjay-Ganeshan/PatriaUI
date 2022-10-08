@@ -134,7 +134,7 @@ class WPAmmoCount(ProgressiveText, ListenForStateChanges, TouchableMixin):
 class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalTooltip):
     weapon_name: str = StringProperty("")
     weapon_description: str = StringProperty("")
-    weapon_attachment_names: T.Optional[T.List[str]] = ObjectProperty(None)
+    weapon_attachment_names: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
 
     weapon_shortname: str = StringProperty("")
     
@@ -171,7 +171,7 @@ class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalToo
             if weapon is not None:
                 use_defaults=False
                 self.weapon_name = weapon.name
-                self.weapon_attachment_names = [a.name for a in weapon.attachments]
+                self.weapon_attachment_names = [a.get_name() for a in weapon.attachments]
                 self.weapon_shortname = weapon.short_name
                 self.weapon_description = weapon.description
                 
@@ -278,8 +278,8 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, ListenForStateChange
     
 class WPAttackOrDamage(MDBoxLayout, BoxSized, ListenForStateChanges):
     is_attack: bool = BooleanProperty(False)
-    attack_roll: T.Optional[Roll] = ObjectProperty(None)
-    dmg_roll: T.Optional[Roll] = ObjectProperty(None)
+    attack_roll: T.Optional[Roll] = ObjectProperty(None, allownone=True)
+    dmg_roll: T.Optional[Roll] = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super().__init__(
@@ -367,14 +367,14 @@ class WeaponBar(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.damage)
 
 class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
-    burst_size: T.Optional[int] = ObjectProperty(None)
-    ammo_name: T.Optional[str] = ObjectProperty(None)
-    caliber: T.Optional[float] = ObjectProperty(None)
-    range_m: T.Optional[int] = ObjectProperty(None)
-    splash: T.Optional[int] = ObjectProperty(None)
+    burst_size: T.Optional[int] = ObjectProperty(None, allownone=True)
+    ammo_name: T.Optional[str] = ObjectProperty(None, allownone=True)
+    caliber: T.Optional[float] = ObjectProperty(None, allownone=True)
+    range_m: T.Optional[int] = ObjectProperty(None, allownone=True)
+    splash: T.Optional[int] = ObjectProperty(None, allownone=True)
 
-    available_ammo: T.Optional[T.List[str]] = ObjectProperty(None)
-    available_burst: T.Optional[T.List[int]] = ObjectProperty(None)
+    available_ammo: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
+    available_burst: T.Optional[T.List[int]] = ObjectProperty(None, allownone=True)
     
     def __init__(self, **kwargs):
         super().__init__(
@@ -406,14 +406,14 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
                 use_defaults = False
         
                 self.burst_size = weapon.burst.get()
+                self.caliber = weapon.caliber
+                self.range_m = weapon.range_meters
+                self.splash = weapon.splash_meters
                 current_ammo = weapon.ammo.get()
                 if current_ammo is None:
                     self.ammo_name = None
                 else:
                     self.ammo_name = current_ammo.name
-                self.caliber = weapon.caliber
-                self.range_m = weapon.range_meters
-                self.splash = weapon.splash_meters
                 self.available_ammo = [a.name for a in weapon.ammo]
                 self.available_burst = list(iter(weapon.burst))
 
@@ -423,6 +423,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             self.ammo_name = None
             self.caliber = None
             self.range_m = None
+            self.splash = None
 
             self.available_ammo = None
             self.available_burst = None
@@ -448,7 +449,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             range_add = ""
         
         if self.splash is not None:
-            splash_add = f" ({self.splash}m AoE)"
+            splash_add = f"({self.splash}m AoE)"
         else:
             splash_add = ""
 
@@ -480,8 +481,8 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
         self.state_manager.push_event(ChangeWeaponBurst(character_id=self.state_manager.view_state.focused_character))
 
 class WPModeSwitcher(CenteredLabel, ListenForStateChanges, TouchableMixin):
-    mode_name: T.Optional[str] = ObjectProperty(None)
-    allowed_modes: T.Optional[T.List[str]] = ObjectProperty(None)
+    mode_name: T.Optional[str] = ObjectProperty(None, allownone=True)
+    allowed_modes: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super().__init__(

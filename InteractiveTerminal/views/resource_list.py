@@ -87,7 +87,7 @@ class Resources:
     WEAPON_ICONS = {
         "Lada DMR": "sniper.png",
         "Pistol": "pistol.png",
-        "Splazer": "splaser.png",
+        "XM786": "splaser.png",
         "Lada BR": "battle_rifle.png",
         "Lada CQ": "smg.png",
         "Vesna LSW": "lsw.png",

@@ -17,7 +17,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
     A container for the main content we want to display
     """
-    which_view: Views = ObjectProperty(None)
+    which_view: Views = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super().__init__(

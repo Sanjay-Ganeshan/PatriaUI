@@ -5,7 +5,7 @@ from ...new_models.state.state_manager import StateManager
 
 
 class ListenForStateChanges:
-    state_manager: StateManager = ObjectProperty(None)
+    state_manager: StateManager = ObjectProperty(None, allownone=True)
     _subscription_id: int = NumericProperty(-1)
 
     def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:

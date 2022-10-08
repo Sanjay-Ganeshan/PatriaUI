@@ -1627,7 +1627,7 @@ class AttackOrDamageCurrentWeapon(RollEvent):
         
         if self.is_attack:
             chat_message = (
-                f"{char.nameplate.name} attacks with {char.nameplate.her} {weapon.short_name}.\n"
+                f"{char.nameplate.name} attacks with {char.nameplate.her} {weapon.short_name}. "
                 f"{completed.total()} to hit. {completed.is_critical().msg()}\n"
             )
         else:
@@ -1663,7 +1663,13 @@ class AttackOrDamageCurrentWeapon(RollEvent):
             description = ""
 
         chat_message += description
-        chat_message += f"{completed}"
+        added_effects = weapon.get_additional_effects(is_attack=self.is_attack, roll=completed)
+        if added_effects is not None:
+            chat_message += added_effects
+
+        if completed.roll.n_dice > 0:
+            chat_message += f"{completed}"
+
 
         g.chat_log.append(chat_message)
 

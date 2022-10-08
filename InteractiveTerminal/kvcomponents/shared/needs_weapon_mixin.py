@@ -6,7 +6,7 @@ from kivy.properties import ObjectProperty
 
 
 class NeedsWeapon(NeedsConstants):
-    bound_weapon: "Weapon" = ObjectProperty(None)
+    bound_weapon: "Weapon" = ObjectProperty(None, allownone=True)
 
     def weapon_changed(self, *args):
         new_weapon = self.constants.get_active_weapon()

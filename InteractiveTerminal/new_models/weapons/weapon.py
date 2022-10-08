@@ -4,13 +4,14 @@ import math
 
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
-from ..dice.rolls import Roll
+from ..dice.rolls import Roll, CompletedRoll
 from ...utils import CircularList
 from .ammo_pack import AmmoPack
 
-@dataclass
+@dataclass(frozen=True)
 class WeaponAttachment:
-    name: str = ""
+    def get_name(self) -> str:
+        return type(self).__name__
 
     def attach_to(self, weapon: "Weapon") -> None:
         return
@@ -153,12 +154,14 @@ class Weapon:
         if current_ammo is None:
             return False
         else:
-            return current_ammo.can_consume(burst_size) and self.clip_current > burst_size
+            return current_ammo.can_consume(burst_size) and self.clip_current >= burst_size
 
     def undo_fire(self) -> None:
         current_ammo = self.ammo.get()
+        burst_size = self.burst.get() or 0
         if current_ammo is not None:
-            current_ammo.restore(1)
+            current_ammo.restore(burst_size)
+            self.clip_current += burst_size
 
     def reload(self) -> bool:
         """
@@ -224,3 +227,6 @@ class Weapon:
     def remove_tag(self, tag: str) -> None:
         if tag in self.tags:
             self.tags.pop(tag)
+    
+    def get_additional_effects(self, is_attack: bool, roll: CompletedRoll) -> T.Optional[str]:
+        return None

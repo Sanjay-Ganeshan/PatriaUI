@@ -3,7 +3,7 @@ from kivy.properties import ObjectProperty
 
 
 class NeedsMap:
-    the_map: Map = ObjectProperty(None)
+    the_map: Map = ObjectProperty(None, allownone=True)
 
     def adapt_to_map(self, *args):
         to_update = []

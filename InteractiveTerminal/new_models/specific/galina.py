@@ -1,4 +1,4 @@
-from ...utils import use_passed_or_default
+from ...utils import CircularList, use_passed_or_default
 from ..character.active_effects import Buffs
 from ..character.character import Character
 from ..character.nameplate import Nameplate
@@ -6,6 +6,7 @@ from ..character.proficiencies import Proficiency
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
+from ..weapons.character_specific_weapons import GalinaBR, GalinaGrenadeLauncher, GalinaSplaser, GalinaGrenades
 
 
 class GalinaNovikova(Character):
@@ -52,6 +53,7 @@ class GalinaNovikova(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
+                weapons=CircularList(items=[GalinaBR(), GalinaGrenadeLauncher(), GalinaSplaser(), GalinaGrenades()])
             )
         )
         self.add_effect(Buffs.LEADERSHIP)

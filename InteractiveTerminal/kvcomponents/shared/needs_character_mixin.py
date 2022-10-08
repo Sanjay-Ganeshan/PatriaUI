@@ -4,7 +4,7 @@ from kivy.properties import ObjectProperty
 
 
 class NeedsConstants:
-    constants: Constants = ObjectProperty(None)
+    constants: Constants = ObjectProperty(None, allownone=True)
     help_text: HelpText = ObjectProperty(HelpText(Constants()))
 
     def adapt_to_constants(self, *args):
