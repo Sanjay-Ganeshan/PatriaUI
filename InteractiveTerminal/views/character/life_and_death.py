@@ -6,9 +6,9 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from ...new_models.character.character import Character
 from ...new_models.character.status import Status
 from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.game_events import (ChangeDeathFail,
-                                              ChangeDeathSuccess, ChangeHP,
-                                              DeathSave)
+from ...new_models.events.game_events import (
+    ChangeDeathFail, ChangeDeathSuccess, ChangeHP, DeathSave
+)
 from ...new_models.help import help_generator
 from ...new_models.state.state_manager import StateManager
 from ..resource_list import Resources
@@ -37,7 +37,10 @@ class CHDeathFails(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
         self.touch_init()
         self.listener_init()
 
-        self.bind(current_death_fails=self.update_fails, max_death_fails=self.update_fails)
+        self.bind(
+            current_death_fails=self.update_fails,
+            max_death_fails=self.update_fails
+        )
         self.update_fails()
 
     def update_fails(self, *args):
@@ -55,8 +58,7 @@ class CHDeathFails(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             self.max_death_fails = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
@@ -72,18 +74,22 @@ class CHDeathFails(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
-        self.state_manager.push_event(ChangeDeathFail(character_id=char_id, amount=-1))
+        self.state_manager.push_event(
+            ChangeDeathFail(character_id=char_id, amount=-1)
+        )
 
     def on_right_click(self, *args):
         if self.state_manager is None:
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
-        self.state_manager.push_event(ChangeDeathFail(character_id=char_id, amount=1))
+        self.state_manager.push_event(
+            ChangeDeathFail(character_id=char_id, amount=1)
+        )
 
 
 class CHDeathSuccesses(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
@@ -105,7 +111,10 @@ class CHDeathSuccesses(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
         self.touch_init()
         self.listener_init()
 
-        self.bind(current_death_successes=self.update_successes, max_death_successes=self.update_successes)
+        self.bind(
+            current_death_successes=self.update_successes,
+            max_death_successes=self.update_successes
+        )
 
     def update_successes(self, *args):
         self.current_value = self.current_death_successes
@@ -122,8 +131,7 @@ class CHDeathSuccesses(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             self.max_death_successes = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
@@ -138,19 +146,22 @@ class CHDeathSuccesses(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
-        self.state_manager.push_event(ChangeDeathSuccess(character_id=char_id, amount=-1))
+        self.state_manager.push_event(
+            ChangeDeathSuccess(character_id=char_id, amount=-1)
+        )
 
     def on_right_click(self, *args):
         if self.state_manager is None:
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        char_id: str = self.state_manager.view_state.focused_character
-        self.state_manager.push_event(ChangeDeathSuccess(character_id=char_id, amount=1))
 
+        char_id: str = self.state_manager.view_state.focused_character
+        self.state_manager.push_event(
+            ChangeDeathSuccess(character_id=char_id, amount=1)
+        )
 
 
 class CHDeathKnockedOut(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
@@ -199,8 +210,7 @@ class CHDeathKnockedOut(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             self.stabilized = False
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
@@ -211,7 +221,6 @@ class CHDeathKnockedOut(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             # stabilized.
             self.stabilized = current.death_successes == 0
 
-
     def on_left_click(self, position):
         super().on_left_click(position)
 
@@ -219,17 +228,15 @@ class CHDeathKnockedOut(ProgressiveIcon, ListenForStateChanges, TouchableMixin):
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
         self.state_manager.push_event(DeathSave(character_id=char_id))
-
 
 
 class CHDeathSaves(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
     Death Throw successes + failures
     """
-
     def __init__(self, **kwargs):
         super().__init__(box_width=2, box_height=1, **kwargs)
         self.box_init()
@@ -286,14 +293,12 @@ class CHHitpoints(ProgressiveText, ListenForStateChanges, TouchableMixin):
             self.max_hp = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
             self.current_hp = current.HP
             self.max_hp = maxi.HP
-
 
     def on_left_click(self, pos):
         super().on_left_click(pos)
@@ -302,7 +307,7 @@ class CHHitpoints(ProgressiveText, ListenForStateChanges, TouchableMixin):
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
         self.state_manager.push_event(ChangeHP(character_id=char_id, amount=-1))
 
@@ -313,14 +318,16 @@ class CHHitpoints(ProgressiveText, ListenForStateChanges, TouchableMixin):
             return
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id: str = self.state_manager.view_state.focused_character
         self.state_manager.push_event(ChangeHP(character_id=char_id, amount=1))
 
 
 class CHLife(MDBoxLayout, BoxSized, ListenForStateChanges):
     def __init__(self, **kwargs):
-        super().__init__(orientation="vertical", box_width=2, box_height=3, **kwargs)
+        super().__init__(
+            orientation="vertical", box_width=2, box_height=3, **kwargs
+        )
         self.box_init()
         self.listener_init()
 

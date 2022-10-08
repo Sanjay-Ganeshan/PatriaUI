@@ -5,7 +5,6 @@ from ..character.character import Character
 from ..map.maps import Map
 
 
-
 @dataclass
 class GameState:
     """

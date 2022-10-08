@@ -21,11 +21,10 @@ class StatBlock:
             return self.stat_modifiers.get(key.value, 0)
         if isinstance(key, Proficiency):
             return self.proficiency_multipliers.get(key.value, 0)
-    
+
     @classmethod
     def create(
-        cls,
-        assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]]
+        cls, assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]]
     ) -> "StatBlock":
         stat_modifiers = {}
         proficiency_multipliers = {}
@@ -43,19 +42,19 @@ class StatBlock:
             stat_modifiers=stat_modifiers,
             proficiency_multipliers=proficiency_multipliers,
         )
-    
+
     def copy(
         self,
         assignments: T.List[T.Tuple[T.Union[Stat, Proficiency], int]] = None
     ) -> "StatBlock":
         if assignments is None:
             assignments = []
-        
+
         desired = StatBlock.create(assignments=assignments)
-        
+
         proficiency_multipliers = {}
         stat_modifiers = {}
-        
+
         stat_modifiers.update(self.stat_modifiers)
         stat_modifiers.update(desired.stat_modifiers)
 

@@ -8,6 +8,7 @@ from ..dice.rolls import Roll, CompletedRoll
 from ...utils import CircularList
 from .ammo_pack import AmmoPack
 
+
 @dataclass(frozen=True)
 class WeaponAttachment:
     def get_name(self) -> str:
@@ -15,39 +16,46 @@ class WeaponAttachment:
 
     def attach_to(self, weapon: "Weapon") -> None:
         return
-    
+
     def modify_attack(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        attack: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
         return attack
-    
+
     def modify_damage(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        damage: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", damage: Roll
     ) -> Roll:
         return damage
 
+
 @dataclass
 class Weapon:
-    name: str = field(default="<long name>", metadata = {"IGNORESAVE": True})
-    short_name: str = field(default="<short name>", metadata = {"IGNORESAVE": True})
-    description: str = field(default="<description>", metadata = {"IGNORESAVE": True})
+    name: str = field(default="<long name>", metadata={"IGNORESAVE": True})
+    short_name: str = field(
+        default="<short name>", metadata={"IGNORESAVE": True}
+    )
+    description: str = field(
+        default="<description>", metadata={"IGNORESAVE": True}
+    )
 
-    caliber: T.Optional[float] = field(default=None, metadata = {"IGNORESAVE": True})
-    range_meters: int = field(default=5, metadata = {"IGNORESAVE": True})
-    splash_meters: T.Optional[int] = field(default=None, metadata = {"IGNORESAVE": True})
+    caliber: T.Optional[float] = field(
+        default=None, metadata={"IGNORESAVE": True}
+    )
+    range_meters: int = field(default=5, metadata={"IGNORESAVE": True})
+    splash_meters: T.Optional[int] = field(
+        default=None, metadata={"IGNORESAVE": True}
+    )
 
     clip_capacity: int = 0
     clip_current: int = 1
 
     ammo: CircularList[AmmoPack] = field(default_factory=CircularList)
-    mode: CircularList[str] = field(default_factory=lambda: CircularList(items=["Standard"]))
-    burst: CircularList[int] = field(default_factory=lambda: CircularList(items=[1]))
+    mode: CircularList[str] = field(
+        default_factory=lambda: CircularList(items=["Standard"])
+    )
+    burst: CircularList[int] = field(
+        default_factory=lambda: CircularList(items=[1])
+    )
     burst_improves_accuracy: bool = True
     attachments: T.List["WeaponAttachment"] = field(default_factory=list)
     tags: T.List[str] = field(default_factory=list)
@@ -61,7 +69,7 @@ class Weapon:
         Unload the gun
         """
         self.clip_current = 0
-    
+
     def load(self, n: T.Optional[int] = None) -> None:
         """
         Load the gun with active ammo. If n is provided, loads no more than
@@ -74,7 +82,9 @@ class Weapon:
         if current_ammo_pack is None:
             self.clip_current = 0
         else:
-            self.clip_current = min(current_ammo_pack.current, min(self.clip_capacity, n))
+            self.clip_current = min(
+                current_ammo_pack.current, min(self.clip_capacity, n)
+            )
 
     def replace_magazine(self, old: str, new: str) -> "Weapon":
         """
@@ -108,10 +118,8 @@ class Weapon:
         # Burst - add half of proficiency bonus, rounded up
         burst_size = self.burst.get()
         if burst_size is not None and burst_size > 1 and self.burst_improves_accuracy:
-            burst_bonus = int((equipped_by[Stat.PROFICIENCY_BONUS]+1) // 2)
-            params = params.replace(
-                modifier=params.modifier+burst_bonus,
-            )
+            burst_bonus = int((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2)
+            params = params.replace(modifier=params.modifier + burst_bonus, )
         return params
 
     def damage(self, equipped_by: StatBlock) -> Roll:
@@ -125,10 +133,14 @@ class Weapon:
         return params
 
     def _attack_impl(self, equipped_by: StatBlock) -> Roll:
-        raise NotImplementedError(f"{self.name} in {self.mode} has no attack formula!")
+        raise NotImplementedError(
+            f"{self.name} in {self.mode} has no attack formula!"
+        )
 
     def _damage_impl(self, equipped_by: StatBlock) -> Roll:
-        raise NotImplementedError(f"{self.name} in {self.mode} has no damage formula!")
+        raise NotImplementedError(
+            f"{self.name} in {self.mode} has no damage formula!"
+        )
 
     def fire(self) -> bool:
         """
@@ -154,7 +166,9 @@ class Weapon:
         if current_ammo is None:
             return False
         else:
-            return current_ammo.can_consume(burst_size) and self.clip_current >= burst_size
+            return current_ammo.can_consume(
+                burst_size
+            ) and self.clip_current >= burst_size
 
     def undo_fire(self) -> None:
         current_ammo = self.ammo.get()
@@ -176,7 +190,7 @@ class Weapon:
 
     def next_mode(self) -> None:
         self.mode = self.mode.next()
-    
+
     def prev_mode(self) -> None:
         self.mode = self.mode.prev()
 
@@ -208,7 +222,7 @@ class Weapon:
         self.attachments.append(attachment)
         attachment.attach_to(self)
         return self
-    
+
     def restore(self) -> T.Dict[str, int]:
         prev_state: T.Dict[str, int] = {}
         for each_pack in self.ammo:
@@ -223,10 +237,11 @@ class Weapon:
     def add_tag(self, tag: str) -> None:
         if tag not in self.tags:
             self.tags.append(tag)
-    
+
     def remove_tag(self, tag: str) -> None:
         if tag in self.tags:
             self.tags.pop(tag)
-    
-    def get_additional_effects(self, is_attack: bool, roll: CompletedRoll) -> T.Optional[str]:
+
+    def get_additional_effects(self, is_attack: bool,
+                               roll: CompletedRoll) -> T.Optional[str]:
         return None

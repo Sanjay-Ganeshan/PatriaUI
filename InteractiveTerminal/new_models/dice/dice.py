@@ -11,6 +11,7 @@ class Dice(IntEnum):
     D12 = 12
     D20 = 20
 
+
 @unique
 class Critical(Enum):
     NO = "NO"

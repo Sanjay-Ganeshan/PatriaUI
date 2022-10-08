@@ -16,8 +16,6 @@ from .map_instruction import MapDrawing
 import typing as T
 
 
-
-
 class MapView(Widget, BoxSized, ListenForStateChanges):
     the_map: Map = ObjectProperty(None)
     map_center: Vector2 = ObjectProperty(Vector2.zero())
@@ -41,13 +39,13 @@ class MapView(Widget, BoxSized, ListenForStateChanges):
             the_map=self.update,
         )
 
-
         self.ins_group: InstructionGroup = InstructionGroup()
         self.canvas.add(self.ins_group)
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         self.the_map = state_manager.game_state.the_map
-
 
     def update(self, *args):
         self.ins_group.clear()
@@ -59,18 +57,17 @@ class MapView(Widget, BoxSized, ListenForStateChanges):
             # square areas, so let's adjust the aspect ratio
             # according to our render area
             w, h = self.size
-            
+
             # This vector goes from the center to the top-right
             # corner
             quarter_viewport = Vector2(w * scale, h * scale)
 
-
-            self.ins_group.add(MapDrawing(
-                self.the_map,
-                self.map_center - quarter_viewport,
-                self.map_center + quarter_viewport,
-                Vector2(*self.pos),
-                Vector2(*self.size),
-            ))
-        
-
+            self.ins_group.add(
+                MapDrawing(
+                    self.the_map,
+                    self.map_center - quarter_viewport,
+                    self.map_center + quarter_viewport,
+                    Vector2(*self.pos),
+                    Vector2(*self.size),
+                )
+            )

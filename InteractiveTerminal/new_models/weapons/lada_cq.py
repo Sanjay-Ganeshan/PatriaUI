@@ -26,11 +26,7 @@ class ProjectLadaCQ(Weapon):
                 mode=CircularList(items=["Standard"]),
                 ammo=CircularList(
                     items=[
-                        AmmoPack(
-                            name="FMJ",
-                            current=4 * 40,
-                            capacity=4 * 40
-                        )
+                        AmmoPack(name="FMJ", current=4 * 40, capacity=4 * 40)
                     ]
                 ),
             )

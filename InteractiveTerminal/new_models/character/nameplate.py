@@ -10,7 +10,7 @@ class Nameplate:
     name: str = "<name>"
     surname: str = "<surname>"
     role: str = "<role>"
-    
+
     she: str = "<she>"
     her: str = "<her>"
     hers: str = "<hers>"

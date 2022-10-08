@@ -33,18 +33,20 @@ class CHIcon(Image, BoxSized, TouchableMixin, ListenForStateChanges):
         # change characters
         if self.state_manager is not None:
             chars = sorted(self.state_manager.game_state.characters.keys())
-            my_idx = -1 if self.state_manager.view_state.focused_character is None else chars.index(self.state_manager.view_state.focused_character)
+            my_idx = -1 if self.state_manager.view_state.focused_character is None else chars.index(
+                self.state_manager.view_state.focused_character
+            )
             next_char = chars[(my_idx + 1) % len(chars)]
             self.state_manager.push_event(
-                SwitchFocusedCharacter(
-                    new_focus=next_char,
-                )
+                SwitchFocusedCharacter(new_focus=next_char, )
             )
 
-
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         # We might have changed the current character's icon. Look it up
         if state_manager.view_state.focused_character is None:
             self.icon_src = "missing.png"
         else:
-            self.icon_src = state_manager.game_state.characters[state_manager.view_state.focused_character].nameplate.icon
+            self.icon_src = state_manager.game_state.characters[
+                state_manager.view_state.focused_character].nameplate.icon

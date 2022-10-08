@@ -3,9 +3,12 @@ import typing as T
 from ..character.active_effects import Buffs
 from ..spells.spell_list import Spell
 from .ev_base import GameOrViewEvent
-from .game_events import (ApplyEffectToCharacter, ConsumeSkinsuitCharge,
-                          ModifyArmorRating, RemoveEffectFromCharacter, CastDeflect, SpellAttack,
-                          CastTelekinesis, IncinerateDamage, FreezeDamage, ElectrocuteDamage, WarpDamage, RepulseDamage, FeedbackDamage, CastSpell)
+from .game_events import (
+    ApplyEffectToCharacter, ConsumeSkinsuitCharge, ModifyArmorRating,
+    RemoveEffectFromCharacter, CastDeflect, SpellAttack, CastTelekinesis,
+    IncinerateDamage, FreezeDamage, ElectrocuteDamage, WarpDamage,
+    RepulseDamage, FeedbackDamage, CastSpell
+)
 
 # Some abilities as event chains
 
@@ -26,7 +29,9 @@ def cast_reactive_armor(character_id: str) -> T.List[GameOrViewEvent]:
             effect=Buffs.REACTIVE_ARMOR.value,
         ),
         ConsumeSkinsuitCharge(character_id=character_id),
-        ModifyArmorRating(character_id=character_id, armor_mod=REACTIVE_ARMOR_BONUS),
+        ModifyArmorRating(
+            character_id=character_id, armor_mod=REACTIVE_ARMOR_BONUS
+        ),
     ]
 
 
@@ -57,15 +62,28 @@ def cast_spell(
             SpellAttack(character_id=character_id, which_spell=which_spell)
         ]
     elif which_spell == Spell.FREEZE:
-        return [CastSpell(character_id=character_id),FreezeDamage(character_id=character_id)]
+        return [
+            CastSpell(character_id=character_id),
+            FreezeDamage(character_id=character_id)
+        ]
     elif which_spell == Spell.WARP:
-        return [CastSpell(character_id=character_id),WarpDamage(character_id=character_id)]
+        return [
+            CastSpell(character_id=character_id),
+            WarpDamage(character_id=character_id)
+        ]
     elif which_spell == Spell.FEEDBACK:
-        return [CastSpell(character_id=character_id),FeedbackDamage(character_id=character_id)]
+        return [
+            CastSpell(character_id=character_id),
+            FeedbackDamage(character_id=character_id)
+        ]
     elif which_spell == Spell.TELEKINESIS:
-        return [CastSpell(character_id=character_id),CastTelekinesis(character_id=character_id)]
+        return [
+            CastSpell(character_id=character_id),
+            CastTelekinesis(character_id=character_id)
+        ]
     else:
         raise NotImplementedError(f"Unexpected spell: {which_spell}")
+
 
 def followup_spell(
     character_id: str,

@@ -1,20 +1,19 @@
 import typing as T
 
-from kivy.properties import (BooleanProperty, NumericProperty, ObjectProperty,
-                             StringProperty)
+from kivy.properties import (
+    BooleanProperty, NumericProperty, ObjectProperty, StringProperty
+)
 from kivy.uix.image import Image
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from ...new_models.character.character import Character
 from ...new_models.dice.rolls import Roll
 from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.game_events import (AttackOrDamageCurrentWeapon,
-                                              ChangeWeaponAmmo,
-                                              ChangeWeaponBurst,
-                                              ChangeWeaponMode, ChangeWeapons,
-                                              FireCurrentWeapon,
-                                              ReloadCurrentWeapon,
-                                              ResupplyWeapon)
+from ...new_models.events.game_events import (
+    AttackOrDamageCurrentWeapon, ChangeWeaponAmmo, ChangeWeaponBurst,
+    ChangeWeaponMode, ChangeWeapons, FireCurrentWeapon, ReloadCurrentWeapon,
+    ResupplyWeapon
+)
 from ...new_models.help import help_generator
 from ...new_models.state.app_settings import BOX_WIDTH
 from ...new_models.state.state_manager import StateManager
@@ -52,7 +51,7 @@ class WPAmmoCount(ProgressiveText, ListenForStateChanges, TouchableMixin):
             font_style="H6",
             **kwargs,
         )
-        
+
         self.touch_init()
         self.listener_init()
 
@@ -74,27 +73,33 @@ class WPAmmoCount(ProgressiveText, ListenForStateChanges, TouchableMixin):
 
         self.text = self.get_text()
 
-
-
     def on_left_click(self, position):
         super().on_left_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(FireCurrentWeapon(character_id=self.state_manager.view_state.focused_character))
-    
+
+        self.state_manager.push_event(
+            FireCurrentWeapon(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
     def on_right_click(self, position):
         super().on_right_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ReloadCurrentWeapon(character_id=self.state_manager.view_state.focused_character))
+
+        self.state_manager.push_event(
+            ReloadCurrentWeapon(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
 
     def get_text(self):
         """
@@ -102,42 +107,48 @@ class WPAmmoCount(ProgressiveText, ListenForStateChanges, TouchableMixin):
         "{loaded} / {clip size} ({remaining unloaded ammo of this type})"
         """
         return f"{self.clip_current} / {self.clip_capacity} ({self.total_ammo - self.clip_current})"
-        
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
                 use_defaults = False
                 self.clip_current = weapon.clip_current
                 self.clip_capacity = weapon.clip_capacity
-    
+
                 ammo = weapon.ammo.get()
                 if ammo is not None:
                     self.total_ammo = ammo.current
                 else:
                     self.total_ammo = weapon.clip_current
-                
+
                 if weapon.burst.get() is not None:
                     self.burst_size = weapon.burst.get()
                 else:
                     self.burst_size = 0
-                    
-                
+
         if use_defaults:
             self.clip_current = 0
             self.clip_capacity = 1
             self.total_ammo = 1
             self.burst_size = 1
 
-class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalTooltip):
+
+class WPIcon(
+    Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalTooltip
+):
     weapon_name: str = StringProperty("")
     weapon_description: str = StringProperty("")
-    weapon_attachment_names: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
+    weapon_attachment_names: T.Optional[T.List[str]
+                                       ] = ObjectProperty(None, allownone=True)
 
     weapon_shortname: str = StringProperty("")
-    
+
     def __init__(self, **kwargs):
         super().__init__(
             source="",
@@ -150,11 +161,18 @@ class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalToo
         self.touch_init()
         self.listener_init()
 
-        self.bind(weapon_name=self.desc_changed, weapon_description=self.desc_changed, weapon_attachment_names=self.desc_changed)
+        self.bind(
+            weapon_name=self.desc_changed,
+            weapon_description=self.desc_changed,
+            weapon_attachment_names=self.desc_changed
+        )
         self.bind(weapon_shortname=self.shortname_changed)
 
     def desc_changed(self, *args):
-        self.tooltip_text=help_generator.weapon(self.weapon_name, self.weapon_description, self.weapon_attachment_names)
+        self.tooltip_text = help_generator.weapon(
+            self.weapon_name, self.weapon_description,
+            self.weapon_attachment_names
+        )
 
     def shortname_changed(self, *args):
         self.source = Resources.WEAPON_ICONS.get(
@@ -162,19 +180,23 @@ class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalToo
             Resources.MISSING,
         )
 
-    
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
-                use_defaults=False
+                use_defaults = False
                 self.weapon_name = weapon.name
-                self.weapon_attachment_names = [a.get_name() for a in weapon.attachments]
+                self.weapon_attachment_names = [
+                    a.get_name() for a in weapon.attachments
+                ]
                 self.weapon_shortname = weapon.short_name
                 self.weapon_description = weapon.description
-                
+
         if use_defaults:
             self.weapon_name = "<long name>"
             self.weapon_attachment_names = None
@@ -185,25 +207,34 @@ class WPIcon(Image, BoxSized, ListenForStateChanges, TouchableMixin, OptionalToo
         super().on_left_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ChangeWeapons(character_id=self.state_manager.view_state.focused_character))
-    
+
+        self.state_manager.push_event(
+            ChangeWeapons(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
     def on_right_click(self, position):
         super().on_right_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ResupplyWeapon(character_id=self.state_manager.view_state.focused_character))
+
+        self.state_manager.push_event(
+            ResupplyWeapon(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
 
 class WPWeaponName(CenteredLabel, ListenForStateChanges, TouchableMixin):
     weapon_short_name: str = StringProperty("<name>")
-    
+
     def __init__(self, **kwargs):
         super().__init__(
             text="ttt",
@@ -214,34 +245,38 @@ class WPWeaponName(CenteredLabel, ListenForStateChanges, TouchableMixin):
 
         self.listener_init()
         self.bind(weapon_short_name=self.short_name_changed)
-        
-    
+
     def short_name_changed(self, *args):
         self.text = self.weapon_short_name
 
-    
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
-                use_defaults=False
+                use_defaults = False
                 self.weapon_short_name = weapon.short_name
-                
+
         if use_defaults:
             self.weapon_short_name = "<short name>"
 
-class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, ListenForStateChanges, OptionalTooltip):
+
+class WPAttackOrDamageIcon(
+    BoxSized, Image, TouchableMixin, ListenForStateChanges, OptionalTooltip
+):
     is_attack: bool = BooleanProperty(False)
-    
+
     def __init__(self, **kwargs):
         super().__init__(
             source=Resources.MISSING,
             box_width=0.5,
             box_height=2,
             color="darkred",
-            tooltip_text = "LClick - fire, RClick - roll, no ammo reduction",
+            tooltip_text="LClick - fire, RClick - roll, no ammo reduction",
             **kwargs
         )
         self.touch_init()
@@ -251,7 +286,7 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, ListenForStateChange
 
     def is_attack_updated(self, *args) -> None:
         self.source = Resources.RETICLE if self.is_attack else Resources.BLOOD
-    
+
     def on_left_click(self, position):
         super().on_left_click(position)
         self.common_click(True)
@@ -259,23 +294,27 @@ class WPAttackOrDamageIcon(BoxSized, Image, TouchableMixin, ListenForStateChange
     def common_click(self, is_left: bool):
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         char_id = self.state_manager.view_state.focused_character
 
         events = []
         if is_left and self.is_attack:
             events.append(FireCurrentWeapon(character_id=char_id))
-        events.append(AttackOrDamageCurrentWeapon(character_id=char_id, is_attack=self.is_attack))
+        events.append(
+            AttackOrDamageCurrentWeapon(
+                character_id=char_id, is_attack=self.is_attack
+            )
+        )
         self.state_manager.push_event(events)
-    
+
     def on_right_click(self, position):
         super().on_right_click(position)
         self.common_click(False)
-    
-    
+
+
 class WPAttackOrDamage(MDBoxLayout, BoxSized, ListenForStateChanges):
     is_attack: bool = BooleanProperty(False)
     attack_roll: T.Optional[Roll] = ObjectProperty(None, allownone=True)
@@ -290,48 +329,56 @@ class WPAttackOrDamage(MDBoxLayout, BoxSized, ListenForStateChanges):
         )
         self.box_init()
         self.listener_init()
-        
+
         self.icon = WPAttackOrDamageIcon(is_attack=self.is_attack)
-        self.dmg = CenteredLabel(box_width=2, box_height=2, halign="left", font_style="H5")
-        
+        self.dmg = CenteredLabel(
+            box_width=2, box_height=2, halign="left", font_style="H5"
+        )
+
         self.add_widget(self.icon)
         self.add_widget(self.dmg)
 
-        self.bind(is_attack=self.roll_updated, attack_roll=self.roll_updated, dmg_roll=self.roll_updated)
+        self.bind(
+            is_attack=self.roll_updated,
+            attack_roll=self.roll_updated,
+            dmg_roll=self.roll_updated
+        )
         self.roll_updated()
-        
 
     def roll_updated(self, *args):
         self.icon.is_attack = self.is_attack
-        
+
         roll = self.attack_roll if self.is_attack else self.dmg_roll
-        
+
         if roll is None:
             self.dmg.text = "--"
         else:
             self.dmg.text = str(roll)
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
-                use_defaults=False
+                use_defaults = False
                 self.attack_roll = weapon.attack(char.stat_block)
                 self.dmg_roll = weapon.damage(char.stat_block)
-                
+
         if use_defaults:
             self.attack_roll = None
             self.dmg_roll = None
-        
-    
+
+
 class WeaponBar(MDBoxLayout, BoxSized, ListenForStateChanges):
     def __init__(self, **kwargs):
         super().__init__(
             orientation="horizontal",
-            box_width = BOX_WIDTH,
-            box_height = 2,
+            box_width=BOX_WIDTH,
+            box_height=2,
             **kwargs,
         )
 
@@ -366,6 +413,7 @@ class WeaponBar(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.attack)
         self.add_widget(self.damage)
 
+
 class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
     burst_size: T.Optional[int] = ObjectProperty(None, allownone=True)
     ammo_name: T.Optional[str] = ObjectProperty(None, allownone=True)
@@ -373,9 +421,11 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
     range_m: T.Optional[int] = ObjectProperty(None, allownone=True)
     splash: T.Optional[int] = ObjectProperty(None, allownone=True)
 
-    available_ammo: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
-    available_burst: T.Optional[T.List[int]] = ObjectProperty(None, allownone=True)
-    
+    available_ammo: T.Optional[T.List[str]
+                              ] = ObjectProperty(None, allownone=True)
+    available_burst: T.Optional[T.List[int]
+                               ] = ObjectProperty(None, allownone=True)
+
     def __init__(self, **kwargs):
         super().__init__(
             text="",
@@ -386,25 +436,30 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
         )
         self.touch_init()
         self.listener_init()
-        
+
         self.bind(
             burst_size=self.update,
             ammo_name=self.update,
             caliber=self.update,
             range_m=self.update,
         )
-        self.bind(available_ammo = self.update_help, available_burst=self.update_help)
+        self.bind(
+            available_ammo=self.update_help, available_burst=self.update_help
+        )
         self.update()
         self.update_help()
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
                 use_defaults = False
-        
+
                 self.burst_size = weapon.burst.get()
                 self.caliber = weapon.caliber
                 self.range_m = weapon.range_meters
@@ -417,7 +472,6 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
                 self.available_ammo = [a.name for a in weapon.ammo]
                 self.available_burst = list(iter(weapon.burst))
 
-                
         if use_defaults:
             self.burst_size = None
             self.ammo_name = None
@@ -437,7 +491,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             ammo_add = f"{self.ammo_name}"
         else:
             ammo_add = f"?"
-        
+
         if self.caliber is not None:
             cal_add = f"{self.caliber:.1f} cal "
         else:
@@ -447,7 +501,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             range_add = f" {self.range_m}m"
         else:
             range_add = ""
-        
+
         if self.splash is not None:
             splash_add = f"({self.splash}m AoE)"
         else:
@@ -458,31 +512,43 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
         self.text = f"{prefix}\n{suffix}"
 
     def update_help(self, *args) -> str:
-        self.tooltip_text = help_generator.ammo_and_burst(self.available_ammo, self.available_burst)
-    
+        self.tooltip_text = help_generator.ammo_and_burst(
+            self.available_ammo, self.available_burst
+        )
+
     def on_left_click(self, position):
         super().on_left_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ChangeWeaponAmmo(character_id=self.state_manager.view_state.focused_character))
+
+        self.state_manager.push_event(
+            ChangeWeaponAmmo(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
 
     def on_right_click(self, position):
         super().on_right_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ChangeWeaponBurst(character_id=self.state_manager.view_state.focused_character))
+
+        self.state_manager.push_event(
+            ChangeWeaponBurst(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
 
 class WPModeSwitcher(CenteredLabel, ListenForStateChanges, TouchableMixin):
     mode_name: T.Optional[str] = ObjectProperty(None, allownone=True)
-    allowed_modes: T.Optional[T.List[str]] = ObjectProperty(None, allownone=True)
+    allowed_modes: T.Optional[T.List[str]
+                             ] = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super().__init__(
@@ -494,8 +560,8 @@ class WPModeSwitcher(CenteredLabel, ListenForStateChanges, TouchableMixin):
         )
         self.touch_init()
         self.listener_init()
-        self.bind(mode_name = self.update, allowed_modes = self.update)
-        
+        self.bind(mode_name=self.update, allowed_modes=self.update)
+
     def update(self, *args):
         if self.mode_name is None:
             self.text = "N/A"
@@ -507,23 +573,29 @@ class WPModeSwitcher(CenteredLabel, ListenForStateChanges, TouchableMixin):
         super().on_left_click(position)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
-        self.state_manager.push_event(ChangeWeaponMode(character_id=self.state_manager.view_state.focused_character))
-    
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+
+        self.state_manager.push_event(
+            ChangeWeaponMode(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         use_defaults: bool = True
         if state_manager.view_state.focused_character is not None:
-            char = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             weapon = char.weapons.get()
             if weapon is not None:
                 use_defaults = False
                 self.mode_name = weapon.mode.get()
                 self.allowed_modes = [m for m in weapon.mode]
 
-                
         if use_defaults:
             self.burst_size = None
             self.ammo_name = None
@@ -532,7 +604,3 @@ class WPModeSwitcher(CenteredLabel, ListenForStateChanges, TouchableMixin):
 
             self.available_ammo = None
             self.available_burst = None
-
-    
-
-    

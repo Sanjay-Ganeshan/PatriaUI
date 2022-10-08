@@ -44,7 +44,10 @@ class StatBadge(
         self.touch_init()
         self.listener_init()
 
-        self.bind(which_stat=self.on_stats_changed, stat_modifier=self.on_stats_changed)
+        self.bind(
+            which_stat=self.on_stats_changed,
+            stat_modifier=self.on_stats_changed
+        )
         self.on_stats_changed()
 
     def on_stats_changed(self, *args):
@@ -63,8 +66,7 @@ class StatBadge(
             self.stat_modifier = 0
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             self.stat_modifier = char.stat_block[self.which_stat]
 
     def on_left_click(self, *args):

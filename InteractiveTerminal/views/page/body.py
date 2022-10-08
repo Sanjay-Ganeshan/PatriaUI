@@ -30,7 +30,6 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.box_init()
         self.listener_init()
 
-
         self.empty = Spacer(box_width=BOX_WIDTH, box_height=10)
         self.details = DetailsSheet()
         self.map_view = MapView()
@@ -40,7 +39,7 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
 
     def update_which_view(self, *args):
         self.remove_widget(self.content)
-        
+
         if self.which_view is None:
             self.content = self.empty
 
@@ -49,9 +48,8 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
 
         elif self.which_view == Views.MAP:
             self.content = self.map_view
-    
-        self.add_widget(self.content)
 
+        self.add_widget(self.content)
 
     def listener(
         self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
@@ -60,5 +58,3 @@ class Body(MDBoxLayout, BoxSized, ListenForStateChanges):
             return
 
         self.which_view = state_manager.view_state.focused_view
-        
-

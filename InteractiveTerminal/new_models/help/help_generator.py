@@ -73,11 +73,13 @@ def revive(current_revives: int, max_revives: int) -> str:
         f"{current_revives} uses remaining."
     )
 
+
 def hit_dice() -> str:
     return (
         f"During a short rest, you can spend hit dice to recover. Each heals 1d6.\n"
         f"They are restored during a long rest."
     )
+
 
 def stat_description(which_stat: Stat, stat_value: int) -> str:
     if which_stat == Stat.STRENGTH:
@@ -106,7 +108,7 @@ def roll_status(help_for_status: RollStatus, current_status: RollStatus) -> str:
         description = "With disadvantage, you roll an extra die, and drop the HIGHEST roll."
     else:
         description = ""
-    
+
     if current_status == RollStatus.STANDARD:
         current = "Your next roll is normal."
     else:
@@ -131,6 +133,7 @@ def weapon(
         f"LClick - Change weapons, RClick - Fully resupply this weapon"
     )
 
+
 def ammo_and_burst(
     available_ammo: T.Optional[T.List[str]],
     available_burst: T.Optional[T.List[int]],
@@ -151,6 +154,7 @@ def ammo_and_burst(
     msg = msg.strip()
     return msg
 
+
 def weapon_mode(allowed_modes: T.Optional[str]) -> str:
     if allowed_modes is not None and len(allowed_modes) > 0:
         return (
@@ -160,24 +164,40 @@ def weapon_mode(allowed_modes: T.Optional[str]) -> str:
     else:
         return ""
 
-def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, proficiency_bonus: int, total_bonus: int) -> str:
+
+def skill_description(
+    which_skill: Proficiency, multiplier: int, stat_mod: int,
+    proficiency_bonus: int, total_bonus: int
+) -> str:
     SKILL_DESCRIPTIONS = {
         # STR
-        Proficiency.ATHLETICS: "Your overall fitness.",
-        Proficiency.COMBATIVES: "Your skill in hand-to-hand combat.",
+        Proficiency.ATHLETICS:
+            "Your overall fitness.",
+        Proficiency.COMBATIVES:
+            "Your skill in hand-to-hand combat.",
         # DEX
-        Proficiency.ACROBATICS: "Your overall agility.",
-        Proficiency.STEALTH: "Your skill at remaining undetected.",
+        Proficiency.ACROBATICS:
+            "Your overall agility.",
+        Proficiency.STEALTH:
+            "Your skill at remaining undetected.",
         # INT
-        Proficiency.INVESTIGATION: "Your ability to make logical deductions.",
-        Proficiency.NATURE: "How well you recall knowledge about terrain and wildlife.",
-        Proficiency.ANIMAL_HANDLING: "How well you cn coax animals to do your bidding.",
+        Proficiency.INVESTIGATION:
+            "Your ability to make logical deductions.",
+        Proficiency.NATURE:
+            "How well you recall knowledge about terrain and wildlife.",
+        Proficiency.ANIMAL_HANDLING:
+            "How well you cn coax animals to do your bidding.",
         # WIS
-        Proficiency.INSIGHT: "Your ability to determine someone's true intentions, based on their actions and other signs.",
-        Proficiency.MEDICINE: "Your ability to treat wounds.",
-        Proficiency.PERCEPTION: "How aware you are of your surroundings.",
-        Proficiency.SURVIVAL: "Your ability to survive 'in the wild'.",
-        Proficiency.SOCIAL: "How well you interact outside of combat.",
+        Proficiency.INSIGHT:
+            "Your ability to determine someone's true intentions, based on their actions and other signs.",
+        Proficiency.MEDICINE:
+            "Your ability to treat wounds.",
+        Proficiency.PERCEPTION:
+            "How aware you are of your surroundings.",
+        Proficiency.SURVIVAL:
+            "Your ability to survive 'in the wild'.",
+        Proficiency.SOCIAL:
+            "How well you interact outside of combat.",
     }
     skill_desc = SKILL_DESCRIPTIONS[which_skill]
 
@@ -205,7 +225,11 @@ def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, 
 
     return f"{skill_desc}\n{general_desc}"
 
-def spell_description(which_spell: Spell, spell_save_dc: int, spell_attack_bonus: int, intelligence: int) -> str:
+
+def spell_description(
+    which_spell: Spell, spell_save_dc: int, spell_attack_bonus: int,
+    intelligence: int
+) -> str:
     example_attack = Roll(faces=Dice.D20, n_dice=1, modifier=spell_attack_bonus)
     if which_spell == Spell.INCINERATE:
         return (

@@ -4,10 +4,9 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from ...new_models.character.character import Character
 from ...new_models.character.status import Status
 from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.events.game_events import (ConsumeShield,
-                                              ConsumeSkinsuitCharge,
-                                              RestoreShield,
-                                              RestoreSkinsuitCharge)
+from ...new_models.events.game_events import (
+    ConsumeShield, ConsumeSkinsuitCharge, RestoreShield, RestoreSkinsuitCharge
+)
 from ...new_models.help import help_generator
 from ...new_models.state.state_manager import StateManager
 from ..resource_list import Resources
@@ -38,7 +37,9 @@ class SkinSuitPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
         self.touch_init()
         self.listener_init()
 
-        self.bind(current_power=self.power_updated, max_power=self.power_updated)
+        self.bind(
+            current_power=self.power_updated, max_power=self.power_updated
+        )
 
     def power_updated(self, *args):
         self.current_value = self.current_power
@@ -56,8 +57,7 @@ class SkinSuitPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
             self.max_power = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
@@ -117,7 +117,9 @@ class ShieldPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
         self.touch_init()
         self.listener_init()
 
-        self.bind(current_shield=self.shield_updated, max_shield=self.shield_updated)
+        self.bind(
+            current_shield=self.shield_updated, max_shield=self.shield_updated
+        )
 
     def shield_updated(self, *args):
         self.current_value = self.current_shield
@@ -137,8 +139,7 @@ class ShieldPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
             self.max_shield = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 
@@ -155,7 +156,9 @@ class ShieldPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
 
         # Left click -> Consume a skinsuit charge
         self.state_manager.push_event(
-            ConsumeShield(character_id=self.state_manager.view_state.focused_character)
+            ConsumeShield(
+                character_id=self.state_manager.view_state.focused_character
+            )
         )
 
     def on_right_click(self, *args):
@@ -168,7 +171,9 @@ class ShieldPowerIcon(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
             return
 
         self.state_manager.push_event(
-            RestoreShield(character_id=self.state_manager.view_state.focused_character)
+            RestoreShield(
+                character_id=self.state_manager.view_state.focused_character
+            )
         )
 
 
@@ -254,13 +259,11 @@ class CHPower(MDBoxLayout, BoxSized, ListenForStateChanges):
             shield_power=self.update_text,
             shield_capacity=self.update_text,
         )
-        
+
         self.update_text()
 
     def update_text(self, *args):
-        self.charge_suit.text = (
-            f"{self.suit_power} / {self.suit_capacity}"
-        )
+        self.charge_suit.text = (f"{self.suit_power} / {self.suit_capacity}")
         self.charge_shield.text = (
             f"{self.shield_power} / {self.shield_capacity}"
         )
@@ -278,8 +281,7 @@ class CHPower(MDBoxLayout, BoxSized, ListenForStateChanges):
             self.suit_capacity = 1
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             current: Status = char.current_life
             maxi: Status = char.max_life
 

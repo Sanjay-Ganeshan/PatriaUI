@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import typing as T
 
+
 @dataclass
 class AmmoPack:
     name: str = "FMJ"

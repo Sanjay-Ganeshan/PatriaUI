@@ -25,7 +25,6 @@ class Views(Enum):
             return Views.CHARACTER_DETAILS
 
 
-
 @dataclass
 class ViewState:
     focused_view: Views = Views.CHARACTER_DETAILS

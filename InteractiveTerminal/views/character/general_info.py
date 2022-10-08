@@ -20,7 +20,6 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
     Info needed at a glance
     """
-
     def __init__(self, **kwargs):
         super().__init__(
             orientation="horizontal",
@@ -43,7 +42,7 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
             box_height=3,
             pr_full_color="white",
         )
-        
+
         self.add_widget(self.icon)
         self.add_widget(self.namecard)
         self.add_widget(self.armor)
@@ -52,8 +51,7 @@ class CHGeneralInfo(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.restoration)
         self.add_widget(self.proficiency)
 
-
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         pass
-    
-

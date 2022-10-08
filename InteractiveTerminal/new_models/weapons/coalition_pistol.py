@@ -15,9 +15,7 @@ class CoalitionPistol(Weapon):
                 kwargs,
                 name="Coalition Pistol",
                 short_name="Pistol",
-                description=(
-                    "A standard issue pistol"
-                ),
+                description=("A standard issue pistol"),
                 caliber=9,
                 range_meters=40,
                 clip_current=12,
@@ -27,9 +25,7 @@ class CoalitionPistol(Weapon):
                 ammo=CircularList(
                     items=[
                         AmmoPack(
-                            name="Parabellum",
-                            current=4 * 12,
-                            capacity=4 * 12
+                            name="Parabellum", current=4 * 12, capacity=4 * 12
                         )
                     ]
                 ),

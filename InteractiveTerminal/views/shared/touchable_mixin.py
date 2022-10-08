@@ -20,4 +20,3 @@ class TouchableMixin:
 
     def on_right_click(self, position):
         pass
-

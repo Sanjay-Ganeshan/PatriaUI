@@ -8,7 +8,9 @@ class ListenForStateChanges:
     state_manager: StateManager = ObjectProperty(None, allownone=True)
     _subscription_id: int = NumericProperty(-1)
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         pass
 
     def _state_manager_updated(self, *args):
@@ -20,8 +22,8 @@ class ListenForStateChanges:
         for each_attr in dir(self):
             possible_child = getattr(self, each_attr)
             if (
-                isinstance(possible_child, ListenForStateChanges)
-                and possible_child not in to_update
+                isinstance(possible_child, ListenForStateChanges) and
+                possible_child not in to_update
             ):
                 to_update.append(possible_child)
 

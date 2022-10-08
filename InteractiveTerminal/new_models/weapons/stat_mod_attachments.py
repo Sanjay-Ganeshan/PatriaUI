@@ -10,63 +10,49 @@ class Bipod(WeaponAttachment):
         if weapon.mode.find(lambda m: m == "Braced") is None:
             weapon.mode.append("Braced")
         weapon.add_tag("bipod")
-    
+
     def modify_attack(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        attack: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
         if weapon.mode.get() == "Braced":
             return attack.replace(
-                modifier=attack.modifier+ ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
+                modifier=attack.modifier +
+                ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
             )
         else:
             return attack
-    
+
 
 class VerticalGrip(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
         weapon.add_tag("vertical-grip")
-    
+
     def modify_attack(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        attack: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
-        return attack.replace(
-            modifier=attack.modifier+1,
-        )
-    
+        return attack.replace(modifier=attack.modifier + 1, )
+
 
 class HolographicSight(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
         weapon.add_tag("holo-sight")
-    
+
     def modify_attack(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        attack: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
-        return attack.replace(
-            modifier=attack.modifier+1,
-        )
+        return attack.replace(modifier=attack.modifier + 1, )
 
 
 class TelescopicSight(WeaponAttachment):
     def attach_to(self, weapon: "Weapon") -> None:
         weapon.add_tag("telescopic-sight")
-    
+
     def modify_attack(
-        self, 
-        equipped_by: StatBlock,
-        weapon: "Weapon",
-        attack: Roll
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
         return attack.replace(
-            modifier=attack.modifier+((equipped_by[Stat.PROFICIENCY_BONUS]+1) // 2),
+            modifier=attack.modifier +
+            ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
         )
 
 

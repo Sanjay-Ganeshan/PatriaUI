@@ -92,7 +92,9 @@ class MapDrawing(InstructionGroup):
                 )
             )
         else:
-            raise NotImplementedError(f"Map can't draw type: {type(ins)} -- {ins}")
+            raise NotImplementedError(
+                f"Map can't draw type: {type(ins)} -- {ins}"
+            )
 
     def point_to_screen(self, point: Vector2) -> Vector2:
         return point.renorm(

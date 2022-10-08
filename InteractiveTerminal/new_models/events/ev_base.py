@@ -10,8 +10,8 @@ from ..state.view_state import ViewState
 
 @dataclass(frozen=True)
 class GameOrViewEvent(ABC):
-    event_id: str = field(default_factory=lambda:str(uuid4()))
-    
+    event_id: str = field(default_factory=lambda: str(uuid4()))
+
     @abstractmethod
     def do(self, v: ViewState, g: GameState) -> T.Optional["GameOrViewEvent"]:
         """
@@ -23,18 +23,21 @@ class GameOrViewEvent(ABC):
              But listeners / undo, you need the result)
         """
         ...
-    
+
     @abstractmethod
     def undo(self, v: ViewState, g: GameState) -> None:
         ...
 
+
 @dataclass(frozen=True)
 class ViewEvent(GameOrViewEvent):
-    pass    
+    pass
+
 
 @dataclass(frozen=True)
 class GameEvent(GameOrViewEvent):
     pass
+
 
 @dataclass(frozen=True)
 class RollEvent(GameEvent):

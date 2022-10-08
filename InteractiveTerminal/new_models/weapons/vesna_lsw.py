@@ -21,19 +21,15 @@ class ProjectVesnaLSW(Weapon):
                 ),
                 caliber=5.3,
                 range_meters=400,
-                splash_meters = 1,
+                splash_meters=1,
                 clip_current=80,
                 clip_capacity=80,
                 burst=CircularList(items=[10]),
-                burst_improves_accuracy = False,
+                burst_improves_accuracy=False,
                 mode=CircularList(items=["Standard"]),
                 ammo=CircularList(
                     items=[
-                        AmmoPack(
-                            name="FMJ",
-                            current=6 * 80,
-                            capacity=6 * 80
-                        )
+                        AmmoPack(name="FMJ", current=6 * 80, capacity=6 * 80)
                     ]
                 ),
             )

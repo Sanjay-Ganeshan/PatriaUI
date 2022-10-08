@@ -25,7 +25,9 @@ class ProjectLadaDMR(Weapon):
                 clip_capacity=12,
                 mode=CircularList(items=["Standard"]),
                 ammo=CircularList(
-                    items=[AmmoPack(name="FMJ", current=8 * 12, capacity=8 * 12)]
+                    items=[
+                        AmmoPack(name="FMJ", current=8 * 12, capacity=8 * 12)
+                    ]
                 ),
             )
         )

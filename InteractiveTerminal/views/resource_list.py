@@ -27,9 +27,7 @@ class Resources:
     PROFICIENCY_STAT_ICON: str = "proficiency_skill_tag.png"
 
     PROFICIENCY_MULTIPLIER_TO_SKILL_TAG: T.List[str] = [
-        "skilltag_basic.png",
-        "skilltag_prof.png",
-        "skilltag_expert.png"
+        "skilltag_basic.png", "skilltag_prof.png", "skilltag_expert.png"
     ]
 
     SKILL_TO_ICON = {
@@ -101,7 +99,8 @@ class Resources:
     BLOOD = "teardrop.png"
     RETICLE = "reticle.png"
 
-    SFX_DICE_ROLL = ["diceroll.mp3", "diceroll2.mp3","diceroll3.mp3","diceroll4.mp3"]
+    SFX_DICE_ROLL = [
+        "diceroll.mp3", "diceroll2.mp3", "diceroll3.mp3", "diceroll4.mp3"
+    ]
     SFX_KEYPRESS = "keypress.mp3"
     SFX_COIN_FLIP = "coinflip.mp3"
-

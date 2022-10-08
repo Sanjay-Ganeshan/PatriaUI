@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import typing as T
 
+
 @dataclass(frozen=True)
 class Vector2:
     x: float
@@ -20,13 +21,13 @@ class Vector2:
     def __mul__(self, other: "Vector2") -> "Vector2":
         assert isinstance(other, (float, int)), f"Cannot mul {self} and {other}"
         return Vector2(self.x * other, self.y * other)
-    
+
     def __truediv__(self, other: "Vector2") -> "Vector2":
         assert isinstance(other, (float, int)), f"Cannot div {self} and {other}"
         return Vector2(self.x / other, self.y / other)
-    
+
     def magnitude(self) -> float:
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x**2 + self.y**2)**0.5
 
     def normalized(self) -> "Vector2":
         return self / self.magnitude()
@@ -48,12 +49,10 @@ class Vector2:
         return cls(1.0, 0.0)
 
     def renorm(
-        self, 
-        oldMinX: float, oldMaxX: float,
-        oldMinY: float, oldMaxY: float,
-        newMinX: float, newMaxX: float,
-        newMinY: float, newMaxY: float) -> "Vector2":
-        
+        self, oldMinX: float, oldMaxX: float, oldMinY: float, oldMaxY: float,
+        newMinX: float, newMaxX: float, newMinY: float, newMaxY: float
+    ) -> "Vector2":
+
         xNorm = (self.x - oldMinX) / (oldMaxX - oldMinX)
         yNorm = (self.y - oldMinY) / (oldMaxY - oldMinY)
 

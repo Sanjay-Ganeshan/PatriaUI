@@ -94,7 +94,9 @@ class ConsumeSkinsuitCharge(GameEvent):
         char: Character = g.characters[self.character_id]
 
         # Reduce suit power by 1
-        new_status = char.current_life.delta(suit_power=-1, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            suit_power=-1, max_st=char.max_life
+        )
         if char.current_life == new_status:
             # No power .. no-op
             return None
@@ -150,7 +152,9 @@ class RestoreSkinsuitCharge(GameEvent):
         char: Character = g.characters[self.character_id]
 
         # Reduce skinsuit power by however much we restored
-        new_status = char.current_life.delta(suit_power=-1 * self.amount_restored)
+        new_status = char.current_life.delta(
+            suit_power=-1 * self.amount_restored
+        )
         char.current_life = new_status
 
 
@@ -203,7 +207,9 @@ class ConsumeShield(GameEvent):
         char: Character = g.characters[self.character_id]
 
         # Reduce shield power by 1
-        new_status = char.current_life.delta(shield_power=-1, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            shield_power=-1, max_st=char.max_life
+        )
         if char.current_life == new_status:
             # No power .. no-op
             return None
@@ -218,7 +224,9 @@ class ConsumeShield(GameEvent):
         char: Character = g.characters[self.character_id]
 
         # Increase suit power by 1
-        new_status = char.current_life.delta(shield_power=1, max_st=char.max_life)
+        new_status = char.current_life.delta(
+            shield_power=1, max_st=char.max_life
+        )
         char.current_life = new_status
 
 
@@ -256,7 +264,8 @@ class RestoreShield(RollEvent):
             return RestoreShield(
                 event_id=self.event_id,
                 character_id=self.character_id,
-                amount_restored=new_status.shield_power - old_status.shield_power,
+                amount_restored=new_status.shield_power -
+                old_status.shield_power,
                 roll=completed,
             )
 
@@ -267,7 +276,9 @@ class RestoreShield(RollEvent):
         char: Character = g.characters[self.character_id]
 
         # Reduce skinsuit power by however much we restored
-        new_status = char.current_life.delta(shield_power=-1 * self.amount_restored)
+        new_status = char.current_life.delta(
+            shield_power=-1 * self.amount_restored
+        )
         char.current_life = new_status
 
 
@@ -316,9 +327,10 @@ class ChangeHP(GameEvent):
                 event_id=self.event_id,
                 character_id=self.character_id,
                 amount=new_status.HP - old_status.HP,
-                _death_fail_delta=new_status.death_fails - old_status.death_fails,
-                _death_success_delta=new_status.death_successes
-                - old_status.death_successes,
+                _death_fail_delta=new_status.death_fails -
+                old_status.death_fails,
+                _death_success_delta=new_status.death_successes -
+                old_status.death_successes,
             )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -502,7 +514,8 @@ class DeathSave(RollEvent):
                 roll=completed,
                 character_id=self.character_id,
                 _fail_delta=new_status.death_fails - old_status.death_fails,
-                _success_delta=new_status.death_successes - old_status.death_successes,
+                _success_delta=new_status.death_successes -
+                old_status.death_successes,
                 _hp_delta=new_status.HP - old_status.HP,
             )
 
@@ -667,8 +680,8 @@ class ConsumeRevival(GameEvent):
             _hp_delta=new_status.HP - old_status.HP,
             _revive_delta=new_status.revives - old_status.revives,
             _death_fail_delta=new_status.death_fails - old_status.death_fails,
-            _death_success_delta=new_status.death_successes
-            - old_status.death_successes,
+            _death_success_delta=new_status.death_successes -
+            old_status.death_successes,
         )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -803,8 +816,8 @@ class UseHitDice(RollEvent):
             roll=completed,
             _hp_delta=new_status.HP - old_status.HP,
             _death_fail_delta=new_status.death_fails - old_status.death_fails,
-            _death_success_delta=new_status.death_successes
-            - old_status.death_successes,
+            _death_success_delta=new_status.death_successes -
+            old_status.death_successes,
         )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -848,9 +861,9 @@ class StatOrSkillTest(RollEvent):
                 modifier = char.stat_block[self.stat_or_skill]
             elif isinstance(self.stat_or_skill, Proficiency):
                 modifier = (
-                    char.stat_block[self.stat_or_skill]
-                    * char.stat_block[Stat.PROFICIENCY_BONUS]
-                    + char.stat_block[self.stat_or_skill.corresponding_stat()]
+                    char.stat_block[self.stat_or_skill] *
+                    char.stat_block[Stat.PROFICIENCY_BONUS] +
+                    char.stat_block[self.stat_or_skill.corresponding_stat()]
                 )
 
             roll = Roll(
@@ -893,7 +906,7 @@ class StatOrSkillTest(RollEvent):
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status
-        
+
         # We added this, so it won't be length 0
         g.chat_log.pop()
 
@@ -952,7 +965,7 @@ class RandomRoll(RollEvent):
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status
-        
+
         # We added this, so it won't be length 0
         g.chat_log.pop()
 
@@ -1069,7 +1082,7 @@ class SpellAttack(RollEvent):
 
     character_id: str = ""
     which_spell: Spell = Spell.INCINERATE
-    
+
     _prev_roll_status: T.Optional[RollStatus] = None
 
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
@@ -1084,7 +1097,8 @@ class SpellAttack(RollEvent):
             roll = Roll(
                 faces=Dice.D20,
                 n_dice=1,
-                modifier=char.stat_block[Stat.INTELLIGENCE] + char.stat_block[Stat.PROFICIENCY_BONUS],
+                modifier=char.stat_block[Stat.INTELLIGENCE] +
+                char.stat_block[Stat.PROFICIENCY_BONUS],
                 status=char.next_roll_status,
             )
 
@@ -1139,10 +1153,14 @@ class SpellDamage(RollEvent):
     _prev_roll_status: T.Optional[RollStatus] = None
 
     which_dice: Dice = field(default=Dice.D6, metadata={"IGNORESAVE": True})
-    which_spell: Spell = field(default=Spell.INCINERATE, metadata={"IGNORESAVE": True})
-    enemy_save: T.Optional[Stat] = field(default=None, metadata={"IGNORESAVE": True})
+    which_spell: Spell = field(
+        default=Spell.INCINERATE, metadata={"IGNORESAVE": True}
+    )
+    enemy_save: T.Optional[Stat] = field(
+        default=None, metadata={"IGNORESAVE": True}
+    )
     effective_range: str = field(default="10m", metadata={"IGNORESAVE": True})
-    
+
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         assert (
             self.character_id in g.characters
@@ -1172,18 +1190,22 @@ class SpellDamage(RollEvent):
         if self.enemy_save is None:
             chat_message += self.get_effect(char, completed, None) + "\n"
         else:
-            spell_save_dc = 11 + char.stat_block[Stat.PROFICIENCY_BONUS] + char.stat_block[Stat.INTELLIGENCE]
+            spell_save_dc = 11 + char.stat_block[
+                Stat.PROFICIENCY_BONUS] + char.stat_block[Stat.INTELLIGENCE]
             chat_message += (
                 f"The enemy must make {self.enemy_save.a_or_an()} {self.enemy_save.value[:3]} save (DC {spell_save_dc}).\n"
             )
             common_effect = self.get_effect(char, completed, None)
             if common_effect is not None:
                 chat_message += common_effect + "\n"
-            chat_message += "FAIL: " + self.get_effect(char, completed, False) + "\n"
-            chat_message += "PASS: " + self.get_effect(char, completed, True) + "\n"
-        
+            chat_message += "FAIL: " + self.get_effect(
+                char, completed, False
+            ) + "\n"
+            chat_message += "PASS: " + self.get_effect(
+                char, completed, True
+            ) + "\n"
+
         chat_message += f"{completed}"
-        
 
         g.chat_log.append(chat_message)
         return SpellDamage(
@@ -1205,61 +1227,63 @@ class SpellDamage(RollEvent):
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status
-        
+
         g.chat_log.pop()
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         raise NotImplementedError()
 
+
 class IncinerateDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D10,
-            which_spell = Spell.INCINERATE,
-            enemy_save = None,
-            effective_range = "10m",
+            which_dice=Dice.D10,
+            which_spell=Spell.INCINERATE,
+            enemy_save=None,
+            effective_range="10m",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         return f"{char.nameplate.her.capitalize()} target takes {roll.total()} damage"
 
+
 class ElectrocuteDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D12,
-            which_spell = Spell.ELECTROCUTE,
-            enemy_save = None,
-            effective_range = "melee",
+            which_dice=Dice.D12,
+            which_spell=Spell.ELECTROCUTE,
+            enemy_save=None,
+            effective_range="melee",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         return (
             f"{char.nameplate.her.capitalize()} target takes {roll.total()} damage "
             f"AND cannot make reactions until the end of {char.nameplate.name}'s next turn."
         )
 
+
 class FreezeDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D6,
-            which_spell = Spell.FREEZE,
-            enemy_save = Stat.CONSTITUTION,
-            effective_range = "16m",
+            which_dice=Dice.D6,
+            which_spell=Spell.FREEZE,
+            enemy_save=Stat.CONSTITUTION,
+            effective_range="16m",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         if save_pass is True:
             return "No effect."
         elif save_pass is False:
@@ -1269,74 +1293,69 @@ class FreezeDamage(SpellDamage):
         else:
             return None
 
+
 class WarpDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D8,
-            which_spell = Spell.WARP,
-            enemy_save = Stat.DEXTERITY,
-            effective_range = "12m, 4m AoE",
+            which_dice=Dice.D8,
+            which_spell=Spell.WARP,
+            enemy_save=Stat.DEXTERITY,
+            effective_range="12m, 4m AoE",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         if save_pass is True:
             return f"Target(s) take {(roll.total() + 1) // 2} damage."
         elif save_pass is False:
-            return (
-                f"Target(s) takes {roll.total()} damage."
-            )
+            return (f"Target(s) takes {roll.total()} damage.")
         else:
             return f"(Targets in AoE roll saves independently)"
-    
+
+
 class RepulseDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D8,
-            which_spell = Spell.WARP,
-            enemy_save = Stat.STRENGTH,
-            effective_range = "melee",
+            which_dice=Dice.D8,
+            which_spell=Spell.WARP,
+            enemy_save=Stat.STRENGTH,
+            effective_range="melee",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         if save_pass is True:
-            return (
-                f"Target is knocked prone"
-            )
+            return (f"Target is knocked prone")
         elif save_pass is False:
             return f"Target is knocked up to 10m away. (May take fall / collision damage)"
         else:
             return f"Always: Target takes {roll.total()} damage"
 
+
 class FeedbackDamage(SpellDamage):
-    def __init__(
-        self, 
-        **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(
             **kwargs,
-            which_dice = Dice.D8,
-            which_spell = Spell.FEEDBACK,
-            enemy_save = Stat.WISDOM,
-            effective_range = "12m",
+            which_dice=Dice.D8,
+            which_spell=Spell.FEEDBACK,
+            enemy_save=Stat.WISDOM,
+            effective_range="12m",
         )
 
-    def get_effect(self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]) -> T.Optional[str]:
+    def get_effect(
+        self, char: Character, roll: CompletedRoll, save_pass: T.Optional[bool]
+    ) -> T.Optional[str]:
         if save_pass is True:
-            return (
-                f"{(roll.total() + 1) // 2} damage."
-            )
+            return (f"{(roll.total() + 1) // 2} damage.")
         elif save_pass is False:
             return f"{roll.total()} damage."
         else:
             return f"(Effectiveness is halved without line of sight)"
+
 
 @dataclass(frozen=True)
 class CastTelekinesis(GameEvent):
@@ -1383,6 +1402,7 @@ class CastTelekinesis(GameEvent):
         char.current_life = new_status
         g.chat_log.pop()
 
+
 @dataclass(frozen=True)
 class FireCurrentWeapon(GameEvent):
     character_id: str = ""
@@ -1397,13 +1417,12 @@ class FireCurrentWeapon(GameEvent):
 
         if weapon is None:
             return None
-        
+
         fired: bool = weapon.fire()
         if not fired:
             return None
         else:
             return self
-
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
@@ -1414,8 +1433,9 @@ class FireCurrentWeapon(GameEvent):
         weapon: T.Optional[Weapon] = char.weapons.get()
 
         assert weapon is not None, f"{char.nameplate.name} does not have a weapon equipped"
-        
+
         weapon.undo_fire()
+
 
 @dataclass(frozen=True)
 class ChangeWeapons(GameEvent):
@@ -1431,7 +1451,6 @@ class ChangeWeapons(GameEvent):
 
         return self
 
-
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
             self.character_id in g.characters
@@ -1439,6 +1458,7 @@ class ChangeWeapons(GameEvent):
         char: Character = g.characters[self.character_id]
 
         char.weapons = char.weapons.prev()
+
 
 @dataclass(frozen=True)
 class ChangeWeaponMode(GameEvent):
@@ -1458,7 +1478,6 @@ class ChangeWeaponMode(GameEvent):
             weapon.next_mode()
             return self
 
-
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
             self.character_id in g.characters
@@ -1468,6 +1487,7 @@ class ChangeWeaponMode(GameEvent):
         weapon = char.weapons.get()
         assert weapon is not None, f"{char.nameplate.name} does not have a weapon"
         weapon.prev_mode()
+
 
 @dataclass(frozen=True)
 class ChangeWeaponBurst(GameEvent):
@@ -1488,7 +1508,6 @@ class ChangeWeaponBurst(GameEvent):
                 return None
             else:
                 return self
-
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
@@ -1527,7 +1546,6 @@ class ChangeWeaponAmmo(GameEvent):
                     character_id=self.character_id,
                     _prev_clip_current=prev_clip_current,
                 )
-
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
@@ -1568,7 +1586,6 @@ class ReloadCurrentWeapon(GameEvent):
                     _prev_clip_current=prev_clip_current,
                 )
 
-
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
             self.character_id in g.characters
@@ -1599,7 +1616,7 @@ class AttackOrDamageCurrentWeapon(RollEvent):
 
         if weapon is None:
             return None
-        
+
         if self.roll is None:
             roll: Roll
             if self.is_attack:
@@ -1621,10 +1638,8 @@ class AttackOrDamageCurrentWeapon(RollEvent):
             prev_roll_status = None
             completed = self.roll
 
-
-
         chat_message: str
-        
+
         if self.is_attack:
             chat_message = (
                 f"{char.nameplate.name} attacks with {char.nameplate.her} {weapon.short_name}. "
@@ -1634,7 +1649,7 @@ class AttackOrDamageCurrentWeapon(RollEvent):
             chat_message = (
                 f"{char.nameplate.name} deals {completed.total()} damage with {char.nameplate.her} {weapon.short_name}\n"
             )
-        
+
         ammo = weapon.ammo.get()
         needs_description: bool = False
         if ammo is not None:
@@ -1642,34 +1657,35 @@ class AttackOrDamageCurrentWeapon(RollEvent):
             needs_description = True
         else:
             ammo_add = ""
-        
+
         mode = weapon.mode.get()
         if mode is not None:
             mode_add = f" mode: {mode}"
             needs_description = True
         else:
             mode_add = ""
-        
+
         burst = weapon.burst.get()
         if burst is not None:
             burst_add = f"{burst}x"
             needs_description = True
         else:
             burst_add = ""
-        
+
         if needs_description:
             description = f"[{burst_add}{ammo_add}{mode_add}]\n"
         else:
             description = ""
 
         chat_message += description
-        added_effects = weapon.get_additional_effects(is_attack=self.is_attack, roll=completed)
+        added_effects = weapon.get_additional_effects(
+            is_attack=self.is_attack, roll=completed
+        )
         if added_effects is not None:
             chat_message += added_effects
 
         if completed.roll.n_dice > 0:
             chat_message += f"{completed}"
-
 
         g.chat_log.append(chat_message)
 
@@ -1689,7 +1705,7 @@ class AttackOrDamageCurrentWeapon(RollEvent):
 
         if self._prev_roll_status is not None:
             char.next_roll_status = self._prev_roll_status
-        
+
         g.chat_log.pop()
 
 
@@ -1710,13 +1726,12 @@ class ResupplyWeapon(GameEvent):
             return None
         else:
             prev_state = weapon.restore()
-        
+
             return ResupplyWeapon(
                 event_id=self.event_id,
                 character_id=self.character_id,
                 _prev_state=prev_state,
             )
-
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (

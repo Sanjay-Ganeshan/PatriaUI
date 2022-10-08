@@ -23,8 +23,8 @@ class Splazer(Weapon):
                     "Please remember to file a "
                     "usage report with HQ if you use ammunition from this weapon."
                 ),
-                range_meters = 100,
-                splash_meters = 0.01,
+                range_meters=100,
+                splash_meters=0.01,
                 clip_current=1,
                 clip_capacity=1,
                 burst=CircularList(items=[1]),

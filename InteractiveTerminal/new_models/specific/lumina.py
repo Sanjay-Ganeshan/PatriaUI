@@ -11,6 +11,7 @@ from ..weapons.character_specific_weapons import (
     LuminaPistol,
 )
 
+
 class LuminaGale(Character):
     def __init__(self, **kwargs) -> None:
         super().__init__(
@@ -55,6 +56,10 @@ class LuminaGale(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                weapons=CircularList(items=[LuminaDMR(), LuminaPistol(), LuminaGrenades()]),
+                weapons=CircularList(
+                    items=[LuminaDMR(),
+                           LuminaPistol(),
+                           LuminaGrenades()]
+                ),
             )
         )

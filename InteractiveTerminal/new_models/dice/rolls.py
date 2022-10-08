@@ -17,11 +17,9 @@ class Roll:
         msg = f"{self.n_dice}d{self.faces.value}"
         mod_msg = "" if self.modifier == 0 else f"{self.modifier:+d}"
         status_msg = (
-            "(+)"
-            if self.status == RollStatus.ADVANTAGE
-            else "(-)"  # down arrow unicode
-            if self.status == RollStatus.DISADVANTAGE
-            else ""
+            "(+)" if self.status == RollStatus.ADVANTAGE else
+            "(-)"  # down arrow unicode
+            if self.status == RollStatus.DISADVANTAGE else ""
         )
 
         return status_msg + msg + mod_msg

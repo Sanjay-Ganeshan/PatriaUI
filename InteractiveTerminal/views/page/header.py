@@ -25,10 +25,8 @@ class Header(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.general_info = CHGeneralInfo()
         self.add_widget(self.general_info)
 
-    
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         # I don't need to do anything
         pass
-
-            
-

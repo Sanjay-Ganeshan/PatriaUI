@@ -17,7 +17,6 @@ class BoxSized:
             )
 
 
-
 class BoxSizedBoxLayout(MDBoxLayout, BoxSized):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

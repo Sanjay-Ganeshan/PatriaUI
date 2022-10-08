@@ -1,6 +1,7 @@
 from enum import Enum
 import typing as T
 
+
 class Spell(Enum):
     INCINERATE = "INCINERATE"
     ELECTROCUTE = "ELECTROCUTE"

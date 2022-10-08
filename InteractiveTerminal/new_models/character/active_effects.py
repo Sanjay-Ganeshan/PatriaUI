@@ -5,9 +5,10 @@ from enum import Enum, unique
 class Buffs(Enum):
     # Grants access to the "designate" ability
     LEADERSHIP = "leadership"
-    
+
     # Temporary armor bonus of 3
     REACTIVE_ARMOR = "reactive_armor"
+
 
 @unique
 class Debuffs(Enum):

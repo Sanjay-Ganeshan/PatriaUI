@@ -30,7 +30,5 @@ class CycleViews(Image, BoxSized, TouchableMixin, ListenForStateChanges):
             else:
                 next_view = self.state_manager.view_state.focused_view.next()
             self.state_manager.push_event(
-                SwitchFocusedView(
-                    new_focus=next_view,
-                )
+                SwitchFocusedView(new_focus=next_view, )
             )

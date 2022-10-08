@@ -7,6 +7,7 @@ from .skill_tag import SkillTag
 from ..shared.spacer import Spacer
 from ...new_models.character.proficiencies import Proficiency
 
+
 class SkillTagList(MDGridLayout, BoxSized, ListenForStateChanges):
     def __init__(self, **kwargs):
         N_ROWS = 3
@@ -40,12 +41,12 @@ class SkillTagList(MDGridLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.tags[Proficiency.INVESTIGATION])
         self.add_widget(self.tags[Proficiency.NATURE])
         self.add_widget(self.tags[Proficiency.ANIMAL_HANDLING])
-    
+
         # CON
         self.add_widget(Spacer(box_width=2, box_height=1))
         self.add_widget(Spacer(box_width=2, box_height=1))
         self.add_widget(Spacer(box_width=2, box_height=1))
-        
+
         # WIS
         self.add_widget(self.tags[Proficiency.INSIGHT])
         self.add_widget(self.tags[Proficiency.MEDICINE])

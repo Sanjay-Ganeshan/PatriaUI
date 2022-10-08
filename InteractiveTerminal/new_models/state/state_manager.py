@@ -13,12 +13,21 @@ class StateManager:
     game_state: GameState = field(default_factory=GameState)
 
     _next_subscription_id: int = field(default=0, metadata={"IGNORESAVE": True})
-    _listeners: T.Dict[int, T.Callable[[GameOrViewEvent, bool, "StateManager"], None]] = field(default_factory=dict, metadata={"IGNORESAVE": True})
-    _history: T.List[T.List[GameOrViewEvent]] = field(default_factory=list, metadata={"IGNORESAVE": True})
+    _listeners: T.Dict[int, T.Callable[[GameOrViewEvent, bool, "StateManager"],
+                                       None]] = field(
+                                           default_factory=dict,
+                                           metadata={"IGNORESAVE": True}
+                                       )
+    _history: T.List[T.List[GameOrViewEvent]] = field(
+        default_factory=list, metadata={"IGNORESAVE": True}
+    )
 
     _locked: bool = False
 
-    def subscribe(self, callback: T.Callable[[GameOrViewEvent, bool, "StateManager"], None]) -> int:
+    def subscribe(
+        self, callback: T.Callable[[GameOrViewEvent, bool, "StateManager"],
+                                   None]
+    ) -> int:
         """
         Add a listener that will be called every time we process
         *any* event. You need to filter to which events you care
@@ -39,7 +48,6 @@ class StateManager:
 
         return ret
 
-
     def unsubscribe(self, sub_id: int) -> bool:
         """
         If the given subscription ID is valid, unsubscribes it.
@@ -47,7 +55,9 @@ class StateManager:
         """
         return self._listeners.pop(sub_id, None) is not None
 
-    def push_event(self, ev: T.Union[GameOrViewEvent, T.List[GameOrViewEvent]]) -> None:
+    def push_event(
+        self, ev: T.Union[GameOrViewEvent, T.List[GameOrViewEvent]]
+    ) -> None:
         """
         Push's the given event or chain of events.
 
@@ -74,7 +84,7 @@ class StateManager:
                 break
             else:
                 updated_evs.append(updated)
-        
+
         if success:
             self._locked = True
             self._history.append(updated_evs)
@@ -115,6 +125,3 @@ class StateManager:
         Clears all history, so that it's no longer possible to go back
         """
         self._history.clear()
-
-    
-    

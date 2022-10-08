@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 import typing as T
 
+
 def use_passed_or_default(passed, **defaults):
     new_kwargs = {}
     new_kwargs.update(defaults)
@@ -8,8 +9,8 @@ def use_passed_or_default(passed, **defaults):
     return new_kwargs
 
 
-
 ItemType = T.TypeVar("ItemType")
+
 
 @dataclass(frozen=True)
 class CircularList(T.Generic[ItemType]):
@@ -24,10 +25,10 @@ class CircularList(T.Generic[ItemType]):
 
     def next(self) -> "CircularList[ItemType]":
         return self.seek(1)
-    
+
     def prev(self) -> "CircularList[ItemType]":
         return self.seek(-1)
-    
+
     def get(self) -> T.Optional[ItemType]:
         return self[0]
 
@@ -35,14 +36,17 @@ class CircularList(T.Generic[ItemType]):
         if len(self.items) == 0:
             return CircularList(items=self.items, index=0)
         else:
-            return CircularList(items=self.items, index=(self.index + rel_idx) % len(self.items))
+            return CircularList(
+                items=self.items,
+                index=(self.index + rel_idx) % len(self.items)
+            )
 
     def __getitem__(self, index: int) -> T.Optional[ItemType]:
         if len(self.items) == 0:
             return None
         else:
             return self.items[(self.index + index) % len(self.items)]
-    
+
     def __len__(self) -> int:
         return len(self.items)
 
@@ -50,19 +54,20 @@ class CircularList(T.Generic[ItemType]):
         for i in range(len(self)):
             yield self[i]
 
-    def find(self, condition: T.Callable[[ItemType], bool]) -> T.Optional[ItemType]:
+    def find(self, condition: T.Callable[[ItemType],
+                                         bool]) -> T.Optional[ItemType]:
         for i in self:
             if condition(i):
                 return i
-    
+
         return None
 
-    
-    def find_index(self, condition: T.Callable[[ItemType], bool]) -> T.Optional[int]:
+    def find_index(self, condition: T.Callable[[ItemType],
+                                               bool]) -> T.Optional[int]:
         for i in range(len(self)):
             if condition(self[i]):
                 return i
-    
+
         return None
 
     def append(self, item: ItemType) -> int:
@@ -71,7 +76,7 @@ class CircularList(T.Generic[ItemType]):
         """
         self.items.append(item)
         return (len(self.items) - 1) - self.index
-    
+
     def pop(self) -> "CircularList[ItemType]":
         """
         Pop at my current location. Return a new circular
@@ -82,5 +87,3 @@ class CircularList(T.Generic[ItemType]):
         else:
             self.items.pop(self.index)
             return self.prev()
-
-

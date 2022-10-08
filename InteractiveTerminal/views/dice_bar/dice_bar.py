@@ -20,7 +20,7 @@ from kivy.properties import ObjectProperty
 
 class AnyDiceRoller(ProgressiveText, TouchableMixin, ListenForStateChanges):
     faces: Dice = ObjectProperty(Dice.D6)
-    
+
     def __init__(self, **kwargs):
         super().__init__(
             source=Resources.DICE_ICONS[Dice.D6],
@@ -51,10 +51,10 @@ class AnyDiceRoller(ProgressiveText, TouchableMixin, ListenForStateChanges):
         super().on_left_click(*args)
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
-        
+
         self.state_manager.push_event(
             RandomRoll(
                 character_id=self.state_manager.view_state.focused_character,
@@ -78,31 +78,41 @@ class AdvantageRoll(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
         self.touch_init()
         self.listener_init()
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         if state_manager.view_state.focused_character is None:
             self.current_value = 0
-            self.tooltip_text = help_generator.roll_status(RollStatus.ADVANTAGE, RollStatus.STANDARD)
+            self.tooltip_text = help_generator.roll_status(
+                RollStatus.ADVANTAGE, RollStatus.STANDARD
+            )
 
         else:
-            char: Character = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char: Character = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             if char.next_roll_status == RollStatus.ADVANTAGE:
                 self.current_value = 1
             else:
                 self.current_value = 0
-            
-            self.tooltip_text = help_generator.roll_status(RollStatus.ADVANTAGE, char.next_roll_status)
 
+            self.tooltip_text = help_generator.roll_status(
+                RollStatus.ADVANTAGE, char.next_roll_status
+            )
 
     def on_left_click(self, *args):
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
 
-        self.state_manager.push_event(ToggleAdvantage(character_id=self.state_manager.view_state.focused_character))
-        
-        
+        self.state_manager.push_event(
+            ToggleAdvantage(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
+
+
 class DisadvantageRoll(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
     def __init__(self, **kwargs):
         super().__init__(
@@ -118,30 +128,39 @@ class DisadvantageRoll(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
         self.touch_init()
         self.listener_init()
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         if state_manager.view_state.focused_character is None:
             self.current_value = 0
-            self.tooltip_text = help_generator.roll_status(RollStatus.DISADVANTAGE, RollStatus.STANDARD)
+            self.tooltip_text = help_generator.roll_status(
+                RollStatus.DISADVANTAGE, RollStatus.STANDARD
+            )
 
         else:
-            char: Character = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            char: Character = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             if char.next_roll_status == RollStatus.DISADVANTAGE:
                 self.current_value = 1
             else:
                 self.current_value = 0
-            
-            self.tooltip_text = help_generator.roll_status(RollStatus.DISADVANTAGE, char.next_roll_status)
 
+            self.tooltip_text = help_generator.roll_status(
+                RollStatus.DISADVANTAGE, char.next_roll_status
+            )
 
     def on_left_click(self, *args):
         if self.state_manager is None:
             return
-        
+
         if self.state_manager.view_state.focused_character is None:
             return
 
-        self.state_manager.push_event(ToggleDisadvantage(character_id=self.state_manager.view_state.focused_character))
-
+        self.state_manager.push_event(
+            ToggleDisadvantage(
+                character_id=self.state_manager.view_state.focused_character
+            )
+        )
 
 
 class DiceBar(MDBoxLayout, BoxSized, ListenForStateChanges):

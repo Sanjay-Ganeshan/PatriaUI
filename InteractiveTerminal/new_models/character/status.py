@@ -15,7 +15,6 @@ class Status:
     death_fails: int = 2
     death_successes: int = 3
 
-
     def delta(
         self,
         HP: int = 0,
@@ -67,16 +66,18 @@ class Status:
             if death_fails != 0:
                 new_death_fails = min(new_death_fails, max_st.death_fails)
             if death_successes != 0:
-                new_death_successes = min(new_death_successes, max_st.death_successes)
+                new_death_successes = min(
+                    new_death_successes, max_st.death_successes
+                )
 
         return Status(
-            HP = new_HP,
-            armor_rating = new_armor_rating,
-            revives = new_revives,
-            deflects = new_deflects,
-            hit_dice = new_hit_dice,
-            suit_power = new_suit_power,
-            shield_power = new_shield_power,
-            death_fails = new_death_fails,
-            death_successes = new_death_successes,
+            HP=new_HP,
+            armor_rating=new_armor_rating,
+            revives=new_revives,
+            deflects=new_deflects,
+            hit_dice=new_hit_dice,
+            suit_power=new_suit_power,
+            shield_power=new_shield_power,
+            death_fails=new_death_fails,
+            death_successes=new_death_successes,
         )

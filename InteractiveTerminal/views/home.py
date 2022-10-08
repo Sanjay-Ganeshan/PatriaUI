@@ -20,7 +20,6 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
     """
     The full screen's worth of content
     """
-
     def __init__(self, **kwargs):
         super().__init__(
             size_hint=(1.0, 1.0),
@@ -40,7 +39,9 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.add_widget(self.body)
         self.add_widget(self.footer)
 
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self, "text")
+        self._keyboard = Window.request_keyboard(
+            self._keyboard_closed, self, "text"
+        )
         if self._keyboard.widget:
             # If it exists, this widget is a VKeyboard object which you can use
             # to change the keyboard layout.
@@ -49,27 +50,30 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
             on_key_down=self._on_keyboard_down, on_key_up=self._on_keyboard_up
         )
 
-
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         if not is_forward:
             if SoundPlayer.keypress.state == "stop":
                 SoundPlayer.keypress.volume = 0.3
                 SoundPlayer.keypress.play()
-        
+
         else:
             if isinstance(ev, RollEvent):
-                if all((d.state == "stop" for d in SoundPlayer.dice_rolls)) and SoundPlayer.coin_flip.state == "stop":
+                if all(
+                    (d.state == "stop" for d in SoundPlayer.dice_rolls)
+                ) and SoundPlayer.coin_flip.state == "stop":
                     if ev.roll.roll.faces == Dice.D2:
                         r = SoundPlayer.coin_flip
                     else:
                         if ev.roll.is_critical() != Critical.NO:
                             r = SoundPlayer.dice_rolls[0]
                         else:
-                            r = SoundPlayer.dice_rolls[random.randrange(1, len(SoundPlayer.dice_rolls))]
+                            r = SoundPlayer.dice_rolls[random.randrange(
+                                1, len(SoundPlayer.dice_rolls)
+                            )]
                     r.volume = 0.8
                     r.play()
-        
-        
 
     def _keyboard_closed(self):
         print("My keyboard have been closed!")

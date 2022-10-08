@@ -6,10 +6,14 @@ from .stat_badge import StatBadge
 from ..shared.spacer import Spacer
 from ...new_models.character.stats import Stat
 
+
 class CharacterStatModifierBlock(MDBoxLayout, BoxSized, ListenForStateChanges):
     def __init__(self, **kwargs):
         super().__init__(
-            box_width=BOX_WIDTH, box_height=2, orientation="horizontal", **kwargs
+            box_width=BOX_WIDTH,
+            box_height=2,
+            orientation="horizontal",
+            **kwargs
         )
         self.box_init()
         self.listener_init()
@@ -19,12 +23,14 @@ class CharacterStatModifierBlock(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.intelligence = StatBadge(which_stat=Stat.INTELLIGENCE)
         self.constitution = StatBadge(which_stat=Stat.CONSTITUTION)
         self.wisdom = StatBadge(which_stat=Stat.WISDOM)
-        
+
         self.wisdom_space_left = Spacer(
-            box_width=self.wisdom.box_width / 2, box_height=self.wisdom.box_height
+            box_width=self.wisdom.box_width / 2,
+            box_height=self.wisdom.box_height
         )
         self.wisdom_space_right = Spacer(
-            box_width=self.wisdom.box_width / 2, box_height=self.wisdom.box_height
+            box_width=self.wisdom.box_width / 2,
+            box_height=self.wisdom.box_height
         )
 
         self.add_widget(self.strength)

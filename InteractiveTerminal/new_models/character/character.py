@@ -12,6 +12,7 @@ from ...utils import CircularList
 
 # NOT frozen
 
+
 @dataclass
 class Character:
     """
@@ -56,13 +57,3 @@ class Character:
             effect = effect.value
 
         return effect in self.active_effects
-    
-        
-
-    
-
-
-
-
-
-

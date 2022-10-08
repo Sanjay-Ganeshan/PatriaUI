@@ -22,17 +22,22 @@ class CHNamecard(CenteredLabel, ListenForStateChanges):
         self.box_init()
         self.listener_init()
 
-        self.bind(character_name=self.update_text, character_role=self.update_text)
+        self.bind(
+            character_name=self.update_text, character_role=self.update_text
+        )
 
     def update_text(self, *args):
         self.text = f"{self.character_name}\n{self.character_role}"
 
-    def listener(self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager) -> None:
+    def listener(
+        self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
+    ) -> None:
         # We might have changed the current character's icon. Look it up
         if state_manager.view_state.focused_character is None:
             self.character_name = "<name>"
             self.character_role = "<role>"
         else:
-            ch: Character = state_manager.game_state.characters[state_manager.view_state.focused_character]
+            ch: Character = state_manager.game_state.characters[
+                state_manager.view_state.focused_character]
             self.character_name = ch.nameplate.name + " " + ch.nameplate.surname
             self.character_role = ch.nameplate.role

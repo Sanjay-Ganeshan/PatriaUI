@@ -8,7 +8,6 @@ from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
-
 import os
 
 from kivy.resources import resource_add_path, resource_find
@@ -39,6 +38,7 @@ from .new_models.map.location import Vector2
 
 # Replace these with character's current info
 
+
 class PatriaApp(MDApp):
     def __init__(self, state_manager: StateManager, **kwargs):
         super().__init__(**kwargs)
@@ -47,8 +47,8 @@ class PatriaApp(MDApp):
 
     def build(self):
         for each_style in theme_font_styles:
-            self.theme_cls.font_styles[each_style][0] = FONT 
-        
+            self.theme_cls.font_styles[each_style][0] = FONT
+
         self.home = Home()
         self.home.state_manager = self.state_manager
 
@@ -76,13 +76,16 @@ def main():
             print("SAVE FILE CORRUPTED. STARTING FRESH.")
         else:
             init_with_default = False
-    
+
     if init_with_default:
         state_manager = StateManager()
         state_manager.game_state.characters["lumina"] = LuminaGale()
         state_manager.game_state.characters["galina"] = GalinaNovikova()
         state_manager.game_state.characters["silvia"] = SilviaFerreyra()
-        state_manager.game_state.the_map.layers.append(MapLayer(instructions=[MapLine([Vector2.zero(), Vector2.one()])]))
+        state_manager.game_state.the_map.layers.append(
+            MapLayer(instructions=[MapLine([Vector2.zero(),
+                                            Vector2.one()])])
+        )
         state_manager.view_state.focused_character = "lumina"
 
     app = PatriaApp(state_manager)
@@ -90,4 +93,3 @@ def main():
 
     with open(SAVE_PATH, "w") as f:
         f.write(dumps(state_manager, indent=2))
-    

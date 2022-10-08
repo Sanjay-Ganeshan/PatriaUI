@@ -2,8 +2,9 @@ import math
 
 from kivy.core.image import Image as CImage
 from kivy.graphics import Color, InstructionGroup, Rectangle
-from kivy.properties import (BooleanProperty, ColorProperty, NumericProperty,
-                             StringProperty)
+from kivy.properties import (
+    BooleanProperty, ColorProperty, NumericProperty, StringProperty
+)
 from kivy.uix.widget import Widget
 
 from .box_sized_mixin import BoxSized
@@ -84,9 +85,8 @@ class ProgressiveIconImpl:
             per_icon_height = int(h / self.maximum_value)
             for ix, (col, rect) in enumerate(self.color_and_rectangle):
                 col.rgb = (
-                    self.pr_full_color
-                    if (ix < self.current_value)
-                    else self.pr_empty_color
+                    self.pr_full_color if
+                    (ix < self.current_value) else self.pr_empty_color
                 )
                 rect.pos = (x, ix * per_icon_height + y)
                 rect.size = (w, per_icon_height)
@@ -162,7 +162,7 @@ class ProgressiveText(CenteredLabel, ProgressiveIconImpl):
     def update(self, *args):
         super().update(*args)
         self.text = self.get_text()
-    
+
     def get_text(self) -> str:
         return f"{int(self.current_value):d} / {int(self.maximum_value):d}"
 

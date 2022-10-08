@@ -29,13 +29,11 @@ class UnderbarrelGrenadeLauncher(Weapon):
                 burst=CircularList(items=[1]),
                 mode=CircularList(items=["Underbarrel"]),
                 ammo=CircularList(
-                    items=[
-                        AmmoPack(
-                            name="Grenade",
-                            current=4,
-                            capacity=4,
-                        )
-                    ]
+                    items=[AmmoPack(
+                        name="Grenade",
+                        current=4,
+                        capacity=4,
+                    )]
                 ),
             )
         )
@@ -52,7 +50,8 @@ class UnderbarrelGrenadeLauncher(Weapon):
             n_dice=4,
         )
 
-    def get_additional_effects(self, is_attack: bool, roll: CompletedRoll) -> T.Optional[str]:
+    def get_additional_effects(self, is_attack: bool,
+                               roll: CompletedRoll) -> T.Optional[str]:
         if not is_attack:
             return f"Targets must make a DEX save (DC 15). Success - half damage ({(roll.total()+1) // 2})"
         else:

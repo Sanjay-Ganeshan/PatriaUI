@@ -53,7 +53,14 @@ class GalinaNovikova(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                weapons=CircularList(items=[GalinaBR(), GalinaGrenadeLauncher(), GalinaSplaser(), GalinaGrenades()])
+                weapons=CircularList(
+                    items=[
+                        GalinaBR(),
+                        GalinaGrenadeLauncher(),
+                        GalinaSplaser(),
+                        GalinaGrenades()
+                    ]
+                )
             )
         )
         self.add_effect(Buffs.LEADERSHIP)

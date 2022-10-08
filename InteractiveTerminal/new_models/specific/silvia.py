@@ -6,7 +6,10 @@ from ..character.proficiencies import Proficiency
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
-from ..weapons.character_specific_weapons import (SilviaLSW, SilviaPistol, SilviaGrenades)
+from ..weapons.character_specific_weapons import (
+    SilviaLSW, SilviaPistol, SilviaGrenades
+)
+
 
 class SilviaFerreyra(Character):
     def __init__(self, **kwargs) -> None:
@@ -52,7 +55,11 @@ class SilviaFerreyra(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
-                weapons=CircularList(items=[SilviaLSW(), SilviaPistol(), SilviaGrenades()]),
+                weapons=CircularList(
+                    items=[SilviaLSW(),
+                           SilviaPistol(),
+                           SilviaGrenades()]
+                ),
             )
         )
         self.add_effect(Debuffs.HARD_TO_TREAT)

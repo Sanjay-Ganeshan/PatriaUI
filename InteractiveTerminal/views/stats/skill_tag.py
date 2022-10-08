@@ -20,7 +20,8 @@ from ..shared.touchable_mixin import TouchableMixin
 
 
 class SkillTag(
-    MDBoxLayout, BoxSized, ListenForStateChanges, ProgressiveIconImpl, TouchableMixin
+    MDBoxLayout, BoxSized, ListenForStateChanges, ProgressiveIconImpl,
+    TouchableMixin
 ):
     which_skill: Proficiency = ObjectProperty(Proficiency.ACROBATICS)
     proficiency_multiplier: int = NumericProperty(0)
@@ -109,10 +110,10 @@ class SkillTag(
             self.stat_bonus = 0
         else:
             char: Character = state_manager.game_state.characters[
-                state_manager.view_state.focused_character
-            ]
+                state_manager.view_state.focused_character]
             self.proficiency_multiplier = char.stat_block[self.which_skill]
-            self.stat_bonus = char.stat_block[self.which_skill.corresponding_stat()]
+            self.stat_bonus = char.stat_block[
+                self.which_skill.corresponding_stat()]
             self.proficiency_bonus = char.stat_block[Stat.PROFICIENCY_BONUS]
 
     def on_left_click(self, *args):

@@ -3,23 +3,24 @@ from enum import Enum, unique
 
 from .stats import Stat
 
+
 @unique
 class Proficiency(Enum):
     # STR
-    ATHLETICS = "ATHLETICS" 
-    COMBATIVES = "COMBATIVES" 
+    ATHLETICS = "ATHLETICS"
+    COMBATIVES = "COMBATIVES"
     # DEX
-    ACROBATICS = "ACROBATICS" 
-    STEALTH = "STEALTH" 
+    ACROBATICS = "ACROBATICS"
+    STEALTH = "STEALTH"
     # INT
-    INVESTIGATION = "INVESTIGATION" 
-    NATURE = "NATURE" 
-    ANIMAL_HANDLING = "A. HANDLING" 
+    INVESTIGATION = "INVESTIGATION"
+    NATURE = "NATURE"
+    ANIMAL_HANDLING = "A. HANDLING"
     # WIS
-    INSIGHT = "INSIGHT" 
-    MEDICINE = "MEDICINE" 
-    PERCEPTION = "PERCEPTION" 
-    SURVIVAL = "SURVIVAL" 
+    INSIGHT = "INSIGHT"
+    MEDICINE = "MEDICINE"
+    PERCEPTION = "PERCEPTION"
+    SURVIVAL = "SURVIVAL"
     SOCIAL = "SOCIAL"
 
     def corresponding_stat(self) -> Stat:

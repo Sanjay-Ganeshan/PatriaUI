@@ -25,7 +25,7 @@ class DetailsSheet(MDBoxLayout, BoxSized, ListenForStateChanges):
         self.weapons = WeaponBar()
         self.spells = SpellBar()
         self.dice_bar = DiceBar()
-        
+
         self.add_widget(self.stats)
         self.add_widget(self.weapons)
         self.add_widget(self.spells)

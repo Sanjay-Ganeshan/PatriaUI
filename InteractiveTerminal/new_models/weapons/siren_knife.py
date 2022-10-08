@@ -25,13 +25,7 @@ class SirenKnife(Weapon):
                 burst=CircularList(items=[1]),
                 mode=CircularList(items=["Melee", "Thrown"]),
                 ammo=CircularList(
-                    items=[
-                        AmmoPack(
-                            name="Knife",
-                            current=1,
-                            capacity=1
-                        )
-                    ]
+                    items=[AmmoPack(name="Knife", current=1, capacity=1)]
                 ),
             )
         )
@@ -46,9 +40,7 @@ class SirenKnife(Weapon):
     def _damage_impl(self, equipped_by: StatBlock) -> Roll:
         if self.mode.get() == "Melee":
             return Roll(
-                Dice.D10,
-                n_dice=3,
-                modifier=equipped_by[Stat.DEXTERITY]
+                Dice.D10, n_dice=3, modifier=equipped_by[Stat.DEXTERITY]
             )
         else:
             return Roll(
@@ -76,4 +68,3 @@ class SirenKnife(Weapon):
         if self.ammo.get() is not None:
             self.ammo.get().restore(n)
         super().load(n)
-        
