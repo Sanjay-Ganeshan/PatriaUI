@@ -1484,8 +1484,10 @@ class ChangeWeaponBurst(GameEvent):
         if weapon is None:
             return None
         else:
-            weapon.next_burst()
-            return self
+            if not weapon.next_burst():
+                return None
+            else:
+                return self
 
 
     def undo(self, v: ViewState, g: GameState) -> None:

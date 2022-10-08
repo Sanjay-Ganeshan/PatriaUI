@@ -3,7 +3,7 @@ import typing as T
 
 @dataclass
 class AmmoPack:
-    name = "FMJ"
+    name: str = "FMJ"
     current: int = 1
     capacity: int = 1
 

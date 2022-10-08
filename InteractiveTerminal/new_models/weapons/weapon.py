@@ -45,7 +45,7 @@ class Weapon:
     clip_current: int = 1
 
     ammo: CircularList[AmmoPack] = field(default_factory=CircularList)
-    mode: CircularList[str] = field(default_factory=CircularList)
+    mode: CircularList[str] = field(default_factory=lambda: CircularList(items=["Standard"]))
     burst: CircularList[int] = field(default_factory=lambda: CircularList(items=[1]))
     burst_improves_accuracy: bool = True
     attachments: T.List["WeaponAttachment"] = field(default_factory=list)
@@ -134,9 +134,10 @@ class Weapon:
         Consumes ammo depending on burst size.
         Returns True iff we have enough ammo for the burst
         """
-        current_ammo = self.ammo.get()
-        if current_ammo is not None and current_ammo.can_consume(self.burst.get()):
-            current_ammo.consume(self.burst.get())
+        burst_size = self.burst.get() or 0
+        if self.can_fire():
+            self.ammo.get().consume(burst_size)
+            self.clip_current -= burst_size
             return True
         else:
             return False
@@ -147,10 +148,12 @@ class Weapon:
         actually use ammo.
         """
         current_ammo = self.ammo.get()
-        if current_ammo is not None and current_ammo.can_consume(self.burst.get()):
-            return True
-        else:
+        burst_size = self.burst.get() or 0
+
+        if current_ammo is None:
             return False
+        else:
+            return current_ammo.can_consume(burst_size) and self.clip_current > burst_size
 
     def undo_fire(self) -> None:
         current_ammo = self.ammo.get()
@@ -174,8 +177,12 @@ class Weapon:
     def prev_mode(self) -> None:
         self.mode = self.mode.prev()
 
-    def next_burst(self) -> None:
-        self.burst = self.burst.next()
+    def next_burst(self) -> bool:
+        if len(self.burst) <= 1:
+            return False
+        else:
+            self.burst = self.burst.next()
+            return True
 
     def prev_burst(self) -> None:
         self.burst = self.burst.prev()

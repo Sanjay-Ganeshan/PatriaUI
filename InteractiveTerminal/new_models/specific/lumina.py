@@ -1,10 +1,11 @@
-from ...utils import use_passed_or_default
+from ...utils import CircularList, use_passed_or_default
 from ..character.character import Character
 from ..character.nameplate import Nameplate
 from ..character.proficiencies import Proficiency
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
+from ..weapons.lada_dmr import ProjectLadaDMR
 
 
 class LuminaGale(Character):
@@ -51,5 +52,6 @@ class LuminaGale(Character):
                     death_fails=2,
                     death_successes=3,
                 ),
+                weapons=CircularList(items=[ProjectLadaDMR()]),
             )
         )

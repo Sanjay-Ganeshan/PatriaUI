@@ -1,35 +1,32 @@
+import typing as T
+
+from kivy.properties import (BooleanProperty, NumericProperty, ObjectProperty,
+                             StringProperty)
 from kivy.uix.image import Image
 from kivymd.uix.boxlayout import MDBoxLayout
 
+from ...new_models.character.character import Character
+from ...new_models.dice.rolls import Roll
+from ...new_models.events.ev_base import GameOrViewEvent
+from ...new_models.events.game_events import (AttackOrDamageCurrentWeapon,
+                                              ChangeWeaponAmmo,
+                                              ChangeWeaponBurst,
+                                              ChangeWeaponMode, ChangeWeapons,
+                                              FireCurrentWeapon,
+                                              ReloadCurrentWeapon,
+                                              ResupplyWeapon)
+from ...new_models.help import help_generator
 from ...new_models.state.app_settings import BOX_WIDTH
+from ...new_models.state.state_manager import StateManager
 from ..resource_list import Resources
-from ..shared.listens_for_state_changes import ListenForStateChanges
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.centered_label import CenteredLabel
+from ..shared.listens_for_state_changes import ListenForStateChanges
 from ..shared.progressive_icon import ProgressiveText
 from ..shared.spacer import Spacer
 from ..shared.tooltip import OptionalTooltip
 from ..shared.touchable_mixin import TouchableMixin
 
-from ...new_models.events.game_events import (
-    ChangeWeaponAmmo,
-    ChangeWeaponBurst,
-    ChangeWeaponMode,
-    FireCurrentWeapon,
-    ReloadCurrentWeapon,
-    ChangeWeapons,
-    ResupplyWeapon,
-    AttackOrDamageCurrentWeapon,
-)
-from ...new_models.character.character import Character
-from ...new_models.events.ev_base import GameOrViewEvent
-from ...new_models.state.state_manager import StateManager
-from ...new_models.help import help_generator
-from ...new_models.dice.rolls import Roll
-
-import typing as T
-
-from kivy.properties import ObjectProperty, NumericProperty, StringProperty, BooleanProperty
 
 class WPAmmoCount(ProgressiveText, ListenForStateChanges, TouchableMixin):
     """
@@ -321,8 +318,8 @@ class WPAttackOrDamage(MDBoxLayout, BoxSized, ListenForStateChanges):
             weapon = char.weapons.get()
             if weapon is not None:
                 use_defaults=False
-                self.attack_roll = weapon.attack(char)
-                self.dmg_roll = weapon.damage(char)
+                self.attack_roll = weapon.attack(char.stat_block)
+                self.dmg_roll = weapon.damage(char.stat_block)
                 
         if use_defaults:
             self.attack_roll = None
@@ -373,7 +370,8 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
     burst_size: T.Optional[int] = ObjectProperty(None)
     ammo_name: T.Optional[str] = ObjectProperty(None)
     caliber: T.Optional[float] = ObjectProperty(None)
-    range: T.Optional[int] = ObjectProperty(None)
+    range_m: T.Optional[int] = ObjectProperty(None)
+    splash: T.Optional[int] = ObjectProperty(None)
 
     available_ammo: T.Optional[T.List[str]] = ObjectProperty(None)
     available_burst: T.Optional[T.List[int]] = ObjectProperty(None)
@@ -393,7 +391,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             burst_size=self.update,
             ammo_name=self.update,
             caliber=self.update,
-            range=self.update,
+            range_m=self.update,
         )
         self.bind(available_ammo = self.update_help, available_burst=self.update_help)
         self.update()
@@ -406,6 +404,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             weapon = char.weapons.get()
             if weapon is not None:
                 use_defaults = False
+        
                 self.burst_size = weapon.burst.get()
                 current_ammo = weapon.ammo.get()
                 if current_ammo is None:
@@ -413,7 +412,8 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
                 else:
                     self.ammo_name = current_ammo.name
                 self.caliber = weapon.caliber
-                self.range = weapon.range_meters
+                self.range_m = weapon.range_meters
+                self.splash = weapon.splash_meters
                 self.available_ammo = [a.name for a in weapon.ammo]
                 self.available_burst = list(iter(weapon.burst))
 
@@ -422,7 +422,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             self.burst_size = None
             self.ammo_name = None
             self.caliber = None
-            self.range = None
+            self.range_m = None
 
             self.available_ammo = None
             self.available_burst = None
@@ -441,14 +441,19 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
             cal_add = f"{self.caliber:.1f} cal "
         else:
             cal_add = ""
-        
-        if self.range is not None:
-            range_add = f"@ {self.range}m"
+
+        if self.range_m is not None:
+            range_add = f" {self.range_m}m"
         else:
             range_add = ""
+        
+        if self.splash is not None:
+            splash_add = f" ({self.splash}m AoE)"
+        else:
+            splash_add = ""
 
         prefix = f"{burst_add}x {ammo_add}"
-        suffix = f"{cal_add}{range_add}"
+        suffix = f"{cal_add}{range_add}{splash_add}"
         self.text = f"{prefix}\n{suffix}"
 
     def update_help(self, *args) -> str:
