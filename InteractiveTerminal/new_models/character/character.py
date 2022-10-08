@@ -7,6 +7,9 @@ from .nameplate import Nameplate
 from .stat_block import StatBlock
 from .status import Status
 
+from ..weapons.weapon import Weapon
+from ...utils import CircularList
+
 # NOT frozen
 
 @dataclass
@@ -27,6 +30,8 @@ class Character:
 
     active_effects: T.List[str] = field(default_factory=list)
     next_roll_status: RollStatus = RollStatus.STANDARD
+
+    weapons: CircularList[Weapon] = field(default_factory=CircularList)
 
     def __post_init__(self):
         if self.current_life is None:

@@ -5,7 +5,7 @@ from ..spells.spell_list import Spell
 from .ev_base import GameOrViewEvent
 from .game_events import (ApplyEffectToCharacter, ConsumeSkinsuitCharge,
                           ModifyArmorRating, RemoveEffectFromCharacter, CastDeflect, SpellAttack,
-                          CastTelekinesis, IncinerateDamage, FreezeDamage, ElectrocuteDamage, WarpDamage, RepulseDamage, FeedbackDamage)
+                          CastTelekinesis, IncinerateDamage, FreezeDamage, ElectrocuteDamage, WarpDamage, RepulseDamage, FeedbackDamage, CastSpell)
 
 # Some abilities as event chains
 
@@ -52,15 +52,18 @@ def cast_spell(
         Spell.ELECTROCUTE,
         Spell.REPULSE,
     ]:
-        return [SpellAttack(character_id=character_id, which_spell=which_spell)]
+        return [
+            CastSpell(character_id=character_id),
+            SpellAttack(character_id=character_id, which_spell=which_spell)
+        ]
     elif which_spell == Spell.FREEZE:
-        return [FreezeDamage(character_id=character_id)]
+        return [CastSpell(character_id=character_id),FreezeDamage(character_id=character_id)]
     elif which_spell == Spell.WARP:
-        return [WarpDamage(character_id=character_id)]
+        return [CastSpell(character_id=character_id),WarpDamage(character_id=character_id)]
     elif which_spell == Spell.FEEDBACK:
-        return [FeedbackDamage(character_id=character_id)]
+        return [CastSpell(character_id=character_id),FeedbackDamage(character_id=character_id)]
     elif which_spell == Spell.TELEKINESIS:
-        return [CastTelekinesis(character_id=character_id)]
+        return [CastSpell(character_id=character_id),CastTelekinesis(character_id=character_id)]
     else:
         raise NotImplementedError(f"Unexpected spell: {which_spell}")
 

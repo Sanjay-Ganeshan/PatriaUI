@@ -26,6 +26,25 @@ class Roll:
 
         return status_msg + msg + mod_msg
 
+    def replace(
+        self,
+        faces: T.Optional[Dice] = None,
+        n_dice: T.Optional[int] = None,
+        modifier: T.Optional[int] = None,
+        status: T.Optional[RollStatus] = None,
+    ) -> "Roll":
+        new_faces = faces if faces is not None else self.faces
+        new_n_dice = n_dice if n_dice is not None else self.n_dice
+        new_modifier = modifier if modifier is not None else self.modifier
+        new_status = status if status is not None else self.status
+
+        return Roll(
+            faces=new_faces,
+            n_dice=new_n_dice,
+            modifier=new_modifier,
+            status=new_status,
+        )
+
 
 @dataclass(frozen=True)
 class CompletedRoll:

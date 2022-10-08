@@ -5,6 +5,10 @@ Game events actually impact game state
 import typing as T
 from dataclasses import dataclass, field
 
+from ...utils import CircularList
+
+from ..weapons.ammo_pack import AmmoPack
+
 from ..character.active_effects import Debuffs
 from ..character.character import Character
 from ..character.proficiencies import Proficiency
@@ -15,6 +19,7 @@ from ..dice.rolls import CompletedRoll, Roll
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
 from ..spells.spell_list import Spell
+from ..weapons.weapon import Weapon
 from .ev_base import GameEvent, GameOrViewEvent, RollEvent
 
 
@@ -1024,6 +1029,35 @@ class ToggleDisadvantage(GameEvent):
         char.next_roll_status = self._prev_roll_status
 
 
+@dataclass(frozen=True)
+class CastSpell(GameEvent):
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if char.current_life.HP <= 0:
+            return None
+        else:
+            char.current_life = char.current_life.delta(HP=-1)
+            return self
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        # Restore the HP used to cast
+        new_status = char.current_life.delta(
+            HP=1,
+            max_st=char.max_life,
+        )
+        char.current_life = new_status
+
 
 @dataclass(frozen=True)
 class SpellAttack(RollEvent):
@@ -1044,49 +1078,40 @@ class SpellAttack(RollEvent):
         ), f"Not a character: {self.character_id}"
         char: Character = g.characters[self.character_id]
 
-        new_status = char.current_life.delta(
-            HP=-1, max_st=char.max_life
+        old_status = char.current_life
+        # Continue with spellcasting
+        if self.roll is None:
+            roll = Roll(
+                faces=Dice.D20,
+                n_dice=1,
+                modifier=char.stat_block[Stat.INTELLIGENCE] + char.stat_block[Stat.PROFICIENCY_BONUS],
+                status=char.next_roll_status,
+            )
+
+            # Clear the next roll status, save info for undo
+            prev_roll_status = char.next_roll_status
+            char.next_roll_status = RollStatus.STANDARD
+
+            completed = CompletedRoll.realize(roll)
+        else:
+            prev_roll_status = None
+            completed = self.roll
+
+        chat_message = (
+            f"{char.nameplate.name} attacks with {self.which_spell.value}. "
+            f"{completed.total()} to hit.{completed.is_critical().msg()}\n"
+            f"{completed}\n"
+            f"(RClick for damage)"
         )
 
-        old_status = char.current_life
-        if old_status == new_status:
-            # No HP to burn
-            return None
-        else:
-            char.current_life = new_status
-            # Continue with spellcasting
-            if self.roll is None:
-                roll = Roll(
-                    faces=Dice.D20,
-                    n_dice=1,
-                    modifier=char.stat_block[Stat.INTELLIGENCE] + char.stat_block[Stat.PROFICIENCY_BONUS],
-                    status=char.next_roll_status,
-                )
-
-                # Clear the next roll status, save info for undo
-                prev_roll_status = char.next_roll_status
-                char.next_roll_status = RollStatus.STANDARD
-
-                completed = CompletedRoll.realize(roll)
-            else:
-                prev_roll_status = None
-                completed = self.roll
-
-            chat_message = (
-                f"{char.nameplate.name} attacks with {self.which_spell.value}. "
-                f"{completed.total()} to hit.{completed.is_critical().msg()}\n"
-                f"{completed}\n"
-                f"(RClick for damage)"
-            )
-
-            g.chat_log.append(chat_message)
-            return SpellAttack(
-                event_id=self.event_id,
-                roll=completed,
-                character_id=self.character_id,
-                which_spell=self.which_spell,
-                _prev_roll_status=prev_roll_status
-            )
+        g.chat_log.append(chat_message)
+        return SpellAttack(
+            event_id=self.event_id,
+            roll=completed,
+            character_id=self.character_id,
+            which_spell=self.which_spell,
+            _prev_roll_status=prev_roll_status
+        )
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
@@ -1095,11 +1120,6 @@ class SpellAttack(RollEvent):
         char: Character = g.characters[self.character_id]
 
         # Restore the HP used to cast
-        new_status = char.current_life.delta(
-            HP=1,
-            max_st=char.max_life,
-        )
-        char.current_life = new_status
         if self._prev_roll_status:
             char.next_roll_status = self._prev_roll_status
         g.chat_log.pop()
@@ -1362,3 +1382,340 @@ class CastTelekinesis(GameEvent):
         )
         char.current_life = new_status
         g.chat_log.pop()
+
+@dataclass(frozen=True)
+class FireCurrentWeapon(GameEvent):
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        
+        fired: bool = weapon.fire()
+        if not fired:
+            return None
+        else:
+            return self
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        assert weapon is not None, f"{char.nameplate.name} does not have a weapon equipped"
+        
+        weapon.undo_fire()
+
+@dataclass(frozen=True)
+class ChangeWeapons(GameEvent):
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        char.weapons = char.weapons.next()
+
+        return self
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        char.weapons = char.weapons.prev()
+
+@dataclass(frozen=True)
+class ChangeWeaponMode(GameEvent):
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        else:
+            weapon.next_mode()
+            return self
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, f"{char.nameplate.name} does not have a weapon"
+        weapon.prev_mode()
+
+@dataclass(frozen=True)
+class ChangeWeaponBurst(GameEvent):
+    character_id: str = ""
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        else:
+            weapon.next_burst()
+            return self
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, f"{char.nameplate.name} does not have a weapon"
+        weapon.prev_burst()
+
+
+@dataclass(frozen=True)
+class ChangeWeaponAmmo(GameEvent):
+    character_id: str = ""
+
+    _prev_clip_current: T.Optional[int] = None
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        else:
+            prev_clip_current = weapon.clip_current
+            if not weapon.switch_ammo():
+                return None
+            else:
+                return ChangeWeaponAmmo(
+                    event_id=self.event_id,
+                    character_id=self.character_id,
+                    _prev_clip_current=prev_clip_current,
+                )
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, f"{char.nameplate.name} does not have a weapon"
+        if self._prev_clip_current is not None:
+            weapon.undo_switch_ammo(self._prev_clip_current)
+
+
+@dataclass(frozen=True)
+class ReloadCurrentWeapon(GameEvent):
+    character_id: str = ""
+
+    _prev_clip_current: T.Optional[int] = None
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        else:
+            prev_clip_current = weapon.clip_current
+            if not weapon.reload():
+                return None
+            else:
+                return ReloadCurrentWeapon(
+                    event_id=self.event_id,
+                    character_id=self.character_id,
+                    _prev_clip_current=prev_clip_current,
+                )
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, f"{char.nameplate.name} does not have a weapon"
+        if self._prev_clip_current is not None:
+            weapon.unload()
+            weapon.load(self._prev_clip_current)
+
+
+@dataclass(frozen=True)
+class AttackOrDamageCurrentWeapon(RollEvent):
+    character_id: str = ""
+    is_attack: bool = True
+
+    _prev_roll_status: T.Optional[RollStatus] = None
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        
+        if self.roll is None:
+            roll: Roll
+            if self.is_attack:
+                roll = weapon.attack(char.stat_block)
+            else:
+                roll = weapon.damage(char.stat_block)
+
+            (next_roll, this_roll) = char.next_roll_status.apply(roll.status)
+
+            if next_roll != char.next_roll_status:
+                prev_roll_status = char.next_roll_status
+                char.next_roll_status = next_roll
+            else:
+                prev_roll_status = None
+
+            completed = CompletedRoll.realize(roll.replace(status=this_roll))
+
+        else:
+            prev_roll_status = None
+            completed = self.roll
+
+
+
+        chat_message: str
+        
+        if self.is_attack:
+            chat_message = (
+                f"{char.nameplate.name} attacks with {char.nameplate.her} {weapon.short_name}.\n"
+                f"{completed.total()} to hit. {completed.is_critical().msg()}\n"
+            )
+        else:
+            chat_message = (
+                f"{char.nameplate.name} deals {completed.total()} damage with {char.nameplate.her} {weapon.short_name}\n"
+            )
+        
+        ammo = weapon.ammo.get()
+        needs_description: bool = False
+        if ammo is not None:
+            ammo_add = ammo.name
+            needs_description = True
+        else:
+            ammo_add = ""
+        
+        mode = weapon.mode.get()
+        if mode is not None:
+            mode_add = f" mode: {mode}"
+            needs_description = True
+        else:
+            mode_add = ""
+        
+        burst = weapon.burst.get()
+        if burst is not None:
+            burst_add = f"{burst}x"
+            needs_description = True
+        else:
+            burst_add = ""
+        
+        if needs_description:
+            description = f"[{burst_add}{ammo_add}{mode_add}]\n"
+        else:
+            description = ""
+
+        chat_message += description
+        chat_message += f"{completed}"
+
+        g.chat_log.append(chat_message)
+
+        return AttackOrDamageCurrentWeapon(
+            event_id=self.event_id,
+            is_attack=self.is_attack,
+            roll=completed,
+            character_id=self.character_id,
+            _prev_roll_status=prev_roll_status,
+        )
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        if self._prev_roll_status is not None:
+            char.next_roll_status = self._prev_roll_status
+        
+        g.chat_log.pop()
+
+
+@dataclass(frozen=True)
+class ResupplyWeapon(GameEvent):
+    character_id: str = ""
+    _prev_state: T.Dict[str, int] = field(default_factory=dict)
+
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon: T.Optional[Weapon] = char.weapons.get()
+
+        if weapon is None:
+            return None
+        else:
+            prev_state = weapon.restore()
+        
+            return ResupplyWeapon(
+                event_id=self.event_id,
+                character_id=self.character_id,
+                _prev_state=prev_state,
+            )
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self.character_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, "No weapon"
+        weapon.undo_restore(self._prev_state)

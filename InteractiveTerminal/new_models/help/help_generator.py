@@ -1,3 +1,5 @@
+import typing as T
+
 from ..character.stats import Stat
 from ..character.proficiencies import Proficiency
 from ..dice.advantage import RollStatus
@@ -112,6 +114,51 @@ def roll_status(help_for_status: RollStatus, current_status: RollStatus) -> str:
 
     return f"{description}\n{current}"
 
+
+def weapon(
+    weapon_full_name: str,
+    weapon_description: str,
+    weapon_attachment_names: T.Optional[T.List[str]],
+) -> str:
+    if weapon_attachment_names is not None:
+        attach_s = f"Modifications: {', '.join(weapon_attachment_names)}\n"
+    else:
+        attach_s = ""
+    return (
+        f"{weapon_full_name}\n"
+        f"{weapon_description}\n"
+        f"{attach_s}"
+        f"LClick - Change weapons, RClick - Fully resupply this weapon"
+    )
+
+def ammo_and_burst(
+    available_ammo: T.Optional[T.List[str]],
+    available_burst: T.Optional[T.List[int]],
+) -> str:
+    msg: str = ""
+    instructions = []
+    if available_ammo is not None and len(available_ammo) > 0:
+        msg += (
+            f"Available ammo types: {available_ammo}\n"
+            f"Hover over ammo count to see counts for each.\n"
+        )
+        instructions.append("LClick: change ammo")
+    if available_burst is not None and len(available_burst) > 0:
+        msg += f"Available burst size: {available_burst}\n"
+        instructions.append("RClick: change burst size")
+    all_instructions = ", ".join(instructions)
+    msg += all_instructions
+    msg = msg.strip()
+    return msg
+
+def weapon_mode(allowed_modes: T.Optional[str]) -> str:
+    if allowed_modes is not None and len(allowed_modes) > 0:
+        return (
+            f"Allowed modes: {sorted(allowed_modes)}\n"
+            f"LClick: change mode"
+        )
+    else:
+        return ""
 
 def skill_description(which_skill: Proficiency, multiplier: int, stat_mod: int, proficiency_bonus: int, total_bonus: int) -> str:
     SKILL_DESCRIPTIONS = {

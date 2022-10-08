@@ -47,13 +47,13 @@
         },
         "current_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
-          "HP": 13,
+          "HP": 0,
           "armor_rating": 14,
           "revives": 2,
-          "deflects": 2,
+          "deflects": 0,
           "hit_dice": 2,
-          "suit_power": 6,
-          "shield_power": 2,
+          "suit_power": 1,
+          "shield_power": 0,
           "death_fails": 2,
           "death_successes": 3
         },
@@ -73,6 +73,11 @@
         "next_roll_status": {
           "__type__": "InteractiveTerminal.new_models.dice.advantage|RollStatus",
           "value": "standard"
+        },
+        "weapons": {
+          "__type__": "InteractiveTerminal.utils|CircularList",
+          "items": [],
+          "index": 0
         }
       },
       "galina": {
@@ -138,6 +143,11 @@
         "next_roll_status": {
           "__type__": "InteractiveTerminal.new_models.dice.advantage|RollStatus",
           "value": "standard"
+        },
+        "weapons": {
+          "__type__": "InteractiveTerminal.utils|CircularList",
+          "items": [],
+          "index": 0
         }
       },
       "silvia": {
@@ -203,10 +213,65 @@
         "next_roll_status": {
           "__type__": "InteractiveTerminal.new_models.dice.advantage|RollStatus",
           "value": "standard"
+        },
+        "weapons": {
+          "__type__": "InteractiveTerminal.utils|CircularList",
+          "items": [],
+          "index": 0
         }
       }
     },
-    "chat_log": []
+    "chat_log": [
+      "Lumina tests INTELLIGENCE. 9!\n1d20+2 [7] => 9",
+      "Lumina tests DEXTERITY. 5!\n1d20+1 [4] => 5",
+      "Lumina tests INVESTIGATION. 10!\n1d20+6 [4] => 10",
+      "Lumina tests A. HANDLING. 16!\n1d20+2 [14] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 15 damage.\nPASS: Target(s) take 8 damage.\n3d8 [3, 8, 4] => 15",
+      "Lumina deals FREEZE damage (range: 16m).\nThe enemy must make a CON save (DC 17).\nFAIL: Target takes 12 damage and their next roll is at disadvantage (Attack / Save / Ability)\nPASS: No effect.\n3d6 [6, 5, 1] => 12",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 16 damage.\nPASS: Target(s) take 8 damage.\n3d8 [8, 4, 4] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 10 damage.\nPASS: Target(s) take 5 damage.\n3d8 [4, 1, 5] => 10",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 18 damage.\nPASS: Target(s) take 9 damage.\n3d8 [8, 4, 6] => 18",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 9 damage.\nPASS: Target(s) take 5 damage.\n3d8 [1, 7, 1] => 9",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 9 damage.\nPASS: Target(s) take 5 damage.\n3d8 [5, 1, 3] => 9",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 16 damage.\nPASS: Target(s) take 8 damage.\n3d8 [4, 8, 4] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 14 damage.\nPASS: Target(s) take 7 damage.\n3d8 [5, 7, 2] => 14",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 7 damage.\nPASS: Target(s) take 4 damage.\n3d8 [2, 4, 1] => 7",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 16 damage.\nPASS: Target(s) take 8 damage.\n3d8 [4, 8, 4] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 16 damage.\nPASS: Target(s) take 8 damage.\n3d8 [7, 5, 4] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 10 damage.\nPASS: Target(s) take 5 damage.\n3d8 [3, 5, 2] => 10",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 13 damage.\nPASS: Target(s) take 7 damage.\n3d8 [2, 7, 4] => 13",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 20 damage.\nPASS: Target(s) take 10 damage.\n3d8 [7, 8, 5] => 20",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 20 damage.\nPASS: Target(s) take 10 damage.\n3d8 [4, 8, 8] => 20",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 12 damage.\nPASS: Target(s) take 6 damage.\n3d8 [6, 1, 5] => 12",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 7 damage.\nPASS: Target(s) take 4 damage.\n3d8 [2, 3, 2] => 7",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 11 damage.\nPASS: Target(s) take 6 damage.\n3d8 [2, 6, 3] => 11",
+      "Lumina casts DEFLECT. As a reaction, she can reflect a grenade, OR\nincrease her armor rating by 2 for a single incoming attack",
+      "Lumina attacks with REPULSE. 7 to hit. Critical Failure!!\n1d20+6 [1] => 7\n(RClick for damage)",
+      "Lumina attacks with REPULSE. 7 to hit. Critical Failure!!\n1d20+6 [1] => 7\n(RClick for damage)",
+      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [4, 7, 5] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 8 damage.\nPASS: Target(s) take 4 damage.\n3d8 [4, 2, 2] => 8",
+      "Lumina deals FREEZE damage (range: 16m).\nThe enemy must make a CON save (DC 17).\nFAIL: Target takes 9 damage and their next roll is at disadvantage (Attack / Save / Ability)\nPASS: No effect.\n3d6 [1, 2, 6] => 9",
+      "Lumina attacks with ELECTROCUTE. 21 to hit.\n1d20+6 [15] => 21\n(RClick for damage)",
+      "Lumina attacks with INCINERATE. 13 to hit.\n1d20+6 [7] => 13\n(RClick for damage)",
+      "Lumina attacks with ELECTROCUTE. 26 to hit. Critical!!\n1d20+6 [20] => 26\n(RClick for damage)",
+      "Lumina deals FREEZE damage (range: 16m).\nThe enemy must make a CON save (DC 17).\nFAIL: Target takes 11 damage and their next roll is at disadvantage (Attack / Save / Ability)\nPASS: No effect.\n3d6 [3, 4, 4] => 11",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 8 damage.\nPASS: Target(s) take 4 damage.\n3d8 [2, 1, 5] => 8",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 9 damage.\nPASS: Target(s) take 5 damage.\n3d8 [4, 1, 4] => 9",
+      "Lumina deals FREEZE damage (range: 16m).\nThe enemy must make a CON save (DC 17).\nFAIL: Target takes 12 damage and their next roll is at disadvantage (Attack / Save / Ability)\nPASS: No effect.\n3d6 [4, 2, 6] => 12",
+      "Lumina attacks with ELECTROCUTE. 13 to hit.\n1d20+6 [7] => 13\n(RClick for damage)",
+      "Lumina attacks with INCINERATE. 12 to hit.\n1d20+6 [6] => 12\n(RClick for damage)",
+      "Lumina attacks with INCINERATE. 22 to hit.\n1d20+6 [16] => 22\n(RClick for damage)",
+      "Lumina attacks with ELECTROCUTE. 23 to hit.\n1d20+6 [17] => 23\n(RClick for damage)",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 16 damage.\nPASS: Target(s) take 8 damage.\n3d8 [1, 7, 8] => 16",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 17 damage.\nPASS: Target(s) take 9 damage.\n3d8 [8, 4, 5] => 17",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 14 damage.\nPASS: Target(s) take 7 damage.\n3d8 [6, 2, 6] => 14",
+      "Lumina deals WARP damage (range: 12m, 4m AoE).\nThe enemy must make a DEX save (DC 17).\n(Targets in AoE roll saves independently)\nFAIL: Target(s) takes 22 damage.\nPASS: Target(s) take 11 damage.\n3d8 [7, 8, 7] => 22",
+      "Lumina casts DEFLECT. As a reaction, she can reflect a grenade, OR\nincrease her armor rating by 2 for a single incoming attack",
+      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 17 damage.\nPASS: 9 damage.\n3d8 [1, 8, 8] => 17",
+      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [5, 5, 6] => 16",
+      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 24 damage.\nPASS: 12 damage.\n3d8 [8, 8, 8] => 24",
+      "Lumina deals FEEDBACK damage (range: 12m).\nThe enemy must make a WIS save (DC 17).\n(Effectiveness is halved without line of sight)\nFAIL: 16 damage.\nPASS: 8 damage.\n3d8 [5, 5, 6] => 16"
+    ]
   },
   "_locked": false
 }
