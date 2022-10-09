@@ -15,6 +15,7 @@ from .shared.box_sized_mixin import BoxSized
 from .shared.listens_for_state_changes import ListenForStateChanges
 from .sound_player import SoundPlayer
 from ..new_models.dice.dice import Critical, Dice
+from ..utils import get_username
 
 
 class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
@@ -57,27 +58,28 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
     def listener(
         self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
     ) -> None:
-        if not is_forward:
-            if SoundPlayer.keypress.state == "stop":
-                SoundPlayer.keypress.volume = 0.3
-                SoundPlayer.keypress.play()
+        if ev.username == get_username():
+            if not is_forward:
+                if SoundPlayer.keypress.state == "stop":
+                    SoundPlayer.keypress.volume = 0.3
+                    SoundPlayer.keypress.play()
 
-        else:
-            if isinstance(ev, RollEvent):
-                if all(
-                    (d.state == "stop" for d in SoundPlayer.dice_rolls)
-                ) and SoundPlayer.coin_flip.state == "stop":
-                    if ev.roll.roll.faces == Dice.D2:
-                        r = SoundPlayer.coin_flip
-                    else:
-                        if ev.roll.is_critical() != Critical.NO:
-                            r = SoundPlayer.dice_rolls[0]
+            else:
+                if isinstance(ev, RollEvent):
+                    if all(
+                        (d.state == "stop" for d in SoundPlayer.dice_rolls)
+                    ) and SoundPlayer.coin_flip.state == "stop":
+                        if ev.roll.roll.faces == Dice.D2:
+                            r = SoundPlayer.coin_flip
                         else:
-                            r = SoundPlayer.dice_rolls[random.randrange(
-                                1, len(SoundPlayer.dice_rolls)
-                            )]
-                    r.volume = 0.8
-                    r.play()
+                            if ev.roll.is_critical() != Critical.NO:
+                                r = SoundPlayer.dice_rolls[0]
+                            else:
+                                r = SoundPlayer.dice_rolls[random.randrange(
+                                    1, len(SoundPlayer.dice_rolls)
+                                )]
+                        r.volume = 0.8
+                        r.play()
 
     def _keyboard_closed(self):
         print("My keyboard have been closed!")
