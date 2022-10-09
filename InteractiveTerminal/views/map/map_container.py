@@ -2,7 +2,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from kivy.properties import ObjectProperty, NumericProperty
 
-from ...models.location import Vector2
+from ...new_models.map.location import Vector2
 
 from ..shared.box_sized_mixin import BoxSized
 from ..shared.spacer import Spacer

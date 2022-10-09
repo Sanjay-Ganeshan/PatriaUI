@@ -2,15 +2,16 @@ import typing as T
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from uuid import uuid4
-import getpass
+
 import datetime
 
-USERNAME = getpass.getuser()
 
 from ..dice.rolls import CompletedRoll
 from ..state.game_state import GameState
 from ..state.view_state import ViewState
+from ...utils import get_username
 
+USERNAME = get_username()
 
 def generate_id() -> str:
     return USERNAME + "__" + str(int((datetime.datetime.now() - datetime.datetime(day=9, month=10, year=2022)).total_seconds() * 100))

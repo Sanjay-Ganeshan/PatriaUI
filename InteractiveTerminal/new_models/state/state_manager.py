@@ -1,9 +1,10 @@
 import typing as T
 from dataclasses import dataclass, field
 
-from ..events.ev_base import GameOrViewEvent
+from ..events.ev_base import GameEvent, GameOrViewEvent
 from .game_state import GameState
 from .view_state import ViewState
+from ...networking.api import send_event, get_other_player_events
 
 
 @dataclass
@@ -20,6 +21,10 @@ class StateManager:
                                        )
     _history: T.List[T.List[GameOrViewEvent]] = field(
         default_factory=list, metadata={"IGNORESAVE": True}
+    )
+
+    _processed_events: T.Set[str] = field(
+        default_factory = set, metadata={"IGNORESAVE": True}
     )
 
     _locked: bool = False
@@ -125,3 +130,26 @@ class StateManager:
         Clears all history, so that it's no longer possible to go back
         """
         self._history.clear()
+
+    def update_networked(self) -> None:
+        """
+        Update based on network.
+        """
+
+        for ev_list in self._history:
+            for ev in ev_list:
+                if isinstance(ev, GameEvent):
+                    send_event(ev)
+        
+        other_player_ev = get_other_player_events()
+        
+        for each_ev in other_player_ev:
+            if each_ev.event_id not in self._processed_events:
+                self._processed_events.add(each_ev.event_id)
+                self.push_event(each_ev)
+        
+        self.clear_history()
+        
+
+
+

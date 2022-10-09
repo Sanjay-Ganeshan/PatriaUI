@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 import typing as T
+import getpass
 
 
 def use_passed_or_default(passed, **defaults):
@@ -7,6 +8,10 @@ def use_passed_or_default(passed, **defaults):
     new_kwargs.update(defaults)
     new_kwargs.update(passed)
     return new_kwargs
+
+
+def get_username() -> str:
+    return getpass.getuser()
 
 
 ItemType = T.TypeVar("ItemType")

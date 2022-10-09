@@ -2,6 +2,7 @@
 import random
 
 from kivy.core.window import Window
+from kivy.clock import Clock
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from ..new_models.events.ev_base import GameOrViewEvent, RollEvent
@@ -49,6 +50,9 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
         self._keyboard.bind(
             on_key_down=self._on_keyboard_down, on_key_up=self._on_keyboard_up
         )
+
+        Clock.schedule_interval(self.network_update, 10)
+
 
     def listener(
         self, ev: GameOrViewEvent, is_forward: bool, state_manager: StateManager
@@ -102,3 +106,7 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
 
     def _on_keyboard_up(self, keyboard, keycode):
         return False
+
+    def network_update(self, dt) -> None:
+        if self.state_manager is not None:
+            self.state_manager.update_networked()

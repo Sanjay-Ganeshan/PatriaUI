@@ -45,7 +45,7 @@ def run_tests(tests: T.List[T.Tuple[str, unittest.TestCase]]) -> bool:
 
 
 def main() -> None:
-    module_to_test = "InteractiveTerminal.save"
+    module_to_test = "InteractiveTerminal"
 
     all_modules = sorted(get_recursive_modules(module_to_test))
     run_tests(list(populate_test_cases(all_modules)))
