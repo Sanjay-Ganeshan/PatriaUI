@@ -24,7 +24,7 @@ class StateManager:
 
     _last_event_read: T.Dict[str, int] = field(default_factory=dict)
 
-    _locked: bool = False
+    _locked: bool = field(default=False, metadata={"IGNORESAVE": True})
 
     def subscribe(
         self, callback: T.Callable[[GameOrViewEvent, bool, "StateManager"],
