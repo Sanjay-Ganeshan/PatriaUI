@@ -6,7 +6,7 @@
       "__type__": "InteractiveTerminal.new_models.state.view_state|Views",
       "value": "CHARACTER_DETAILS"
     },
-    "focused_character": "silvia",
+    "focused_character": "lumina",
     "chat_log_index": -1
   },
   "game_state": {
@@ -80,7 +80,7 @@
             {
               "__type__": "InteractiveTerminal.new_models.weapons.lada_dmr|ProjectLadaDMR",
               "clip_capacity": 12,
-              "clip_current": 12,
+              "clip_current": 0,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
@@ -208,7 +208,7 @@
             {
               "__type__": "InteractiveTerminal.new_models.weapons.grenade_pack|GrenadePack",
               "clip_capacity": 4,
-              "clip_current": 2,
+              "clip_current": 0,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
@@ -1083,20 +1083,16 @@
       ]
     },
     "chat_log": [
-      "Lumina tests SOCIAL. 12!\n1d20 [12] => 12",
-      "Lumina tests INTELLIGENCE. 18!\n1d20+2 [16] => 18",
-      "Lumina tests SOCIAL. 2!\n1d20 [2] => 2",
-      "Lumina tests DEXTERITY. 20!\n1d20+1 [19] => 20",
-      "Lumina tests PERCEPTION. 23!\n1d20+4 [19] => 23",
-      "Lumina tests WISDOM. 7!\n1d20 [7] => 7",
-      "Lumina rolls a D20. 12!\n1d20 [12] => 12",
-      "Lumina rolls a D20. 8!\n1d20 [8] => 8",
       "Silvia tests INSIGHT. 24!\n1d20+5 [19] => 24",
       "Silvia tests STEALTH. 17!\n1d20+4 [13] => 17",
       "Silvia tests ATHLETICS. 21!\n1d20+3 [18] => 21",
       "Silvia tests ACROBATICS. 14!\n1d20 [14] => 14",
-      "Silvia tests MEDICINE. 14!\n1d20+5 [9] => 14"
+      "Silvia tests MEDICINE. 14!\n1d20+5 [9] => 14",
+      "Lumina rolls a D6. 3!\n1d6 [3] => 3"
     ]
+  },
+  "_last_event_read": {
+    "julie": 5837262
   },
   "_locked": false
 }

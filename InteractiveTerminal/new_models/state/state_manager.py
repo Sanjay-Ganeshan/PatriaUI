@@ -23,9 +23,7 @@ class StateManager:
         default_factory=list, metadata={"IGNORESAVE": True}
     )
 
-    _processed_events: T.Set[str] = field(
-        default_factory = set, metadata={"IGNORESAVE": True}
-    )
+    _last_event_read: T.Dict[str, int] = field(default_factory=dict)
 
     _locked: bool = False
 
@@ -142,11 +140,13 @@ class StateManager:
                     send_event(ev)
         
         other_player_ev = get_other_player_events()
-        
+
         for each_ev in other_player_ev:
-            if each_ev.event_id not in self._processed_events:
-                self._processed_events.add(each_ev.event_id)
+            username, ts = each_ev.event_id.split("__")
+            ts = int(ts)
+            if username not in self._last_event_read or self._last_event_read[username] < ts:
                 self.push_event(each_ev)
+                self._last_event_read[username] = ts
         
         self.clear_history()
         
