@@ -7,7 +7,7 @@ from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
 from ..weapons.character_specific_weapons import (
-    SilviaLSW, SilviaPistol, SilviaGrenades
+    SilviaLSW, SilviaPistol, SilviaGrenades, ReplacementSMG,
 )
 
 
@@ -46,19 +46,22 @@ class SilviaFerreyra(Character):
                 current_life=None,
                 max_life=Status(
                     HP=13,
-                    armor_rating=15,
+                    armor_rating=13,
                     revives=2,  # From CON
                     deflects=2,  # From INT
                     hit_dice=2,
-                    suit_power=6,
+                    suit_power=3,
                     shield_power=2,
                     death_fails=2,
                     death_successes=3,
                 ),
                 weapons=CircularList(
-                    items=[SilviaLSW(),
-                           SilviaPistol(),
-                           SilviaGrenades()]
+                    items=[
+                        ReplacementSMG(),
+                        # SilviaLSW(),
+                        # SilviaPistol(),
+                        # SilviaGrenades(),
+                    ],
                 ),
             )
         )

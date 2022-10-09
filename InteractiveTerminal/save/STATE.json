@@ -48,11 +48,11 @@
         "current_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
           "HP": 13,
-          "armor_rating": 14,
+          "armor_rating": 12,
           "revives": 2,
           "deflects": 2,
           "hit_dice": 2,
-          "suit_power": 6,
+          "suit_power": 2,
           "shield_power": 2,
           "death_fails": 2,
           "death_successes": 3
@@ -60,11 +60,11 @@
         "max_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
           "HP": 13,
-          "armor_rating": 14,
+          "armor_rating": 12,
           "revives": 2,
           "deflects": 2,
           "hit_dice": 2,
-          "suit_power": 6,
+          "suit_power": 3,
           "shield_power": 2,
           "death_fails": 2,
           "death_successes": 3
@@ -78,97 +78,23 @@
           "__type__": "InteractiveTerminal.utils|CircularList",
           "items": [
             {
-              "__type__": "InteractiveTerminal.new_models.weapons.lada_dmr|ProjectLadaDMR",
-              "clip_capacity": 12,
-              "clip_current": 0,
+              "__type__": "InteractiveTerminal.new_models.weapons.lada_cq|ProjectLadaCQ",
+              "clip_capacity": 40,
+              "clip_current": 40,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "FMJ",
-                    "current": 60,
-                    "capacity": 60
+                    "current": 0,
+                    "capacity": 0
                   },
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "Plasma",
-                    "current": 12,
-                    "capacity": 12
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "EM",
-                    "current": 12,
-                    "capacity": 12
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "AP",
-                    "current": 12,
-                    "capacity": 12
-                  }
-                ],
-                "index": 0
-              },
-              "mode": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  "Standard",
-                  "Braced"
-                ],
-                "index": 0
-              },
-              "burst": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  1
-                ],
-                "index": 0
-              },
-              "burst_improves_accuracy": true,
-              "attachments": [
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|PlasmaChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|EMChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|APChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|TelescopicSight"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Bipod"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Suppressor"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.training|SpecializedTraining"
-                }
-              ],
-              "tags": [
-                "telescopic-sight",
-                "bipod",
-                "suppressed",
-                "expert"
-              ]
-            },
-            {
-              "__type__": "InteractiveTerminal.new_models.weapons.coalition_pistol|CoalitionPistol",
-              "clip_capacity": 12,
-              "clip_current": 12,
-              "ammo": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Parabellum",
-                    "current": 48,
-                    "capacity": 48
+                    "current": 160,
+                    "capacity": 160
                   }
                 ],
                 "index": 0
@@ -183,12 +109,19 @@
               "burst": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
-                  1
+                  1,
+                  8
                 ],
                 "index": 0
               },
               "burst_improves_accuracy": true,
               "attachments": [
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.training|BasicTraining"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|PlasmaChamber"
+                },
                 {
                   "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|HolographicSight"
                 },
@@ -196,66 +129,15 @@
                   "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Suppressor"
                 },
                 {
-                  "__type__": "InteractiveTerminal.new_models.weapons.training|BasicTraining"
+                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|VerticalGrip"
                 }
               ],
               "tags": [
+                "proficient",
                 "holo-sight",
                 "suppressed",
-                "proficient"
+                "vertical-grip"
               ]
-            },
-            {
-              "__type__": "InteractiveTerminal.new_models.weapons.grenade_pack|GrenadePack",
-              "clip_capacity": 4,
-              "clip_current": 0,
-              "ammo": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Flashbang",
-                    "current": 2,
-                    "capacity": 2
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Concussion",
-                    "current": 2,
-                    "capacity": 2
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Fragmentation",
-                    "current": 0,
-                    "capacity": 0
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Smoke",
-                    "current": 0,
-                    "capacity": 0
-                  }
-                ],
-                "index": 0
-              },
-              "mode": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  "Thrown"
-                ],
-                "index": 0
-              },
-              "burst": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  1
-                ],
-                "index": 0
-              },
-              "burst_improves_accuracy": true,
-              "attachments": [],
-              "tags": []
             }
           ],
           "index": 0
@@ -576,11 +458,11 @@
         "current_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
           "HP": 13,
-          "armor_rating": 15,
+          "armor_rating": 13,
           "revives": 2,
           "deflects": 2,
           "hit_dice": 2,
-          "suit_power": 6,
+          "suit_power": 3,
           "shield_power": 2,
           "death_fails": 2,
           "death_successes": 3
@@ -588,11 +470,11 @@
         "max_life": {
           "__type__": "InteractiveTerminal.new_models.character.status|Status",
           "HP": 13,
-          "armor_rating": 15,
+          "armor_rating": 13,
           "revives": 2,
           "deflects": 2,
           "hit_dice": 2,
-          "suit_power": 6,
+          "suit_power": 3,
           "shield_power": 2,
           "death_fails": 2,
           "death_successes": 3
@@ -608,97 +490,23 @@
           "__type__": "InteractiveTerminal.utils|CircularList",
           "items": [
             {
-              "__type__": "InteractiveTerminal.new_models.weapons.vesna_lsw|ProjectVesnaLSW",
-              "clip_capacity": 80,
-              "clip_current": 80,
+              "__type__": "InteractiveTerminal.new_models.weapons.lada_cq|ProjectLadaCQ",
+              "clip_capacity": 40,
+              "clip_current": 40,
               "ammo": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "FMJ",
-                    "current": 240,
-                    "capacity": 240
+                    "current": 0,
+                    "capacity": 0
                   },
                   {
                     "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
                     "name": "Plasma",
-                    "current": 80,
-                    "capacity": 80
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "EM",
-                    "current": 80,
-                    "capacity": 80
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "AP",
-                    "current": 80,
-                    "capacity": 80
-                  }
-                ],
-                "index": 0
-              },
-              "mode": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  "Standard",
-                  "Braced"
-                ],
-                "index": 0
-              },
-              "burst": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  10
-                ],
-                "index": 0
-              },
-              "burst_improves_accuracy": false,
-              "attachments": [
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Bipod"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Suppressor"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|HolographicSight"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|PlasmaChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|EMChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|APChamber"
-                },
-                {
-                  "__type__": "InteractiveTerminal.new_models.weapons.training|SpecializedTraining"
-                }
-              ],
-              "tags": [
-                "bipod",
-                "suppressed",
-                "holo-sight",
-                "expert"
-              ]
-            },
-            {
-              "__type__": "InteractiveTerminal.new_models.weapons.coalition_pistol|CoalitionPistol",
-              "clip_capacity": 12,
-              "clip_current": 12,
-              "ammo": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Parabellum",
-                    "current": 48,
-                    "capacity": 48
+                    "current": 160,
+                    "capacity": 160
                   }
                 ],
                 "index": 0
@@ -713,12 +521,19 @@
               "burst": {
                 "__type__": "InteractiveTerminal.utils|CircularList",
                 "items": [
-                  1
+                  1,
+                  8
                 ],
                 "index": 0
               },
               "burst_improves_accuracy": true,
               "attachments": [
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.training|BasicTraining"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|PlasmaChamber"
+                },
                 {
                   "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|HolographicSight"
                 },
@@ -726,66 +541,15 @@
                   "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Suppressor"
                 },
                 {
-                  "__type__": "InteractiveTerminal.new_models.weapons.training|BasicTraining"
+                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|VerticalGrip"
                 }
               ],
               "tags": [
+                "proficient",
                 "holo-sight",
                 "suppressed",
-                "proficient"
+                "vertical-grip"
               ]
-            },
-            {
-              "__type__": "InteractiveTerminal.new_models.weapons.grenade_pack|GrenadePack",
-              "clip_capacity": 4,
-              "clip_current": 0,
-              "ammo": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Flashbang",
-                    "current": 0,
-                    "capacity": 0
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Concussion",
-                    "current": 0,
-                    "capacity": 0
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Fragmentation",
-                    "current": 2,
-                    "capacity": 2
-                  },
-                  {
-                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
-                    "name": "Smoke",
-                    "current": 2,
-                    "capacity": 2
-                  }
-                ],
-                "index": 0
-              },
-              "mode": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  "Thrown"
-                ],
-                "index": 0
-              },
-              "burst": {
-                "__type__": "InteractiveTerminal.utils|CircularList",
-                "items": [
-                  1
-                ],
-                "index": 0
-              },
-              "burst_improves_accuracy": true,
-              "attachments": [],
-              "tags": []
             }
           ],
           "index": 0

@@ -9,6 +9,7 @@ from ..weapons.character_specific_weapons import (
     LuminaDMR,
     LuminaGrenades,
     LuminaPistol,
+    ReplacementSMG,
 )
 
 
@@ -47,19 +48,22 @@ class LuminaGale(Character):
                 current_life=None,
                 max_life=Status(
                     HP=13,
-                    armor_rating=14,
+                    armor_rating=12,
                     revives=2,  # From CON
                     deflects=2,  # From INT
                     hit_dice=2,
-                    suit_power=6,
+                    suit_power=3,
                     shield_power=2,
                     death_fails=2,
                     death_successes=3,
                 ),
                 weapons=CircularList(
-                    items=[LuminaDMR(),
-                           LuminaPistol(),
-                           LuminaGrenades()]
+                    items=[
+                        ReplacementSMG(),
+                        # LuminaDMR(),
+                        # LuminaPistol(),
+                        # LuminaGrenades(),
+                        ]
                 ),
             )
         )
