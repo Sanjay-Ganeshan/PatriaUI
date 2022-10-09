@@ -3,4 +3,5 @@ BOX_HEIGHT = 16
 
 
 class AppSettings:
-    TooltipsEnabled = False
+    TooltipsEnabled: bool = False
+    SecondsBetweenSync: int = 10

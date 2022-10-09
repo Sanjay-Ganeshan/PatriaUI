@@ -51,7 +51,7 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
             on_key_down=self._on_keyboard_down, on_key_up=self._on_keyboard_up
         )
 
-        Clock.schedule_interval(self.network_update, 10)
+        Clock.schedule_interval(self.network_update, AppSettings.SecondsBetweenSync)
 
 
     def listener(
