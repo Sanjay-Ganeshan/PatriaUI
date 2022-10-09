@@ -37,6 +37,7 @@ from .save.file_io import path_for
 from .save.powerful_json import loads, dumps
 from .new_models.map.maps import MapLayer, MapLine
 from .new_models.map.location import Vector2
+from .networking.api import get_backup, save_backup
 
 # Replace these with character's current info
 
@@ -69,15 +70,23 @@ def main():
 
     init_with_default: bool = True
 
-    if os.path.isfile(SAVE_PATH):
-        with open(SAVE_PATH, "r") as f:
-            save_contents = f.read()
-        try:
-            state_manager = loads(save_contents)
-        except (JSONDecodeError, ValueError) as err:
-            print("SAVE FILE CORRUPTED. STARTING FRESH.")
-        else:
-            init_with_default = False
+    state_manager = get_backup()
+
+    if state_manager is None:
+        if os.path.isfile(SAVE_PATH):
+            print("Could not load from cloud .. trying local")
+            try:
+                with open(SAVE_PATH, "r") as f:
+                    save_contents = f.read()
+            except (JSONDecodeError, ValueError) as err:
+                print("SAVE FILE CORRUPTED. STARTING FRESH.")
+            else:
+                state_manager = loads(save_contents)
+    
+    if isinstance(state_manager, StateManager):
+        init_with_default = False
+    else:
+        state_manager = None
 
     if init_with_default:
         state_manager = StateManager()
@@ -96,3 +105,4 @@ def main():
 
     with open(SAVE_PATH, "w") as f:
         f.write(dumps(state_manager, indent=2))
+        save_backup(dumps(state_manager))

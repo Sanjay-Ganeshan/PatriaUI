@@ -14,7 +14,7 @@ from ...utils import get_username
 USERNAME = get_username()
 
 def generate_id() -> str:
-    return USERNAME + "__" + str(int((datetime.datetime.now() - datetime.datetime(day=9, month=10, year=2022)).total_seconds() * 100))
+    return USERNAME + "__" + str(int((datetime.datetime.now() - datetime.datetime(day=9, month=10, year=2022)).total_seconds() * 10000))
 
 @dataclass(frozen=True)
 class GameOrViewEvent(ABC):

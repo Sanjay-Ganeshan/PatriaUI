@@ -4,12 +4,11 @@ from dataclasses import dataclass, field
 from ..events.ev_base import GameEvent, GameOrViewEvent
 from .game_state import GameState
 from .view_state import ViewState
-from ...networking.api import send_event, get_other_player_events
+from ...networking.api import get_other_player_events, send_events
 
 
 @dataclass
 class StateManager:
-
     view_state: ViewState = field(default_factory=ViewState)
     game_state: GameState = field(default_factory=GameState)
 
@@ -134,10 +133,13 @@ class StateManager:
         Update based on network.
         """
 
+        evs_to_send = []
         for ev_list in self._history:
             for ev in ev_list:
                 if isinstance(ev, GameEvent):
-                    send_event(ev)
+                    evs_to_send.append(ev)
+        
+        send_events(evs_to_send)
         
         other_player_ev = get_other_player_events()
 
