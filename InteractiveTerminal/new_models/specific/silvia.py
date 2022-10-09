@@ -46,21 +46,20 @@ class SilviaFerreyra(Character):
                 current_life=None,
                 max_life=Status(
                     HP=13,
-                    armor_rating=13,
+                    armor_rating=15,
                     revives=2,  # From CON
                     deflects=2,  # From INT
                     hit_dice=2,
-                    suit_power=3,
+                    suit_power=6,
                     shield_power=2,
                     death_fails=2,
                     death_successes=3,
                 ),
                 weapons=CircularList(
                     items=[
-                        ReplacementSMG(),
-                        # SilviaLSW(),
-                        # SilviaPistol(),
-                        # SilviaGrenades(),
+                        SilviaLSW(),
+                        SilviaPistol(),
+                        SilviaGrenades(),
                     ],
                 ),
             )
