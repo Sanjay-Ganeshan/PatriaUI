@@ -1,6 +1,7 @@
 from json import JSONDecodeError
 import sys
 
+
 sys.dont_write_bytecode = True
 
 import kivy
@@ -28,6 +29,7 @@ from .new_models.events.view_events import (LoadFinished)
 from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
+from .new_models.specific.maya import MayaReeseDavis
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
@@ -80,8 +82,9 @@ def main():
     if init_with_default:
         state_manager = StateManager()
         state_manager.game_state.characters["lumina"] = LuminaGale()
+        state_manager.game_state.characters["maya"] = MayaReeseDavis()
         state_manager.game_state.characters["galina"] = GalinaNovikova()
-        state_manager.game_state.characters["silvia"] = SilviaFerreyra()
+        state_manager.game_state.characters["silvia"] = SilviaFerreyra()        
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])

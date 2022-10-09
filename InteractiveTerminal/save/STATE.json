@@ -6,7 +6,7 @@
       "__type__": "InteractiveTerminal.new_models.state.view_state|Views",
       "value": "CHARACTER_DETAILS"
     },
-    "focused_character": "galina",
+    "focused_character": "lumina",
     "chat_log_index": -1
   },
   "game_state": {
@@ -63,6 +63,137 @@
           "armor_rating": 12,
           "revives": 2,
           "deflects": 2,
+          "hit_dice": 2,
+          "suit_power": 3,
+          "shield_power": 2,
+          "death_fails": 2,
+          "death_successes": 3
+        },
+        "active_effects": [],
+        "next_roll_status": {
+          "__type__": "InteractiveTerminal.new_models.dice.advantage|RollStatus",
+          "value": "standard"
+        },
+        "weapons": {
+          "__type__": "InteractiveTerminal.utils|CircularList",
+          "items": [
+            {
+              "__type__": "InteractiveTerminal.new_models.weapons.lada_cq|ProjectLadaCQ",
+              "clip_capacity": 40,
+              "clip_current": 40,
+              "ammo": {
+                "__type__": "InteractiveTerminal.utils|CircularList",
+                "items": [
+                  {
+                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
+                    "name": "FMJ",
+                    "current": 0,
+                    "capacity": 0
+                  },
+                  {
+                    "__type__": "InteractiveTerminal.new_models.weapons.ammo_pack|AmmoPack",
+                    "name": "Plasma",
+                    "current": 160,
+                    "capacity": 160
+                  }
+                ],
+                "index": 0
+              },
+              "mode": {
+                "__type__": "InteractiveTerminal.utils|CircularList",
+                "items": [
+                  "Standard"
+                ],
+                "index": 0
+              },
+              "burst": {
+                "__type__": "InteractiveTerminal.utils|CircularList",
+                "items": [
+                  1,
+                  8
+                ],
+                "index": 0
+              },
+              "burst_improves_accuracy": true,
+              "attachments": [
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.training|BasicTraining"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.basic_ammo|PlasmaChamber"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|HolographicSight"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|Suppressor"
+                },
+                {
+                  "__type__": "InteractiveTerminal.new_models.weapons.stat_mod_attachments|VerticalGrip"
+                }
+              ],
+              "tags": [
+                "proficient",
+                "holo-sight",
+                "suppressed",
+                "vertical-grip"
+              ]
+            }
+          ],
+          "index": 0
+        }
+      },
+      "maya": {
+        "__type__": "InteractiveTerminal.new_models.specific.maya|MayaReeseDavis",
+        "id_prefix": "maya",
+        "nameplate": {
+          "__type__": "InteractiveTerminal.new_models.character.nameplate|Nameplate",
+          "icon": "sinon3.png",
+          "name": "Maya",
+          "surname": "Reese-Davis",
+          "role": "Siren - Sniper",
+          "she": "she",
+          "her": "her",
+          "hers": "hers"
+        },
+        "stat_block": {
+          "__type__": "InteractiveTerminal.new_models.character.stat_block|StatBlock",
+          "stat_modifiers": {
+            "STRENGTH": -1,
+            "DEXTERITY": 2,
+            "CONSTITUTION": 1,
+            "INTELLIGENCE": 1,
+            "WISDOM": 1,
+            "PROFICIENCY": 4
+          },
+          "proficiency_multipliers": {
+            "COMBATIVES": 1,
+            "MEDICINE": 1,
+            "INSIGHT": 1,
+            "SOCIAL": 1,
+            "INVESTIGATION": 1,
+            "STEALTH": 1,
+            "PERCEPTION": 1
+          }
+        },
+        "current_life": {
+          "__type__": "InteractiveTerminal.new_models.character.status|Status",
+          "HP": 13,
+          "armor_rating": 12,
+          "revives": 2,
+          "deflects": 1,
+          "hit_dice": 2,
+          "suit_power": 3,
+          "shield_power": 2,
+          "death_fails": 2,
+          "death_successes": 3
+        },
+        "max_life": {
+          "__type__": "InteractiveTerminal.new_models.character.status|Status",
+          "HP": 13,
+          "armor_rating": 12,
+          "revives": 2,
+          "deflects": 1,
           "hit_dice": 2,
           "suit_power": 3,
           "shield_power": 2,
