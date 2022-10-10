@@ -132,6 +132,8 @@ class StateManager:
         """
         Update based on network.
         """
+        if self._locked:
+            return
 
         evs_to_send = []
         for ev_list in self._history:
