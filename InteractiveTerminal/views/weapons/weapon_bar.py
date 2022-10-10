@@ -507,7 +507,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
         else:
             splash_add = ""
 
-        prefix = f"{burst_add}x {ammo_add}"
+        prefix = f"{burst_add} {ammo_add}"
         suffix = f"{cal_add}{range_add}{splash_add}"
         self.text = f"{prefix}\n{suffix}"
 

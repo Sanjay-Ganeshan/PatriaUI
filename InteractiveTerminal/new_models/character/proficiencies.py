@@ -22,6 +22,8 @@ class Proficiency(Enum):
     PERCEPTION = "PERCEPTION"
     SURVIVAL = "SURVIVAL"
     SOCIAL = "SOCIAL"
+    # Not actually a skill, but nicer than seeing "rolls wisdom"
+    INITIATIVE = "INITIATIVE"
 
     def corresponding_stat(self) -> Stat:
         return {
@@ -41,6 +43,7 @@ class Proficiency(Enum):
             Proficiency.PERCEPTION: Stat.WISDOM,
             Proficiency.SURVIVAL: Stat.WISDOM,
             Proficiency.SOCIAL: Stat.WISDOM,
+            Proficiency.INITIATIVE: Stat.WISDOM,
         }[self]
 
     @classmethod

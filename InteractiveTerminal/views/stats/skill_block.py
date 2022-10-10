@@ -54,4 +54,4 @@ class SkillTagList(MDGridLayout, BoxSized, ListenForStateChanges):
         # WIS overflowing
         self.add_widget(self.tags[Proficiency.SURVIVAL])
         self.add_widget(self.tags[Proficiency.SOCIAL])
-        self.add_widget(Spacer(box_width=2, box_height=1))
+        self.add_widget(self.tags[Proficiency.INITIATIVE])

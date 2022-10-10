@@ -198,6 +198,8 @@ def skill_description(
             "Your ability to survive 'in the wild'.",
         Proficiency.SOCIAL:
             "How well you interact outside of combat.",
+        Proficiency.INITIATIVE:
+            "How quickly you react at the first sign of combat.",
     }
     skill_desc = SKILL_DESCRIPTIONS[which_skill]
 

@@ -43,6 +43,7 @@ class Resources:
         Proficiency.PERCEPTION: "perception.png",
         Proficiency.SURVIVAL: "survival.png",
         Proficiency.SOCIAL: "social.png",
+        Proficiency.INITIATIVE: "initiative.png",
     }
 
     SPELLS = {
