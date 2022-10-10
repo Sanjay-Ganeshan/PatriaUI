@@ -3,7 +3,7 @@ Game events actually impact game state
 """
 
 import typing as T
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from ...utils import CircularList
 
@@ -139,9 +139,8 @@ class RestoreSkinsuitCharge(GameEvent):
 
             # Populate the amount restored - otherwise if we overcap then undo,
             # we'll be at 1 less skinsuit charge
-            return RestoreSkinsuitCharge(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 amount_restored=new_status.suit_power - old_status.suit_power,
             )
 
@@ -179,9 +178,8 @@ class ModifyArmorRating(GameEvent):
 
             # Armor rating can't go below 0 .. so make sure mod
             # is correctly stored
-            return ModifyArmorRating(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 armor_mod=new_status.armor_rating - orig_status.armor_rating,
             )
 
@@ -261,9 +259,8 @@ class RestoreShield(RollEvent):
 
             # Populate the amount restored - otherwise if we overcap then undo,
             # we'll be at 1 less charge
-            return RestoreShield(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 amount_restored=new_status.shield_power -
                 old_status.shield_power,
                 roll=completed,
@@ -323,9 +320,8 @@ class ChangeHP(GameEvent):
             old_status = char.current_life
             char.current_life = new_status
 
-            return ChangeHP(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 amount=new_status.HP - old_status.HP,
                 _death_fail_delta=new_status.death_fails -
                 old_status.death_fails,
@@ -376,9 +372,8 @@ class ChangeDeathFail(GameEvent):
             old_status = char.current_life
             char.current_life = new_status
 
-            return ChangeDeathFail(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 amount=new_status.death_fails - old_status.death_fails,
             )
 
@@ -421,9 +416,8 @@ class ChangeDeathSuccess(GameEvent):
             old_status = char.current_life
             char.current_life = new_status
 
-            return ChangeDeathSuccess(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 amount=new_status.death_successes - old_status.death_successes,
             )
 
@@ -509,10 +503,9 @@ class DeathSave(RollEvent):
             char.current_life = new_status
             g.chat_log.append(chat_msg)
 
-            return DeathSave(
-                event_id=self.event_id,
+            return replace(
+                self,
                 roll=completed,
-                character_id=self.character_id,
                 _fail_delta=new_status.death_fails - old_status.death_fails,
                 _success_delta=new_status.death_successes -
                 old_status.death_successes,
@@ -576,9 +569,8 @@ class CastDeflect(GameEvent):
                 f"can reflect a grenade, OR\n"
                 f"increase her armor rating by {char.stat_block[Stat.INTELLIGENCE]} for a single incoming attack"
             )
-            return CastDeflect(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 _hp_delta=new_status.HP - old_status.HP,
                 _deflect_delta=new_status.deflects - old_status.deflects,
             )
@@ -626,9 +618,8 @@ class RestoreDeflect(GameEvent):
             return None
         else:
             char.current_life = new_status
-            return RestoreDeflect(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 _deflect_delta=new_status.deflects - old_status.deflects,
             )
 
@@ -674,9 +665,8 @@ class ConsumeRevival(GameEvent):
         )
         old_status = char.current_life
         char.current_life = new_status
-        return ConsumeRevival(
-            event_id=self.event_id,
-            character_id=self.character_id,
+        return replace(
+            self,
             _hp_delta=new_status.HP - old_status.HP,
             _revive_delta=new_status.revives - old_status.revives,
             _death_fail_delta=new_status.death_fails - old_status.death_fails,
@@ -719,6 +709,7 @@ class RestoreRevival(GameEvent):
             # No change .. no-op
             return None
         else:
+            char.current_life = new_status
             return self
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -752,9 +743,8 @@ class RestoreHitDice(GameEvent):
         else:
             old_status = char.current_life
             char.current_life = new_status
-            return RestoreHitDice(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 _hit_dice_restored=new_status.hit_dice - old_status.hit_dice,
             )
 
@@ -810,9 +800,8 @@ class UseHitDice(RollEvent):
         old_status = char.current_life
         char.current_life = new_status
 
-        return UseHitDice(
-            event_id=self.event_id,
-            character_id=self.character_id,
+        return replace(
+            self,
             roll=completed,
             _hp_delta=new_status.HP - old_status.HP,
             _death_fail_delta=new_status.death_fails - old_status.death_fails,
@@ -890,11 +879,9 @@ class StatOrSkillTest(RollEvent):
 
         g.chat_log.append(chat_msg)
 
-        return StatOrSkillTest(
-            event_id=self.event_id,
+        return replace(
+            self,
             roll=completed,
-            character_id=self.character_id,
-            stat_or_skill=self.stat_or_skill,
             _prev_roll_status=prev_roll_status,
         )
 
@@ -949,11 +936,9 @@ class RandomRoll(RollEvent):
 
         g.chat_log.append(chat_msg)
 
-        return RandomRoll(
-            event_id=self.event_id,
+        return replace(
+            self,
             roll=completed,
-            character_id=self.character_id,
-            faces=self.faces,
             _prev_roll_status=prev_roll_status,
         )
 
@@ -991,9 +976,8 @@ class ToggleAdvantage(GameEvent):
         elif char.next_roll_status == RollStatus.DISADVANTAGE:
             char.next_roll_status = RollStatus.ADVANTAGE
 
-        return ToggleAdvantage(
-            event_id=self.event_id,
-            character_id=self.character_id,
+        return replace(
+            self,
             _prev_roll_status=prev_roll_status,
         )
 
@@ -1027,9 +1011,8 @@ class ToggleDisadvantage(GameEvent):
         elif char.next_roll_status == RollStatus.DISADVANTAGE:
             char.next_roll_status = RollStatus.STANDARD
 
-        return ToggleDisadvantage(
-            event_id=self.event_id,
-            character_id=self.character_id,
+        return replace(
+            self,
             _prev_roll_status=prev_roll_status,
         )
 
@@ -1119,11 +1102,9 @@ class SpellAttack(RollEvent):
         )
 
         g.chat_log.append(chat_message)
-        return SpellAttack(
-            event_id=self.event_id,
+        return replace(
+            self,
             roll=completed,
-            character_id=self.character_id,
-            which_spell=self.which_spell,
             _prev_roll_status=prev_roll_status
         )
 
@@ -1208,14 +1189,9 @@ class SpellDamage(RollEvent):
         chat_message += f"{completed}"
 
         g.chat_log.append(chat_message)
-        return SpellDamage(
-            event_id=self.event_id,
+        return replace(
+            self,
             roll=completed,
-            character_id=self.character_id,
-            which_dice=self.which_dice,
-            which_spell=self.which_spell,
-            enemy_save=self.enemy_save,
-            effective_range=self.effective_range,
             _prev_roll_status=prev_roll_status
         )
 
@@ -1383,10 +1359,7 @@ class CastTelekinesis(GameEvent):
             )
 
             g.chat_log.append(chat_message)
-            return CastTelekinesis(
-                event_id=self.event_id,
-                character_id=self.character_id,
-            )
+            return self
 
     def undo(self, v: ViewState, g: GameState) -> None:
         assert (
@@ -1541,9 +1514,8 @@ class ChangeWeaponAmmo(GameEvent):
             if not weapon.switch_ammo():
                 return None
             else:
-                return ChangeWeaponAmmo(
-                    event_id=self.event_id,
-                    character_id=self.character_id,
+                return replace(
+                    self,
                     _prev_clip_current=prev_clip_current,
                 )
 
@@ -1580,9 +1552,8 @@ class ReloadCurrentWeapon(GameEvent):
             if not weapon.reload():
                 return None
             else:
-                return ReloadCurrentWeapon(
-                    event_id=self.event_id,
-                    character_id=self.character_id,
+                return replace(
+                    self,
                     _prev_clip_current=prev_clip_current,
                 )
 
@@ -1689,11 +1660,9 @@ class AttackOrDamageCurrentWeapon(RollEvent):
 
         g.chat_log.append(chat_message)
 
-        return AttackOrDamageCurrentWeapon(
-            event_id=self.event_id,
-            is_attack=self.is_attack,
+        return replace(
+            self,
             roll=completed,
-            character_id=self.character_id,
             _prev_roll_status=prev_roll_status,
         )
 
@@ -1727,9 +1696,8 @@ class ResupplyWeapon(GameEvent):
         else:
             prev_state = weapon.restore()
 
-            return ResupplyWeapon(
-                event_id=self.event_id,
-                character_id=self.character_id,
+            return replace(
+                self,
                 _prev_state=prev_state,
             )
 
@@ -1742,3 +1710,41 @@ class ResupplyWeapon(GameEvent):
         weapon = char.weapons.get()
         assert weapon is not None, "No weapon"
         weapon.undo_restore(self._prev_state)
+
+
+@dataclass(frozen=True)
+class SpawnCharacter(GameEvent):
+    char: Character = field(default_factory=Character)
+
+    _char_id: str = ""
+
+    
+    def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
+        assert (
+            self._char_id not in g.characters
+        ), f"Already a character: {self._char_id}"
+
+        if self._char_id is None:
+            id_salt: T.Optional[int] = None
+
+            while (to_spawn_id := (self.char.id_prefix + ("" if id_salt is None else f"{id_salt}"))) in g.characters:
+                id_salt = 2 if id_salt is None else (id_salt + 1)
+        else:
+            to_spawn_id = self._char_id
+            
+        g.characters[to_spawn_id] = self.char
+        return replace(self, _char_id=to_spawn_id)
+        
+
+
+    def undo(self, v: ViewState, g: GameState) -> None:
+        assert (
+            self._char_id in g.characters
+        ), f"Not a character: {self.character_id}"
+        char: Character = g.characters[self.character_id]
+
+        weapon = char.weapons.get()
+        assert weapon is not None, "No weapon"
+        weapon.undo_restore(self._prev_state)
+
+    

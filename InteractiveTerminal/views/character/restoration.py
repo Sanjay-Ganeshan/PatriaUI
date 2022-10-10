@@ -160,7 +160,6 @@ class CHRevivals(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
             self.current_revives = char.current_life.revives
             self.max_revives = char.max_life.revives
 
-
 class CHHitDice(ProgressiveIcon, TouchableMixin, ListenForStateChanges):
     current_hit_dice: int = NumericProperty(1)
     max_hit_dice: int = NumericProperty(1)
