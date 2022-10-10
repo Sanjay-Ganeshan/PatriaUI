@@ -132,6 +132,7 @@ def download_image(remote_name: str, destination_dir: str) -> bool:
             return True
 
 def upload_image(image_path: str) -> bool:
+    image_path = os.path.abspath(image_path)
     remote_name = os.path.basename(image_path)
     assert remote_name.endswith(".png"), f"{image_path} should end with .png"
 
@@ -155,6 +156,8 @@ def _generate_presigned_image_url(img: str, operation: str) -> T.Optional[str]:
         IMAGES_ENDPOINT,
         params = {
             "img": img,
+            # Ultra basic security to prevent easy scraping.
+            "salt": os.path.basename(__file__),
         },
     )
 
