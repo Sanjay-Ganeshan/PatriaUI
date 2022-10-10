@@ -1716,12 +1716,12 @@ class ResupplyWeapon(GameEvent):
 class SpawnCharacter(GameEvent):
     char: Character = field(default_factory=Character)
 
-    _char_id: str = ""
+    _char_id: T.Optional[str] = None
 
     
     def do(self, v: ViewState, g: GameState) -> T.Optional[GameOrViewEvent]:
         assert (
-            self._char_id not in g.characters
+            self._char_id is not None or self._char_id not in g.characters
         ), f"Already a character: {self._char_id}"
 
         if self._char_id is None:
@@ -1741,10 +1741,7 @@ class SpawnCharacter(GameEvent):
         assert (
             self._char_id in g.characters
         ), f"Not a character: {self.character_id}"
-        char: Character = g.characters[self.character_id]
-
-        weapon = char.weapons.get()
-        assert weapon is not None, "No weapon"
-        weapon.undo_restore(self._prev_state)
+    
+        del g.characters[self._char_id]
 
     

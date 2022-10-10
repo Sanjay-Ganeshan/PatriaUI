@@ -26,6 +26,7 @@ from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
 
 from .new_models.events.view_events import (LoadFinished)
+from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
@@ -58,6 +59,7 @@ class PatriaApp(MDApp):
         # Everything's wired up to respond to events, so just send
         # a no-op event down the pipeline so everything refreshes.
         self.home.state_manager.push_event(LoadFinished())
+        self.home.state_manager.clear_history()
         return self.home
 
 
@@ -90,10 +92,10 @@ def main():
 
     if init_with_default:
         state_manager = StateManager()
-        state_manager.game_state.characters["lumina"] = LuminaGale()
-        state_manager.game_state.characters["maya"] = MayaReeseDavis()
-        state_manager.game_state.characters["galina"] = GalinaNovikova()
-        state_manager.game_state.characters["silvia"] = SilviaFerreyra()        
+        state_manager.push_event(SpawnCharacter(char=LuminaGale()))
+        state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
+        state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
+        state_manager.push_event(SpawnCharacter(char=SilviaFerreyra()))
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])
