@@ -62,6 +62,7 @@ class MayaReeseDavis(Character):
                         LuminaDMR(),
                         LuminaPistol(),
                         LuminaGrenades(),
+                        ReplacementSMG(),
                         ]
                 ),
             )

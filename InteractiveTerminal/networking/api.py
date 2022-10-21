@@ -41,7 +41,6 @@ def get_other_player_events(my_username: T.Optional[str] = None) -> T.List[GameO
     else:
         return []
 
-
 def send_events(evs: T.List[GameOrViewEvent]) -> None:
     dumped = dumps(evs)
     
@@ -50,13 +49,11 @@ def send_events(evs: T.List[GameOrViewEvent]) -> None:
         json=json.loads(dumped),
     )
 
-
 def delete_event(event_id: str) -> None:
     response = requests.delete(
         EVENT_ENDPOINT,
         json={"event_id": event_id},
     )
-
 
 def get_backup(my_username: T.Optional[str] = None) -> T.Optional[T.Any]:
     if my_username is None:
@@ -75,7 +72,6 @@ def get_backup(my_username: T.Optional[str] = None) -> T.Optional[T.Any]:
 
     else:
         return None
-
 
 def save_backup(state_manager_dump: str, my_username: T.Optional[str] = None) -> bool:
     if my_username is None:

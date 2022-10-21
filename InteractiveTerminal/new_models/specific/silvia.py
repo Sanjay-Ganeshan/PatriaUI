@@ -60,6 +60,7 @@ class SilviaFerreyra(Character):
                         SilviaLSW(),
                         SilviaPistol(),
                         SilviaGrenades(),
+                        ReplacementSMG(),
                     ],
                 ),
             )

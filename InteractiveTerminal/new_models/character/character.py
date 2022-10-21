@@ -1,5 +1,5 @@
 import typing as T
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from ..dice.advantage import RollStatus
 from .active_effects import Buffs, Debuffs
@@ -37,6 +37,12 @@ class Character:
     def __post_init__(self):
         if self.current_life is None:
             self.current_life = self.max_life
+        
+        if "slim_skinsuit" in self.active_effects:
+            if self.current_life.suit_power > 3:
+                self.current_life = replace(self.current_life, suit_power=3)
+            if self.max_life.suit_power > 3:
+                self.max_life = replace(self.max_life, suit_power=3)
 
     def add_effect(self, effect: T.Union[str, Buffs, Debuffs]) -> None:
         if isinstance(effect, (Buffs, Debuffs)):

@@ -6,7 +6,7 @@ from ..character.proficiencies import Proficiency
 from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
-from ..weapons.character_specific_weapons import GalinaBR, GalinaGrenadeLauncher, GalinaSplaser, GalinaGrenades
+from ..weapons.character_specific_weapons import GalinaBR, GalinaGrenadeLauncher, GalinaSplaser, GalinaGrenades, ReplacementSMG
 
 
 class GalinaNovikova(Character):
@@ -58,7 +58,8 @@ class GalinaNovikova(Character):
                         GalinaBR(),
                         GalinaGrenadeLauncher(),
                         GalinaSplaser(),
-                        GalinaGrenades()
+                        GalinaGrenades(),
+                        ReplacementSMG(),
                     ]
                 )
             )

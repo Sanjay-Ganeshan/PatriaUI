@@ -62,6 +62,7 @@ class LuminaGale(Character):
                         LuminaDMR(),
                         LuminaPistol(),
                         LuminaGrenades(),
+                        ReplacementSMG(),
                         ]
                 ),
             )
