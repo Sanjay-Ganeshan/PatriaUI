@@ -30,6 +30,7 @@ from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
+from .new_models.specific.anabelle import AnabelleNucifera
 from .new_models.specific.maya import MayaReeseDavis
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
@@ -92,7 +93,8 @@ def main():
 
     if init_with_default:
         state_manager = StateManager()
-        state_manager.push_event(SpawnCharacter(char=LuminaGale()))
+        #state_manager.push_event(SpawnCharacter(char=LuminaGale()))
+        state_manager.push_event(SpawnCharacter(char=AnabelleNucifera()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
         state_manager.push_event(SpawnCharacter(char=SilviaFerreyra()))
@@ -100,7 +102,7 @@ def main():
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])
         )
-        state_manager.view_state.focused_character = "lumina"
+        state_manager.view_state.focused_character = "anabelle"
 
     app = PatriaApp(state_manager)
     app.run()
