@@ -7,21 +7,21 @@ from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
 from ..weapons.character_specific_weapons import (
-    SilviaLSW, SilviaPistol, SilviaGrenades, ReplacementSMG,
+    ElenaShotgun, ElenaDrone, ElenaGrenades, ReplacementSMG,
 )
 
 #todo: modify everything
 
-class SilviaFerreyra(Character):
+class ElenaArvanita(Character):
     def __init__(self, **kwargs) -> None:
         super().__init__(
             **use_passed_or_default(
                 kwargs,
-                id_prefix="silvia",
+                id_prefix="elena",
                 nameplate=Nameplate(
-                    icon="kanade.png",
-                    name="Silvia",
-                    surname="Ferreyra",
+                    icon="gfl_ar15.png",
+                    name="Elena",
+                    surname="Arvanita",
                     role="Siren - Spotter",
                     she="she",
                     her="her",
@@ -58,9 +58,9 @@ class SilviaFerreyra(Character):
                 ),
                 weapons=CircularList(
                     items=[
-                        SilviaLSW(),
-                        SilviaPistol(),
-                        SilviaGrenades(),
+                        ElenaShotgun(),
+                        ElenaDrone(),
+                        ElenaGrenades(),
                         ReplacementSMG(),
                     ],
                 ),

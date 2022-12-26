@@ -12,6 +12,8 @@ from .grenade_pack import GrenadePack
 from .siren_knife import SirenKnife
 from .lada_cq import ProjectLadaCQ
 from .exp_shotgun import ExperimentalShotgun
+from .lada_sniper import ProjectLadaSniper
+from .switchblade import SwitchbladeDrone
 from ...utils import CircularList
 
 
@@ -174,6 +176,19 @@ def ReplacementSMG() -> ProjectLadaCQ:
     ).replace_magazine("FMJ", "Plasma").replace_magazine("FMJ", "Plasma")
     return ret
 
+def ElenaShotgun() -> ExperimentalShotgun:
+    return (
+        ExperimentalShotgun().add_attachment(
+            Suppressor()
+        #yes, you can suppress a shotgun - bit difficult in 2023, but doable in 2621
+        ).add_attachment(HolographicSight()
+        ).add_attachment(EMChamber()
+        ).add_attachment(SpecializedTraining())
+    )
+
+def ElenaDrone() -> SwitchbladeDrone:
+    return SwitchbladeDrone().add_attachment(BasicTraining())
+
 def ElenaGrenades() -> GrenadePack:
     return GrenadePack(
         ammo=CircularList(
@@ -200,6 +215,24 @@ def ElenaGrenades() -> GrenadePack:
                 )
             ]
         )
+    )
+
+def RivkaSniper() -> ProjectLadaSniper:
+    return (
+        ProjectLadaSniper().add_attachment(PlasmaChamber()).add_attachment(
+            EMChamber()
+        ).add_attachment(APChamber()).add_attachment(
+            TelescopicSight()
+        ).add_attachment(Bipod()).add_attachment(Suppressor()).add_attachment(
+            SpecializedTraining()
+        )
+    )
+
+def RivkaPistol() -> CoalitionPistol:
+    return (
+        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
+            Suppressor()
+        ).add_attachment(BasicTraining())
     )
 
 def RivkaGrenades() -> GrenadePack:

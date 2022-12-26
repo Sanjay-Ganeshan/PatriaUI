@@ -9,7 +9,7 @@ from ..character.status import Status
 
 # change this
 from ..weapons.character_specific_weapons import (
-    SilviaLSW, SilviaPistol, SilviaGrenades, ReplacementSMG,
+    RivkaSniper, RivkaPistol, RivkaGrenades, ReplacementSMG,
 )
 
 
@@ -20,7 +20,7 @@ class RivkaHadar(Character):
                 kwargs,
                 id_prefix="rivka",
                 nameplate=Nameplate(
-                    icon="kanade.png",
+                    icon="gfl_sv98.png",
                     name="Rivka",
                     surname="Hadar",
                     role="Siren - Sniper",
@@ -61,9 +61,9 @@ class RivkaHadar(Character):
                 # modify this
                 weapons=CircularList(
                     items=[
-                        SilviaLSW(),
-                        SilviaPistol(),
-                        SilviaGrenades(),
+                        RivkaSniper(),
+                        RivkaPistol(),
+                        RivkaGrenades(),
                         ReplacementSMG(),
                     ],
                 ),
