@@ -28,9 +28,10 @@ from kivymd.font_definitions import theme_font_styles
 from .new_models.events.view_events import (LoadFinished)
 from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.galina import GalinaNovikova
-from .new_models.specific.lumina import LuminaGale
 from .new_models.specific.silvia import SilviaFerreyra
 from .new_models.specific.anabelle import AnabelleNucifera
+from .new_models.specific.elena import ElenaArvanita
+from .new_models.specific.rivka import RivkaHadar
 from .new_models.specific.maya import MayaReeseDavis
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
@@ -98,6 +99,8 @@ def main():
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
         state_manager.push_event(SpawnCharacter(char=SilviaFerreyra()))
+        state_manager.push_event(SpawnCharacter(char=RivkaHadar()))
+        state_manager.push_event(SpawnCharacter(char=ElenaArvanita()))
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])

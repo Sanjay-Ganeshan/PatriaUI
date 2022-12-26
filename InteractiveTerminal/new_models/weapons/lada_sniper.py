@@ -38,7 +38,7 @@ class ProjectLadaSniper(Weapon):
         return Roll(
             Dice.D20,
             n_dice=1,
-            modifier=equipped_by[Stat.DEXTERITY + 1],
+            modifier=equipped_by[Stat.DEXTERITY] + 1,
         )
 
     def _damage_impl(self, equipped_by: StatBlock) -> Roll:
