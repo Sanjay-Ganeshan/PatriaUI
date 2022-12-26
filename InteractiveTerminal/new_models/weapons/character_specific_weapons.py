@@ -11,6 +11,7 @@ from .training import BasicTraining, SpecializedTraining
 from .grenade_pack import GrenadePack
 from .siren_knife import SirenKnife
 from .lada_cq import ProjectLadaCQ
+from .exp_shotgun import ExperimentalShotgun
 from ...utils import CircularList
 
 
@@ -172,3 +173,59 @@ def ReplacementSMG() -> ProjectLadaCQ:
         "FMJ", "Plasma"
     ).replace_magazine("FMJ", "Plasma").replace_magazine("FMJ", "Plasma")
     return ret
+
+def ElenaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=0,
+                    capacity=0,
+                )
+            ]
+        )
+    )
+
+def RivkaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=0,
+                    capacity=0,
+                )
+            ]
+        )
+    )
