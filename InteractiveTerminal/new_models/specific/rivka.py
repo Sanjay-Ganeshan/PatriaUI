@@ -64,7 +64,7 @@ class RivkaHadar(Character):
                         RivkaSniper(),
                         RivkaPistol(),
                         RivkaGrenades(),
-                        ReplacementSMG(),
+                        #ReplacementSMG(),
                     ],
                 ),
             )

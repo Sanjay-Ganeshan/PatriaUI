@@ -61,7 +61,7 @@ class ElenaArvanita(Character):
                         ElenaShotgun(),
                         ElenaDrone(),
                         ElenaGrenades(),
-                        ReplacementSMG(),
+                        #ReplacementSMG(),
                     ],
                 ),
             )

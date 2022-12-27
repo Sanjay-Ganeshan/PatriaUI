@@ -38,7 +38,7 @@ class SwitchbladeDrone(Weapon):
         return Roll(
             Dice.D20,
             n_dice=1,
-            modifier=equipped_by[Stat.DEXTERITY + Stat.INTELLIGENCE],
+            modifier=equipped_by[Stat.DEXTERITY] + equipped_by[Stat.INTELLIGENCE],
         )
 
     def _damage_impl(self, equipped_by: StatBlock) -> Roll:
