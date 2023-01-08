@@ -26,8 +26,8 @@ class SwitchbladeDrone(Weapon):
                     items=[
                         AmmoPack(
                             name="Drone",
-                            current=0,
-                            capacity=0,
+                            current=1,
+                            capacity=1,
                         )
                     ]
                 ),
