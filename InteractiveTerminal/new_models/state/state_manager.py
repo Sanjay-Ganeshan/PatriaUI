@@ -132,6 +132,9 @@ class StateManager:
         """
         Update based on network.
         """
+        # Disable networking
+        return
+        
         if self._locked:
             return
 

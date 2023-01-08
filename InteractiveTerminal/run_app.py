@@ -74,7 +74,8 @@ def main():
 
     init_with_default: bool = True
 
-    state_manager = get_backup()
+    #state_manager = get_backup()
+    state_manager = None
 
     if state_manager is None:
         if os.path.isfile(SAVE_PATH):
