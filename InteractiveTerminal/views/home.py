@@ -69,6 +69,8 @@ class Home(MDBoxLayout, BoxSized, ListenForStateChanges):
                     if all(
                         (d.state == "stop" for d in SoundPlayer.dice_rolls)
                     ) and SoundPlayer.coin_flip.state == "stop":
+                        if ev.roll is None or ev.roll.roll is None:
+                            return
                         if ev.roll.roll.faces == Dice.D2:
                             r = SoundPlayer.coin_flip
                         else:

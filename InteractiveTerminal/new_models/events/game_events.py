@@ -1102,8 +1102,9 @@ class SpellAttack(RollEvent):
         )
 
         g.chat_log.append(chat_message)
-        return replace(
-            self,
+        return SpellAttack(
+            character_id=self.character_id,
+            which_spell=self.which_spell,
             roll=completed,
             _prev_roll_status=prev_roll_status
         )
@@ -1189,10 +1190,13 @@ class SpellDamage(RollEvent):
         chat_message += f"{completed}"
 
         g.chat_log.append(chat_message)
-        return replace(
-            self,
-            roll=completed,
-            _prev_roll_status=prev_roll_status
+        return type(self)(
+            character_id=self.character_id,
+            _prev_roll_status=prev_roll_status,
+            which_dice=self.which_dice,
+            which_spell=self.which_spell,
+            enemy_save=self.enemy_save,
+            effective_range=self.effective_range,
         )
 
     def undo(self, v: ViewState, g: GameState) -> None:
@@ -1214,12 +1218,17 @@ class SpellDamage(RollEvent):
 
 class IncinerateDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D10,
+                "which_spell": Spell.INCINERATE,
+                "enemy_save": None,
+                "effective_range": "10m",
+            }
+        )
+        
         super().__init__(
             **kwargs,
-            which_dice=Dice.D10,
-            which_spell=Spell.INCINERATE,
-            enemy_save=None,
-            effective_range="10m",
         )
 
     def get_effect(
@@ -1230,12 +1239,17 @@ class IncinerateDamage(SpellDamage):
 
 class ElectrocuteDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D12,
+                "which_spell": Spell.ELECTROCUTE,
+                "enemy_save": None,
+                "effective_range": "melee",
+            }
+        )
+        
         super().__init__(
             **kwargs,
-            which_dice=Dice.D12,
-            which_spell=Spell.ELECTROCUTE,
-            enemy_save=None,
-            effective_range="melee",
         )
 
     def get_effect(
@@ -1249,12 +1263,16 @@ class ElectrocuteDamage(SpellDamage):
 
 class FreezeDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D6,
+                "which_spell": Spell.FREEZE,
+                "enemy_save": Stat.CONSTITUTION,
+                "effective_range": "16m",
+            }
+        )
         super().__init__(
             **kwargs,
-            which_dice=Dice.D6,
-            which_spell=Spell.FREEZE,
-            enemy_save=Stat.CONSTITUTION,
-            effective_range="16m",
         )
 
     def get_effect(
@@ -1272,12 +1290,16 @@ class FreezeDamage(SpellDamage):
 
 class WarpDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D8,
+                "which_spell": Spell.WARP,
+                "enemy_save": Stat.DEXTERITY,
+                "effective_range": "12m, 4m AoE",
+            }
+        )
         super().__init__(
             **kwargs,
-            which_dice=Dice.D8,
-            which_spell=Spell.WARP,
-            enemy_save=Stat.DEXTERITY,
-            effective_range="12m, 4m AoE",
         )
 
     def get_effect(
@@ -1293,12 +1315,16 @@ class WarpDamage(SpellDamage):
 
 class RepulseDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D8,
+                "which_spell": Spell.WARP,
+                "enemy_save": Stat.STRENGTH,
+                "effective_range": "melee",
+            }
+        )
         super().__init__(
             **kwargs,
-            which_dice=Dice.D8,
-            which_spell=Spell.WARP,
-            enemy_save=Stat.STRENGTH,
-            effective_range="melee",
         )
 
     def get_effect(
@@ -1314,12 +1340,16 @@ class RepulseDamage(SpellDamage):
 
 class FeedbackDamage(SpellDamage):
     def __init__(self, **kwargs) -> None:
+        kwargs.update(
+            {
+                "which_dice": Dice.D8,
+                "which_spell": Spell.FEEDBACK,
+                "enemy_save": Stat.WISDOM,
+                "effective_range": "12m",
+            }
+        )
         super().__init__(
             **kwargs,
-            which_dice=Dice.D8,
-            which_spell=Spell.FEEDBACK,
-            enemy_save=Stat.WISDOM,
-            effective_range="12m",
         )
 
     def get_effect(
