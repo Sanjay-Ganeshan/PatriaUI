@@ -9,6 +9,7 @@ from ..weapons.character_specific_weapons import (
     LuminaDMR,
     LuminaGrenades,
     LuminaPistol,
+    Knife,
     ReplacementSMG,
 )
 
@@ -68,6 +69,7 @@ class AnabelleNucifera(Character):
                         LuminaDMR(),
                         LuminaPistol(),
                         LuminaGrenades(),
+                        Knife(),
                         ReplacementSMG(),
                         ]
                 ),

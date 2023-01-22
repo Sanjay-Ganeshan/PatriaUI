@@ -9,7 +9,7 @@ from ..character.status import Status
 
 # change this
 from ..weapons.character_specific_weapons import (
-    RivkaSniper, RivkaPistol, RivkaGrenades, ReplacementSMG,
+    RivkaSniper, RivkaPistol, RivkaGrenades, Knife, ReplacementSMG,
 )
 
 
@@ -64,6 +64,7 @@ class RivkaHadar(Character):
                         RivkaSniper(),
                         RivkaPistol(),
                         RivkaGrenades(),
+                        Knife()
                         #ReplacementSMG(),
                     ],
                 ),
