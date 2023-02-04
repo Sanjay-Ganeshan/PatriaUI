@@ -16,7 +16,7 @@ class GalinaNovikova(Character):
                 kwargs,
                 id_prefix="galina",
                 nameplate=Nameplate(
-                    icon="yanfei.png",
+                    icon="galina.png",
                     name="Galina",
                     surname="Novikova",
                     role="Siren - Section Leader",
