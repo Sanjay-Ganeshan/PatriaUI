@@ -92,7 +92,8 @@ class Resources:
         "Vesna LSW": "lsw.png",
         "Grenade Launcher": "grenade_launcher.png",
         "Siren Knife": "knife.png",
-        "Grenades": "grenade.png",
+        "Grenade": "grenade.png",
+        "Experimental SG": "shotgun.png",
     }
 
     BULLET = "bullet.png"

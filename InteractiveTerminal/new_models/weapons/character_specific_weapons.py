@@ -262,3 +262,48 @@ def RivkaGrenades() -> GrenadePack:
             ]
         )
     )
+
+def OpheliaShotgun() -> ExperimentalShotgun:
+    return (
+        ExperimentalShotgun()
+            .add_attachment(Suppressor())
+            .add_attachment(HolographicSight())
+            .add_attachment(EMChamber())
+            .add_attachment(SpecializedTraining())
+    )
+
+def OpheliaPistol() -> CoalitionPistol:
+    return (
+        CoalitionPistol()
+            .add_attachment(BasicTraining())
+            .add_attachment(HolographicSight())
+            .add_attachment(Suppressor())
+    )
+
+def OpheliaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=0,
+                    capacity=0,
+                )
+            ]
+        )
+    )
