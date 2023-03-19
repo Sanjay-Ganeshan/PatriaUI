@@ -29,7 +29,7 @@ class ExperimentalShotgun(Weapon):
                 mode=CircularList(items=["Standard"]),
                 ammo=CircularList(
                     items=[
-                        AmmoPack(name="FMJ", current=4 * 8, capacity=4 * 8),
+                        AmmoPack(name="FMJ", current=5 * 8, capacity=5 * 8),
                     ]
                 ),
             )
