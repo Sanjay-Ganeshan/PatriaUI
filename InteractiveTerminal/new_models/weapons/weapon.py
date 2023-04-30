@@ -106,6 +106,12 @@ class Weapon:
         old_pack.capacity -= capacity_transferred
         return self
 
+    def get_range(self) -> int:
+        if (curr_ammo := self.ammo.get()) is not None:
+            if curr_ammo.name == "Plasma":
+                return self.range_meters * 0.5
+        return self.range_meters
+
     def attack(self, equipped_by: StatBlock) -> Roll:
         params = self._attack_impl(equipped_by)
         for each_attachment in self.attachments:

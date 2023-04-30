@@ -19,7 +19,8 @@ class ExperimentalShotgun(Weapon):
                     "Experimental Project Lada/Vesna compatiable shotgun. "
                     "Fabricated on-site by Transcendent's engineering teams; "
                     "capable of 2-round ultra-rapid bursts. Advantage on attack "
-                    "rolls within 20 meters."
+                    "rolls within 20 meters. Hits all targets in a 2m square. "
+                    "Can attack twice, provided the second shot is within one 2m square"
                 ),
                 caliber=18,
                 range_meters=40,
@@ -47,3 +48,9 @@ class ExperimentalShotgun(Weapon):
             Dice.D4,
             n_dice=4,
         )
+
+    def get_range(self) -> int:
+        if (curr_ammo := self.ammo.get()) is not None:
+            if curr_ammo.name == "Plasma":
+                return self.range_meters * 0.75
+        return self.range_meters

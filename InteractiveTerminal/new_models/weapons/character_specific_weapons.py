@@ -269,6 +269,7 @@ def OpheliaShotgun() -> ExperimentalShotgun:
             .add_attachment(Suppressor())
             .add_attachment(HolographicSight())
             .add_attachment(EMChamber())
+            .add_attachment(PlasmaChamber())
             .add_attachment(SpecializedTraining())
     )
 

@@ -25,7 +25,10 @@ class PlasmaChamber(WeaponAttachment):
     ) -> Roll:
         ammo = weapon.ammo.get()
         if ammo is not None and ammo.name == "Plasma":
-            return damage.replace(n_dice=damage.n_dice + 1, )
+            if "shotgun" in weapon.name.lower():
+                return damage.replace(n_dice=damage.n_dice + 2, )
+            else:
+                return damage.replace(n_dice=damage.n_dice + 1, )
         else:
             return damage
 

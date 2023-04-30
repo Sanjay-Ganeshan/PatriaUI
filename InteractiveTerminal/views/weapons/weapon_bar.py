@@ -462,7 +462,7 @@ class WPAmmoType(CenteredLabel, ListenForStateChanges, TouchableMixin):
 
                 self.burst_size = weapon.burst.get()
                 self.caliber = weapon.caliber
-                self.range_m = weapon.range_meters
+                self.range_m = weapon.get_range()
                 self.splash = weapon.splash_meters
                 current_ammo = weapon.ammo.get()
                 if current_ammo is None:
