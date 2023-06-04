@@ -19,7 +19,8 @@ class ExperimentalShotgun(Weapon):
                     "Experimental Project Lada/Vesna compatiable shotgun. "
                     "Fabricated on-site by Transcendent's engineering teams; "
                     "capable of 2-round ultra-rapid bursts. Advantage on attack "
-                    "rolls within 20 meters. Hits all targets in a 2m square. "
+                    "rolls within 20 / 15 [plasma] meters. Hits all targets "
+                    "in a 2m square. "
                     "Can attack twice, provided the second shot is within one 2m square"
                 ),
                 caliber=18,
