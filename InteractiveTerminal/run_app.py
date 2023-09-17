@@ -33,6 +33,7 @@ from .new_models.specific.ophelia import OpheliaRastarra
 from .new_models.specific.elena import ElenaArvanita
 from .new_models.specific.rivka import RivkaHadar
 from .new_models.specific.maya import MayaReeseDavis
+from .new_models.specific.pilvi import PilviKoppel
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
@@ -95,13 +96,10 @@ def main():
 
     if init_with_default:
         state_manager = StateManager()
-        #state_manager.push_event(SpawnCharacter(char=LuminaGale()))
         state_manager.push_event(SpawnCharacter(char=OpheliaRastarra()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
-        state_manager.push_event(SpawnCharacter(char=SilviaFerreyra()))
-        state_manager.push_event(SpawnCharacter(char=RivkaHadar()))
-        state_manager.push_event(SpawnCharacter(char=ElenaArvanita()))
+        state_manager.push_event(SpawnCharacter(char=PilviKoppel()))
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])
