@@ -28,12 +28,9 @@ from kivymd.font_definitions import theme_font_styles
 from .new_models.events.view_events import (LoadFinished)
 from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.galina import GalinaNovikova
-from .new_models.specific.silvia import SilviaFerreyra
-from .new_models.specific.ophelia import OpheliaRastarra
-from .new_models.specific.elena import ElenaArvanita
-from .new_models.specific.rivka import RivkaHadar
 from .new_models.specific.maya import MayaReeseDavis
 from .new_models.specific.pilvi import PilviKoppel
+from .new_models.specific.zoe import ZoeSparks
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
@@ -96,7 +93,7 @@ def main():
 
     if init_with_default:
         state_manager = StateManager()
-        state_manager.push_event(SpawnCharacter(char=OpheliaRastarra()))
+        state_manager.push_event(SpawnCharacter(char=ZoeSparks()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
         state_manager.push_event(SpawnCharacter(char=PilviKoppel()))
@@ -104,7 +101,7 @@ def main():
             MapLayer(instructions=[MapLine([Vector2.zero(),
                                             Vector2.one()])])
         )
-        state_manager.view_state.focused_character = "ophelia"
+        state_manager.view_state.focused_character = "zoe"
 
     app = PatriaApp(state_manager)
     app.run()

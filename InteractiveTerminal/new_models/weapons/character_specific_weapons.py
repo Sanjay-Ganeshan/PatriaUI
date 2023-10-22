@@ -356,3 +356,51 @@ def PilviPistol() -> CoalitionPistol:
             Suppressor()
         ).add_attachment(BasicTraining())
     )
+
+def ZoeLSW() -> ProjectVesnaLSW:
+    return (
+        ProjectVesnaLSW().add_attachment(Bipod()).add_attachment(
+            Suppressor()
+        ).add_attachment(HolographicSight()).add_attachment(
+            PlasmaChamber()
+        ).add_attachment(EMChamber()).add_attachment(
+            APChamber()
+        ).add_attachment(SpecializedTraining())
+    )
+
+
+def ZoePistol() -> CoalitionPistol:
+    return (
+        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
+            Suppressor()
+        ).add_attachment(BasicTraining())
+    )
+
+
+def ZoeGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=1,
+                    capacity=1,
+                )
+            ]
+        )
+    )
