@@ -788,6 +788,7 @@ class UseHitDice(RollEvent):
         to_heal = completed.total()
         if to_heal > 1 and char.has_effect(Debuffs.HARD_TO_TREAT):
             to_heal -= 1
+        to_heal += char.stat_block[Stat.CONSTITUTION]
 
         new_status = char.current_life.delta(
             HP=to_heal,

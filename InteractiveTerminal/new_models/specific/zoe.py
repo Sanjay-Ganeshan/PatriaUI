@@ -50,7 +50,7 @@ class ZoeSparks(Character):
                 max_life=Status(
                     HP=13, # 12 + CON
                     armor_rating=14,
-                    revives=3,  # From CON + autoraise
+                    revives=2,  # From CON (-1 for autoraise)
                     deflects=2,  # From INT
                     hit_dice=2,
                     suit_power=6,
@@ -68,4 +68,3 @@ class ZoeSparks(Character):
                 ),
             )
         )
-        self.add_effect(Debuffs.HARD_TO_TREAT)
