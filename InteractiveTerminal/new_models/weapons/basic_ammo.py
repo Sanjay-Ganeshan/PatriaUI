@@ -45,12 +45,13 @@ class EMChamber(WeaponAttachment):
                 capacity=0,
             ))
             weapon.replace_magazine("FMJ", "EM")
-        
+
     def modify_damage(
         self, equipped_by: StatBlock, weapon: "Weapon", damage: Roll
     ) -> Roll:
         ammo = weapon.ammo.get()
-        if ammo is not None and ammo.name == "EM" and "shotgun" in weapon.name.lower():
+        if ammo is not None and ammo.name == "EM" and "shotgun" in weapon.name.lower(
+        ):
             return damage.replace(n_dice=damage.n_dice - 1, )
         else:
             return damage
@@ -74,6 +75,6 @@ class APChamber(WeaponAttachment):
     ) -> Roll:
         ammo = weapon.ammo.get()
         if ammo is not None and ammo.name == "AP":
-            return attack.replace(modifier=attack.modifier + 1, )
+            return attack.replace(modifier=attack.modifier + 2, )
         else:
             return attack
