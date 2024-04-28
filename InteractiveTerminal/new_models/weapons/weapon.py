@@ -222,7 +222,7 @@ class Weapon:
     def undo_switch_ammo(self, prev_clip: int) -> None:
         self.unload()
         self.ammo = self.ammo.prev()
-        self.lod(prev_clip)
+        self.load(prev_clip)
 
     def add_attachment(self, attachment: WeaponAttachment) -> "Weapon":
         self.attachments.append(attachment)
