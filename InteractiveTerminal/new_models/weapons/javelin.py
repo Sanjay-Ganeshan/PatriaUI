@@ -18,7 +18,7 @@ class Javelin(Weapon):
                 description="Javelin Anti-Tank Weapon",
                 caliber=127,
                 # Idk if this is actually correct
-                range_meters=400,
+                range_meters=3400,
                 clip_current=1,
                 clip_capacity=1,
                 mode=CircularList(items=["Standard"]),
