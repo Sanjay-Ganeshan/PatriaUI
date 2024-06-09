@@ -1,4 +1,4 @@
-import random
+from random import SystemRandom
 import typing as T
 from dataclasses import dataclass, field
 
@@ -17,9 +17,11 @@ class Roll:
         msg = f"{self.n_dice}d{self.faces.value}"
         mod_msg = "" if self.modifier == 0 else f"{self.modifier:+d}"
         status_msg = (
-            "(+)" if self.status == RollStatus.ADVANTAGE else
-            "(-)"  # down arrow unicode
-            if self.status == RollStatus.DISADVANTAGE else ""
+            "(+)"
+            if self.status == RollStatus.ADVANTAGE
+            else "(-)"  # down arrow unicode
+            if self.status == RollStatus.DISADVANTAGE
+            else ""
         )
 
         return status_msg + msg + mod_msg
@@ -48,6 +50,7 @@ class Roll:
 class CompletedRoll:
     roll: Roll = field(default_factory=Roll)
     raw: T.List[int] = field(default_factory=list)
+    rand = SystemRandom()
 
     @classmethod
     def realize(cls, r: Roll) -> "CompletedRoll":
@@ -57,7 +60,7 @@ class CompletedRoll:
             n += 1
 
         for _ in range(n):
-            raw.append(random.randrange(0, r.faces.value) + 1)
+            raw.append(cls.rand.randrange(0, r.faces.value) + 1)
 
         return cls(roll=r, raw=raw)
 

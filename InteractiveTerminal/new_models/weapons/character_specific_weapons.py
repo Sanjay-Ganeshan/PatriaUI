@@ -6,7 +6,14 @@ from .ammo_pack import AmmoPack
 from .vesna_lsw import ProjectVesnaLSW
 from .underbarrel_grenade_launcher import UnderbarrelGrenadeLauncher
 from .basic_ammo import PlasmaChamber, EMChamber, APChamber
-from .stat_mod_attachments import TelescopicSight, HolographicSight, Bipod, Suppressor, VerticalGrip
+from .stat_mod_attachments import (
+    TelescopicSight,
+    HolographicSight,
+    Bipod,
+    Suppressor,
+    VerticalGrip,
+)
+from .javelin import Javelin
 from .training import BasicTraining, SpecializedTraining
 from .grenade_pack import GrenadePack
 from .siren_knife import SirenKnife
@@ -19,21 +26,23 @@ from ...utils import CircularList
 
 def LuminaDMR() -> ProjectLadaDMR:
     return (
-        ProjectLadaDMR().add_attachment(PlasmaChamber()).add_attachment(
-            EMChamber()
-        ).add_attachment(APChamber()).add_attachment(
-            TelescopicSight()
-        ).add_attachment(Bipod()).add_attachment(Suppressor()).add_attachment(
-            SpecializedTraining()
-        )
+        ProjectLadaDMR()
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(TelescopicSight())
+        .add_attachment(Bipod())
+        .add_attachment(Suppressor())
+        .add_attachment(SpecializedTraining())
     )
 
 
 def LuminaPistol() -> CoalitionPistol:
     return (
-        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
-            Suppressor()
-        ).add_attachment(BasicTraining())
+        CoalitionPistol()
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
     )
 
 
@@ -60,7 +69,7 @@ def LuminaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=0,
                     capacity=0,
-                )
+                ),
             ]
         )
     )
@@ -68,11 +77,13 @@ def LuminaGrenades() -> GrenadePack:
 
 def GalinaBR() -> ProjectLadaBR:
     return (
-        ProjectLadaBR().add_attachment(Suppressor()).add_attachment(
-            HolographicSight()
-        ).add_attachment(EMChamber()).add_attachment(
-            PlasmaChamber()
-        ).add_attachment(APChamber()).add_attachment(SpecializedTraining())
+        ProjectLadaBR()
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(EMChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
     )
 
 
@@ -107,7 +118,7 @@ def GalinaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=2,
                     capacity=2,
-                )
+                ),
             ]
         )
     )
@@ -115,21 +126,23 @@ def GalinaGrenades() -> GrenadePack:
 
 def SilviaLSW() -> ProjectVesnaLSW:
     return (
-        ProjectVesnaLSW().add_attachment(Bipod()).add_attachment(
-            Suppressor()
-        ).add_attachment(HolographicSight()).add_attachment(
-            PlasmaChamber()
-        ).add_attachment(EMChamber()).add_attachment(
-            APChamber()
-        ).add_attachment(SpecializedTraining())
+        ProjectVesnaLSW()
+        .add_attachment(Bipod())
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
     )
 
 
 def SilviaPistol() -> CoalitionPistol:
     return (
-        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
-            Suppressor()
-        ).add_attachment(BasicTraining())
+        CoalitionPistol()
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
     )
 
 
@@ -156,7 +169,7 @@ def SilviaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=2,
                     capacity=2,
-                )
+                ),
             ]
         )
     )
@@ -167,27 +180,36 @@ def Knife() -> SirenKnife:
 
 
 def ReplacementSMG() -> ProjectLadaCQ:
-    ret = ProjectLadaCQ().add_attachment(BasicTraining()).add_attachment(
-        PlasmaChamber()
-    ).add_attachment(HolographicSight()).add_attachment(
-        Suppressor()
-    ).add_attachment(VerticalGrip()).replace_magazine(
-        "FMJ", "Plasma"
-    ).replace_magazine("FMJ", "Plasma").replace_magazine("FMJ", "Plasma")
+    ret = (
+        ProjectLadaCQ()
+        .add_attachment(BasicTraining())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(VerticalGrip())
+        .replace_magazine("FMJ", "Plasma")
+        .replace_magazine("FMJ", "Plasma")
+        .replace_magazine("FMJ", "Plasma")
+    )
     return ret
+
 
 def ElenaShotgun() -> ExperimentalShotgun:
     return (
-        ExperimentalShotgun().add_attachment(
+        ExperimentalShotgun()
+        .add_attachment(
             Suppressor()
-        #yes, you can suppress a shotgun - bit difficult in 2023, but doable in 2621
-        ).add_attachment(HolographicSight()
-        ).add_attachment(EMChamber()
-        ).add_attachment(SpecializedTraining())
+            # yes, you can suppress a shotgun - bit difficult in 2023, but doable in 2621
+        )
+        .add_attachment(HolographicSight())
+        .add_attachment(EMChamber())
+        .add_attachment(SpecializedTraining())
     )
+
 
 def ElenaDrone() -> SwitchbladeDrone:
     return SwitchbladeDrone().add_attachment(BasicTraining())
+
 
 def ElenaGrenades() -> GrenadePack:
     return GrenadePack(
@@ -212,28 +234,33 @@ def ElenaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=0,
                     capacity=0,
-                )
+                ),
             ]
         )
     )
 
+
 def RivkaSniper() -> ProjectLadaSniper:
     return (
-        ProjectLadaSniper().add_attachment(PlasmaChamber()).add_attachment(
-            EMChamber()
-        ).add_attachment(APChamber()).add_attachment(
-            TelescopicSight()
-        ).add_attachment(Bipod()).add_attachment(Suppressor()).add_attachment(
-            SpecializedTraining()
-        )
+        ProjectLadaSniper()
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(TelescopicSight())
+        .add_attachment(Bipod())
+        .add_attachment(Suppressor())
+        .add_attachment(SpecializedTraining())
     )
+
 
 def RivkaPistol() -> CoalitionPistol:
     return (
-        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
-            Suppressor()
-        ).add_attachment(BasicTraining())
+        CoalitionPistol()
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
     )
+
 
 def RivkaGrenades() -> GrenadePack:
     return GrenadePack(
@@ -258,28 +285,31 @@ def RivkaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=0,
                     capacity=0,
-                )
+                ),
             ]
         )
     )
 
+
 def OpheliaShotgun() -> ExperimentalShotgun:
     return (
         ExperimentalShotgun()
-            .add_attachment(Suppressor())
-            .add_attachment(HolographicSight())
-            .add_attachment(APChamber())
-            .add_attachment(PlasmaChamber())
-            .add_attachment(SpecializedTraining())
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(APChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(SpecializedTraining())
     )
+
 
 def OpheliaPistol() -> CoalitionPistol:
     return (
         CoalitionPistol()
-            .add_attachment(BasicTraining())
-            .add_attachment(HolographicSight())
-            .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
     )
+
 
 def OpheliaGrenades() -> GrenadePack:
     return GrenadePack(
@@ -304,10 +334,11 @@ def OpheliaGrenades() -> GrenadePack:
                     name="Smoke",
                     current=1,
                     capacity=1,
-                )
+                ),
             ]
         )
     )
+
 
 def PilviGrenades() -> GrenadePack:
     return GrenadePack(
@@ -332,7 +363,7 @@ def PilviGrenades() -> GrenadePack:
                     name="Smoke",
                     current=1,
                     capacity=1,
-                )
+                ),
             ]
         )
     )
@@ -340,40 +371,48 @@ def PilviGrenades() -> GrenadePack:
 
 def PilviBR() -> ProjectLadaBR:
     return (
-        ProjectLadaBR().add_attachment(Suppressor()).add_attachment(
-            HolographicSight()
-        ).add_attachment(EMChamber()).add_attachment(
-            PlasmaChamber()
-        ).add_attachment(APChamber()).add_attachment(SpecializedTraining())
+        ProjectLadaBR()
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(EMChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
     )
+
 
 def PilviGrenadeLauncher() -> UnderbarrelGrenadeLauncher:
     return UnderbarrelGrenadeLauncher().add_attachment(BasicTraining())
 
+
 def PilviPistol() -> CoalitionPistol:
     return (
-        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
-            Suppressor()
-        ).add_attachment(BasicTraining())
+        CoalitionPistol()
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
     )
+
 
 def ZoeLSW() -> ProjectVesnaLSW:
     return (
-        ProjectVesnaLSW().add_attachment(Bipod()).add_attachment(
-            Suppressor()
-        ).add_attachment(HolographicSight()).add_attachment(
-            PlasmaChamber()
-        ).add_attachment(EMChamber()).add_attachment(
-            APChamber()
-        ).add_attachment(SpecializedTraining())
+        ProjectVesnaLSW()
+        .add_attachment(Bipod())
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
     )
 
 
 def ZoePistol() -> CoalitionPistol:
     return (
-        CoalitionPistol().add_attachment(HolographicSight()).add_attachment(
-            Suppressor()
-        ).add_attachment(BasicTraining())
+        CoalitionPistol()
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(BasicTraining())
     )
 
 
@@ -400,7 +439,53 @@ def ZoeGrenades() -> GrenadePack:
                     name="Smoke",
                     current=1,
                     capacity=1,
-                )
+                ),
             ]
         )
     )
+
+
+def HildaExperimentalShotgun() -> ProjectLadaDMR:
+    return (
+        ExperimentalShotgun()
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(SpecializedTraining())
+    )
+
+
+def HildaGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=2,
+                    capacity=2,
+                ),
+            ]
+        )
+    )
+
+
+def HildaJavelin():
+    return Javelin().add_attachment(BasicTraining())
