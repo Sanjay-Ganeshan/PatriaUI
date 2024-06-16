@@ -16,8 +16,8 @@ class Bipod(WeaponAttachment):
     ) -> Roll:
         if weapon.mode.get() == "Braced":
             return attack.replace(
-                modifier=attack.modifier +
-                ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
+                modifier=attack.modifier
+                + ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
             )
         else:
             return attack
@@ -30,7 +30,9 @@ class VerticalGrip(WeaponAttachment):
     def modify_attack(
         self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
-        return attack.replace(modifier=attack.modifier + 1, )
+        return attack.replace(
+            modifier=attack.modifier + 1,
+        )
 
 
 class HolographicSight(WeaponAttachment):
@@ -40,7 +42,9 @@ class HolographicSight(WeaponAttachment):
     def modify_attack(
         self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
-        return attack.replace(modifier=attack.modifier + 1, )
+        return attack.replace(
+            modifier=attack.modifier + 1,
+        )
 
 
 class TelescopicSight(WeaponAttachment):
@@ -51,8 +55,7 @@ class TelescopicSight(WeaponAttachment):
         self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
     ) -> Roll:
         return attack.replace(
-            modifier=attack.modifier +
-            ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
+            modifier=attack.modifier + ((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2),
         )
 
 

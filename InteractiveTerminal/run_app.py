@@ -25,12 +25,12 @@ from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
 
-from .new_models.events.view_events import (LoadFinished)
+from .new_models.events.view_events import LoadFinished
 from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.maya import MayaReeseDavis
-from .new_models.specific.pilvi import PilviKoppel
 from .new_models.specific.zoe import ZoeSparks
+from .new_models.specific.hilda import HildaFosse
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
@@ -72,7 +72,7 @@ def main():
 
     init_with_default: bool = True
 
-    #state_manager = get_backup()
+    # state_manager = get_backup()
     state_manager = None
 
     if state_manager is None:
@@ -85,7 +85,7 @@ def main():
                 print("SAVE FILE CORRUPTED. STARTING FRESH.")
             else:
                 state_manager = loads(save_contents)
-    
+
     if isinstance(state_manager, StateManager):
         init_with_default = False
     else:
@@ -96,10 +96,9 @@ def main():
         state_manager.push_event(SpawnCharacter(char=ZoeSparks()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=GalinaNovikova()))
-        state_manager.push_event(SpawnCharacter(char=PilviKoppel()))
+        state_manager.push_event(SpawnCharacter(char=HildaFosse()))
         state_manager.game_state.the_map.layers.append(
-            MapLayer(instructions=[MapLine([Vector2.zero(),
-                                            Vector2.one()])])
+            MapLayer(instructions=[MapLine([Vector2.zero(), Vector2.one()])])
         )
         state_manager.view_state.focused_character = "zoe"
 

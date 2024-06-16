@@ -1,1 +1,1 @@
-__all__ = ['galina', 'lumina', 'maya', 'silvia', 'elena', 'rivka']
+__all__ = ["galina", "lumina", "maya", "silvia", "elena", "rivka", "pilvi", "hilda"]

@@ -31,20 +31,12 @@ class WeaponAttachment:
 @dataclass
 class Weapon:
     name: str = field(default="<long name>", metadata={"IGNORESAVE": True})
-    short_name: str = field(
-        default="<short name>", metadata={"IGNORESAVE": True}
-    )
-    description: str = field(
-        default="<description>", metadata={"IGNORESAVE": True}
-    )
+    short_name: str = field(default="<short name>", metadata={"IGNORESAVE": True})
+    description: str = field(default="<description>", metadata={"IGNORESAVE": True})
 
-    caliber: T.Optional[float] = field(
-        default=None, metadata={"IGNORESAVE": True}
-    )
+    caliber: T.Optional[float] = field(default=None, metadata={"IGNORESAVE": True})
     range_meters: int = field(default=5, metadata={"IGNORESAVE": True})
-    splash_meters: T.Optional[int] = field(
-        default=None, metadata={"IGNORESAVE": True}
-    )
+    splash_meters: T.Optional[int] = field(default=None, metadata={"IGNORESAVE": True})
 
     clip_capacity: int = 0
     clip_current: int = 1
@@ -53,9 +45,7 @@ class Weapon:
     mode: CircularList[str] = field(
         default_factory=lambda: CircularList(items=["Standard"])
     )
-    burst: CircularList[int] = field(
-        default_factory=lambda: CircularList(items=[1])
-    )
+    burst: CircularList[int] = field(default_factory=lambda: CircularList(items=[1]))
     burst_improves_accuracy: bool = True
     attachments: T.List["WeaponAttachment"] = field(default_factory=list)
     tags: T.List[str] = field(default_factory=list)
@@ -125,7 +115,9 @@ class Weapon:
         burst_size = self.burst.get()
         if burst_size is not None and burst_size > 1 and self.burst_improves_accuracy:
             burst_bonus = int((equipped_by[Stat.PROFICIENCY_BONUS] + 1) // 2)
-            params = params.replace(modifier=params.modifier + burst_bonus, )
+            params = params.replace(
+                modifier=params.modifier + burst_bonus,
+            )
         return params
 
     def damage(self, equipped_by: StatBlock) -> Roll:
@@ -139,14 +131,10 @@ class Weapon:
         return params
 
     def _attack_impl(self, equipped_by: StatBlock) -> Roll:
-        raise NotImplementedError(
-            f"{self.name} in {self.mode} has no attack formula!"
-        )
+        raise NotImplementedError(f"{self.name} in {self.mode} has no attack formula!")
 
     def _damage_impl(self, equipped_by: StatBlock) -> Roll:
-        raise NotImplementedError(
-            f"{self.name} in {self.mode} has no damage formula!"
-        )
+        raise NotImplementedError(f"{self.name} in {self.mode} has no damage formula!")
 
     def fire(self) -> bool:
         """
@@ -172,9 +160,9 @@ class Weapon:
         if current_ammo is None:
             return False
         else:
-            return current_ammo.can_consume(
-                burst_size
-            ) and self.clip_current >= burst_size
+            return (
+                current_ammo.can_consume(burst_size) and self.clip_current >= burst_size
+            )
 
     def undo_fire(self) -> None:
         current_ammo = self.ammo.get()
@@ -224,7 +212,7 @@ class Weapon:
         self.ammo = self.ammo.prev()
         self.load(prev_clip)
 
-    def add_attachment(self, attachment: WeaponAttachment) -> "Weapon":
+    def add_attachment(self, attachment: WeaponAttachment):
         self.attachments.append(attachment)
         attachment.attach_to(self)
         return self
@@ -248,6 +236,7 @@ class Weapon:
         if tag in self.tags:
             self.tags.pop(tag)
 
-    def get_additional_effects(self, is_attack: bool,
-                               roll: CompletedRoll) -> T.Optional[str]:
+    def get_additional_effects(
+        self, is_attack: bool, roll: CompletedRoll
+    ) -> T.Optional[str]:
         return None
