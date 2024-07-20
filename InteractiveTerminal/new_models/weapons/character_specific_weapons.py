@@ -21,6 +21,7 @@ from .lada_cq import ProjectLadaCQ
 from .exp_shotgun import ExperimentalShotgun
 from .lada_sniper import ProjectLadaSniper
 from .switchblade import SwitchbladeDrone
+from .lada_ar import ProjectLadaAR
 from ...utils import CircularList
 
 
@@ -381,7 +382,7 @@ def PilviBR() -> ProjectLadaBR:
     )
 
 
-def PilviGrenadeLauncher() -> UnderbarrelGrenadeLauncher:
+def GenericGrenadeLauncher() -> UnderbarrelGrenadeLauncher:
     return UnderbarrelGrenadeLauncher().add_attachment(BasicTraining())
 
 
@@ -474,13 +475,13 @@ def HildaGrenades() -> GrenadePack:
                 ),
                 AmmoPack(
                     name="Fragmentation",
-                    current=0,
-                    capacity=0,
+                    current=2,
+                    capacity=2,
                 ),
                 AmmoPack(
                     name="Smoke",
-                    current=2,
-                    capacity=2,
+                    current=0,
+                    capacity=0,
                 ),
             ]
         )
@@ -489,3 +490,56 @@ def HildaGrenades() -> GrenadePack:
 
 def HildaJavelin():
     return Javelin().add_attachment(BasicTraining())
+
+
+def HildaBR() -> ProjectLadaBR:
+    return (
+        ProjectLadaBR()
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(EMChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
+    )
+
+
+def AAAAAR() -> ProjectLadaAR:
+    return (
+        ProjectLadaAR()
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(EMChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(APChamber())
+        .add_attachment(SpecializedTraining())
+    )
+
+
+def AAAAGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=0,
+                    capacity=0,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=0,
+                    capacity=0,
+                ),
+            ]
+        )
+    )

@@ -6,22 +6,22 @@ from ..character.stat_block import StatBlock
 from ..character.stats import Stat
 from ..character.status import Status
 from ..weapons.character_specific_weapons import (
-    PilviBR,
+    AAAAAR,
     GenericGrenadeLauncher,
-    PilviGrenades,
-    PilviPistol,
+    AAAAGrenades,
+    Javelin,
     ReplacementSMG,
 )
 
 
-class PilviKoppel(Character):
+class AAAA(Character):
     def __init__(self, **kwargs) -> None:
         super().__init__(
             **use_passed_or_default(
                 kwargs,
                 id_prefix="pilvi",
                 nameplate=Nameplate(
-                    icon="pilvi.png",
+                    icon="aaaa.webp",
                     name="Pilvi",
                     surname="Koppel",
                     role="Siren - Spotter",
@@ -32,26 +32,26 @@ class PilviKoppel(Character):
                 stat_block=StatBlock.create(
                     assignments=[
                         (Stat.STRENGTH, -1),
-                        (Stat.DEXTERITY, 0),
-                        (Stat.CONSTITUTION, 2),
-                        (Stat.INTELLIGENCE, 1),
-                        (Stat.WISDOM, 1),
+                        (Stat.DEXTERITY, 1),
+                        (Stat.CONSTITUTION, 1),
+                        (Stat.INTELLIGENCE, 2),
+                        (Stat.WISDOM, 0),
                         (Stat.PROFICIENCY_BONUS, 4),
                         (Proficiency.COMBATIVES, 1),
-                        (Proficiency.MEDICINE, 2),
-                        (Proficiency.PERCEPTION, 2),
-                        (Proficiency.INVESTIGATION, 1),
-                        (Proficiency.STEALTH, 1),
+                        (Proficiency.MEDICINE, 1),
+                        (Proficiency.ACROBATICS, 1),
+                        (Proficiency.INSIGHT, 1),
+                        (Proficiency.PERCEPTION, 1),
                         (Proficiency.SOCIAL, 1),
-                        (Proficiency.NATURE, 1),
+                        (Proficiency.STEALTH, 1),
                     ],
                 ),
                 current_life=None,
                 max_life=Status(
-                    HP=14,
-                    armor_rating=14,
-                    revives=3,  # From CON
-                    deflects=1,  # From INT
+                    HP=13,
+                    armor_rating=15,  # + 1 for augmentation
+                    revives=2,  # From CON
+                    deflects=2,  # From INT
                     hit_dice=2,
                     suit_power=6,
                     shield_power=2,
@@ -60,10 +60,10 @@ class PilviKoppel(Character):
                 ),
                 weapons=CircularList(
                     items=[
-                        PilviBR(),
+                        AAAAAR(),
                         GenericGrenadeLauncher(),
-                        PilviPistol(),
-                        PilviGrenades(),
+                        Javelin(),
+                        AAAAGrenades(),
                         ReplacementSMG(),
                     ]
                 ),
