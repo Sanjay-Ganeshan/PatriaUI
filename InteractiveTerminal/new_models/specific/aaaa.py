@@ -19,11 +19,11 @@ class AAAA(Character):
         super().__init__(
             **use_passed_or_default(
                 kwargs,
-                id_prefix="pilvi",
+                id_prefix="haha",
                 nameplate=Nameplate(
                     icon="aaaa.webp",
-                    name="Pilvi",
-                    surname="Koppel",
+                    name="Hana",
+                    surname="Sharp",
                     role="Siren - Spotter",
                     she="she",
                     her="her",
