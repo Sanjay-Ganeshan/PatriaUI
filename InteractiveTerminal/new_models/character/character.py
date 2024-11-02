@@ -43,6 +43,10 @@ class Character:
                 self.current_life = replace(self.current_life, suit_power=3)
             if self.max_life.suit_power > 3:
                 self.max_life = replace(self.max_life, suit_power=3)
+            if self.current_life.armor_rating > 13:
+                self.current_life = replace(self.current_life, armor_rating=self.current_life.armor_rating - 2)
+            if self.max_life.armor_rating > 13:
+                self.max_life = replace(self.max_life, armor_rating=self.max_life.armor_rating - 2)
 
     def add_effect(self, effect: T.Union[str, Buffs, Debuffs]) -> None:
         if isinstance(effect, (Buffs, Debuffs)):

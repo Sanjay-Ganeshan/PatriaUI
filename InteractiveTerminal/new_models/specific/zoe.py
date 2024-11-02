@@ -10,6 +10,7 @@ from ..weapons.character_specific_weapons import (
     ZoeLSW,
     ZoePistol,
     ZoeGrenades,
+    ReplacementSMG,
     Knife
 )
 
@@ -63,8 +64,10 @@ class ZoeSparks(Character):
                         ZoeLSW(),
                         ZoePistol(),
                         ZoeGrenades(),
+                        ReplacementSMG(),
                         Knife(),
                         ]
                 ),
+                active_effects = [Debuffs.SLIM_SKINSUIT]
             )
         )
