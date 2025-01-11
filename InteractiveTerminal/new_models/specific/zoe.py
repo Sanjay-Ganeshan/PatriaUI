@@ -68,6 +68,6 @@ class ZoeSparks(Character):
                         Knife(),
                         ]
                 ),
-                active_effects = [Debuffs.SLIM_SKINSUIT.value]
+                active_effects = []
             )
         )
