@@ -53,7 +53,7 @@ class ZoeSparks(Character):
                     HP=13, # 12 + CON
                     armor_rating=14,
                     revives=2,  # From CON (-1 for autoraise)
-                    deflects=2,  # From INT
+                    deflects=3,  # From INT
                     hit_dice=2,
                     suit_power=6,
                     shield_power=2,
