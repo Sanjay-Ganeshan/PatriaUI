@@ -31,7 +31,8 @@ class MayaReeseDavis(Character):
                 stat_block=StatBlock.create(
                     assignments=[
                         (Stat.STRENGTH, -1),
-                        (Stat.DEXTERITY, 2),
+                        # Level up
+                        (Stat.DEXTERITY, 2 + 1),
                         (Stat.CONSTITUTION, 1),
                         (Stat.INTELLIGENCE, 1),
                         (Stat.WISDOM, 1),
