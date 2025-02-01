@@ -35,7 +35,8 @@ class ZoeSparks(Character):
                         (Stat.STRENGTH, -1),
                         (Stat.DEXTERITY, 1),
                         (Stat.CONSTITUTION, 1),
-                        (Stat.INTELLIGENCE, 2),
+                        # Level up
+                        (Stat.INTELLIGENCE, 2 + 1),
                         (Stat.WISDOM, 0),
                         (Stat.PROFICIENCY_BONUS, 4),
                         (Proficiency.COMBATIVES, 1),
