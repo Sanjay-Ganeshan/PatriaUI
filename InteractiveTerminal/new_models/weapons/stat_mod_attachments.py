@@ -21,6 +21,22 @@ class Bipod(WeaponAttachment):
             )
         else:
             return attack
+        
+class LaserModule(WeaponAttachment):
+    def attach_to(self, weapon: "Weapon") -> None:
+        if weapon.mode.find(lambda m: m == "Laser (10m)") is None:
+            weapon.mode.append("Laser (10m)")
+        weapon.add_tag("laser")
+
+    def modify_attack(
+        self, equipped_by: StatBlock, weapon: "Weapon", attack: Roll
+    ) -> Roll:
+        if weapon.mode.get() == "Laser (10m)":
+            return attack.replace(
+                modifier=attack.modifier + 2,
+            )
+        else:
+            return attack
 
 
 class VerticalGrip(WeaponAttachment):

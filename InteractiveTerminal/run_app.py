@@ -27,11 +27,10 @@ from kivymd.font_definitions import theme_font_styles
 
 from .new_models.events.view_events import LoadFinished
 from .new_models.events.game_events import SpawnCharacter
-from .new_models.specific.galina import GalinaNovikova
 from .new_models.specific.maya import MayaReeseDavis
 from .new_models.specific.zoe import ZoeSparks
-from .new_models.specific.hilda import HildaFosse
 from .new_models.specific.aaaa import AAAA
+from .new_models.specific.juliet import JulietMessier
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
 from .views.home import Home
@@ -97,6 +96,7 @@ def main():
         state_manager.push_event(SpawnCharacter(char=ZoeSparks()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=AAAA()))
+        state_manager.push_event(SpawnCharacter(char=JulietMessier()))
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(), Vector2.one()])])
         )

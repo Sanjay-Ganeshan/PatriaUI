@@ -5,6 +5,7 @@ from .coalition_pistol import CoalitionPistol
 from .ammo_pack import AmmoPack
 from .vesna_lsw import ProjectVesnaLSW
 from .underbarrel_grenade_launcher import UnderbarrelGrenadeLauncher
+from .laser_module import UnderbarrelLaser
 from .basic_ammo import PlasmaChamber, EMChamber, APChamber
 from .stat_mod_attachments import (
     TelescopicSight,
@@ -12,6 +13,7 @@ from .stat_mod_attachments import (
     Bipod,
     Suppressor,
     VerticalGrip,
+    LaserModule,
 )
 from .javelin import Javelin
 from .training import BasicTraining, SpecializedTraining
@@ -22,6 +24,7 @@ from .exp_shotgun import ExperimentalShotgun
 from .lada_sniper import ProjectLadaSniper
 from .switchblade import SwitchbladeDrone
 from .lada_ar import ProjectLadaAR
+from .rbs import RBS
 from ...utils import CircularList
 
 
@@ -543,3 +546,48 @@ def AAAAGrenades() -> GrenadePack:
             ]
         )
     )
+
+def JulietSMG() -> ProjectLadaCQ:
+    return (
+        ProjectLadaCQ().add_attachment(SpecializedTraining())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
+        .add_attachment(APChamber())
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+        .add_attachment(LaserModule())
+    )
+
+def JulietGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=2,
+                    capacity=2,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=0,
+                    capacity=0,
+                ),
+            ]
+        )
+    )
+
+def JulietRBS() -> RBS:
+    return RBS().add_attachment(BasicTraining())
+
+def JulietLaser() -> LaserModule:
+    return LaserModule()
