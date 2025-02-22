@@ -350,7 +350,7 @@ def MiraShotgun() -> ExperimentalShotgun:
         .add_attachment(HolographicSight())
         .add_attachment(LaserModule())
         .add_attachment(APChamber())
-        .add_attachment(PlasmaChamber())
+        .add_attachment(EMChamber())
         .add_attachment(SpecializedTraining())
     )
 
