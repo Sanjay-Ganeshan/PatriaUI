@@ -343,6 +343,58 @@ def OpheliaGrenades() -> GrenadePack:
         )
     )
 
+def MiraShotgun() -> ExperimentalShotgun:
+    return (
+        ExperimentalShotgun()
+        .add_attachment(Suppressor())
+        .add_attachment(HolographicSight())
+        .add_attachment(LaserModule())
+        .add_attachment(APChamber())
+        .add_attachment(PlasmaChamber())
+        .add_attachment(SpecializedTraining())
+    )
+
+
+def MiraPistol() -> CoalitionPistol:
+    return (
+        CoalitionPistol()
+        .add_attachment(BasicTraining())
+        .add_attachment(HolographicSight())
+        .add_attachment(Suppressor())
+    )
+
+
+def MiraGrenades() -> GrenadePack:
+    return GrenadePack(
+        ammo=CircularList(
+            items=[
+                AmmoPack(
+                    name="Flashbang",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Concussion",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Fragmentation",
+                    current=1,
+                    capacity=1,
+                ),
+                AmmoPack(
+                    name="Smoke",
+                    current=1,
+                    capacity=1,
+                ),
+            ]
+        )
+    )
+
+def MiraLaser() -> LaserModule:
+    return UnderbarrelLaser()
+
 
 def PilviGrenades() -> GrenadePack:
     return GrenadePack(

@@ -28,8 +28,8 @@ from kivymd.font_definitions import theme_font_styles
 from .new_models.events.view_events import LoadFinished
 from .new_models.events.game_events import SpawnCharacter
 from .new_models.specific.maya import MayaReeseDavis
-from .new_models.specific.zoe import ZoeSparks
 from .new_models.specific.aaaa import AAAA
+from .new_models.specific.mira import MiraCalloway
 from .new_models.specific.juliet import JulietMessier
 from .new_models.state.state_manager import StateManager
 from .new_models.state.view_state import Views
@@ -93,14 +93,14 @@ def main():
 
     if init_with_default:
         state_manager = StateManager()
-        state_manager.push_event(SpawnCharacter(char=ZoeSparks()))
+        state_manager.push_event(SpawnCharacter(char=MiraCalloway()))
         state_manager.push_event(SpawnCharacter(char=MayaReeseDavis()))
         state_manager.push_event(SpawnCharacter(char=AAAA()))
         state_manager.push_event(SpawnCharacter(char=JulietMessier()))
         state_manager.game_state.the_map.layers.append(
             MapLayer(instructions=[MapLine([Vector2.zero(), Vector2.one()])])
         )
-        state_manager.view_state.focused_character = "zoe"
+        state_manager.view_state.focused_character = "mira"
 
     app = PatriaApp(state_manager)
     app.run()
